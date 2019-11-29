@@ -6,6 +6,7 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 public class Player implements Runnable{
+    boolean inGame = false;
     private ObjectInputStream in = null;
     private ObjectOutputStream out = null;
 
@@ -17,8 +18,13 @@ public class Player implements Runnable{
             e.printStackTrace();
         }
     }
+    void waitForStartOfGame(){
+        while(!inGame){
 
+        }
+    }
     public void run() {
-
+        waitForStartOfGame();
+        System.out.println("Lets Play!");
     }
 }
