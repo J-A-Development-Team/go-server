@@ -3,7 +3,6 @@ package JADevelopmentTeam.server;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -31,16 +30,13 @@ class Connector {
         return instance;
     }
 
-    ArrayList <Player> initializePlayers() {
-        ArrayList <Player> players = new ArrayList<>();
-        Player playerOne = connectPlayer(pool);
-        Player playerTwo = connectPlayer(pool);
-        if (playerOne == null || playerTwo == null) {
+    Player[] initializePlayers() {
+        Player[] players = new Player[2];
+        players[0] = connectPlayer(pool);
+        players[1] = connectPlayer(pool);
+        if (players[0] == null || players[1] == null) {
             System.out.println("Accept failed: 4444");
             System.exit(-1);
-        }else{
-            players.add(playerOne);
-            players.add(playerTwo);
         }
         return players;
     }

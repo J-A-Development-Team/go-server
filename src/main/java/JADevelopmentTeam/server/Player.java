@@ -18,13 +18,12 @@ public class Player implements Runnable{
             e.printStackTrace();
         }
     }
-    void waitForStartOfGame(){
-        while(!inGame){
 
-        }
-    }
+    @Override
     public void run() {
-        waitForStartOfGame();
+        while(!inGame){
+            System.out.println("czekam");
+        }
         System.out.println("Lets Play!");
     }
 }
