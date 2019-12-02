@@ -12,6 +12,9 @@ public class Player implements Runnable {
     private Game context;
     private ObjectInputStream is = null;
     private ObjectOutputStream os = null;
+
+
+
     private DataPackage dataPackage;
 
     public enum PlayerState {
@@ -33,6 +36,13 @@ public class Player implements Runnable {
         this.context = context;
     }
 
+    public DataPackage getDataPackage() {
+        return dataPackage;
+    }
+
+    public void setDataPackage(DataPackage dataPackage) {
+        this.dataPackage = dataPackage;
+    }
     public void setPlayerState(PlayerState playerState) {
         this.playerState = playerState;
     }

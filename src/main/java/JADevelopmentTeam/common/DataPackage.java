@@ -5,7 +5,8 @@ import java.io.Serializable;
 public class DataPackage implements Serializable {
     private Object data;
     private Info info;
-    public enum Info {Stone,StoneTable,PlayerColor,Info
+    public enum Info {
+        Stone, StoneTable, PlayerColor, Info, Pass
     }
 
     public DataPackage(Object data, Info info) {
