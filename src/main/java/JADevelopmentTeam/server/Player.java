@@ -12,10 +12,11 @@ public class Player implements Runnable {
     private Game context;
     private ObjectInputStream is = null;
     private ObjectOutputStream os = null;
+    DataPackage dataPackage;
 
-
-
-    private DataPackage dataPackage;
+    public DataPackage getDataPackage() {
+        return dataPackage;
+    }
 
     public enum PlayerState {
         Receive, Send, WaitForStart, NotYourTurn, EndGame
@@ -36,13 +37,6 @@ public class Player implements Runnable {
         this.context = context;
     }
 
-    public DataPackage getDataPackage() {
-        return dataPackage;
-    }
-
-    public void setDataPackage(DataPackage dataPackage) {
-        this.dataPackage = dataPackage;
-    }
     public void setPlayerState(PlayerState playerState) {
         this.playerState = playerState;
     }
@@ -53,7 +47,7 @@ public class Player implements Runnable {
     }
 
     private void receive() throws IOException, ClassNotFoundException {
-        dataPackage = (DataPackage) is.readObject();
+        DataPackage dataPackage = (DataPackage) is.readObject();
         switch (playerState) {
             case WaitForStart:
                 send(new DataPackage("Wait for start", DataPackage.Info.Info));
@@ -61,6 +55,10 @@ public class Player implements Runnable {
             case NotYourTurn:
                 send(new DataPackage("Not your turn", DataPackage.Info.Info));
                 break;
+            default:
+                synchronized (context){
+                    notify();
+                }
         }
     }
 
@@ -72,9 +70,6 @@ public class Player implements Runnable {
         while (inGame) {
             try {
                 receive();
-                synchronized (context){
-                    notify();
-                }
             } catch (IOException | ClassNotFoundException e) {
                 System.out.println("error :(");
             }
