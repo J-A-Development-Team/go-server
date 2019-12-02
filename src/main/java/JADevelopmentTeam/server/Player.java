@@ -1,21 +1,23 @@
 package JADevelopmentTeam.server;
 
 import JADevelopmentTeam.common.DataPackage;
-import JADevelopmentTeam.common.Stone;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
-public class Player implements Runnable{
+public class Player implements Runnable {
     boolean inGame = true;
+    private Game context;
     private ObjectInputStream is = null;
     private ObjectOutputStream os = null;
     private DataPackage dataPackage;
+
     public enum PlayerState {
-        Receive, Send, WaitForStart,NotYourTurn,EndGame
+        Receive, Send, WaitForStart, NotYourTurn, EndGame
     }
+
     private PlayerState playerState = PlayerState.WaitForStart;
 
     public Player(Socket socket) {
@@ -27,55 +29,46 @@ public class Player implements Runnable{
         }
     }
 
+    public void setContext(Game context) {
+        this.context = context;
+    }
+
     public void setPlayerState(PlayerState playerState) {
         this.playerState = playerState;
     }
 
-    public void setDataPackage(DataPackage dataPackage) {
-        this.dataPackage = dataPackage;
-    }
-
-    public DataPackage getDataPackage() {
-        return dataPackage;
-    }
-
-    private void send() throws IOException {
+    public void send(DataPackage dataPackage) throws IOException {
         os.writeObject(dataPackage);
         os.flush();
     }
 
     private void receive() throws IOException, ClassNotFoundException {
-        //(Stone) is.readObject();
+        dataPackage = (DataPackage) is.readObject();
+        switch (playerState) {
+            case WaitForStart:
+                send(new DataPackage("Wait for start", DataPackage.Info.Info));
+                break;
+            case NotYourTurn:
+                send(new DataPackage("Not your turn", DataPackage.Info.Info));
+                break;
+        }
     }
 
 
     @Override
     public void run() {
-        while(inGame){
-            switch (playerState){
-                case Send:
-                    try {
-                        send();
-                    } catch (IOException e) {
-                        System.out.println("Coś nie wyszło w send() player");
-                    }
-                    break;
-                case Receive:
-                    try {
-                        receive();
-                    } catch (IOException | ClassNotFoundException e) {
-                        e.printStackTrace();
-                    }
-                    break;
-
-                case EndGame:
-                    inGame = false;
-                    break;
-                case NotYourTurn:
-
-                case WaitForStart:
+        while (inGame) {
+            try {
+                receive();
+                synchronized (context){
+                    notify();
+                }
+            } catch (IOException | ClassNotFoundException e) {
+                e.printStackTrace();
             }
+
+
+            System.out.println("Lets Play!");
         }
-        System.out.println("Lets Play!");
     }
 }
