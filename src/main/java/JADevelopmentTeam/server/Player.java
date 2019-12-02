@@ -67,6 +67,8 @@ public class Player implements Runnable {
 
     @Override
     public void run() {
+        System.out.println("Lets Play!");
+
         while (inGame) {
             try {
                 receive();
@@ -74,11 +76,9 @@ public class Player implements Runnable {
                     notify();
                 }
             } catch (IOException | ClassNotFoundException e) {
-                e.printStackTrace();
+                System.out.println("error :(");
             }
-
-
-            System.out.println("Lets Play!");
         }
+
     }
 }

@@ -15,7 +15,6 @@ class Connector {
     private Connector() {
         try {
             serverSocket = new ServerSocket(4444);
-            pool = Executors.newFixedThreadPool(200);
             System.out.println("port assigned");
         } catch (IOException ex) {
             System.out.println("Could not listen on port 4444");
@@ -47,7 +46,6 @@ class Connector {
         try {
             socket = serverSocket.accept();
             Player player = new Player(socket);
-            pool.execute(player);
             System.out.println("Connected First Player!");
             return player;
         } catch (IOException e) {
