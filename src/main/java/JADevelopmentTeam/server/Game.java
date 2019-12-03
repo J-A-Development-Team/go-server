@@ -1,13 +1,13 @@
 package JADevelopmentTeam.server;
 
 import JADevelopmentTeam.common.DataPackage;
-import JADevelopmentTeam.common.Stone;
+import JADevelopmentTeam.common.Intersection;
 
 import java.io.IOException;
 
 public class Game implements Runnable {
     private int turn = 1;
-    private Board board;
+    private GameManager gameManager;
     private Player[] players;
     private boolean lastMoveWasPass = false;
     private Object lock = this;
@@ -17,11 +17,11 @@ public class Game implements Runnable {
         this.players = players;
         players[0].setLock(lock);
         players[1].setLock(lock);
-        board = new Board(boardSize);
+        gameManager = new GameManager(boardSize);
     }
 
     private void updatePlayersBoard() {
-        DataPackage dataToSend = new DataPackage(board.getBoardAsStones(), DataPackage.Info.StoneTable);
+        DataPackage dataToSend = new DataPackage(gameManager.getBoardAsIntersections(), DataPackage.Info.StoneTable);
         try {
             players[0].send(dataToSend);
             players[1].send(dataToSend);
@@ -67,15 +67,15 @@ public class Game implements Runnable {
                 lastMoveWasPass = true;
                 nextTurn();
             } else {
-                Stone placedStone = (Stone) players[turn].getDataPackage().getData();
+                Intersection placedStone = (Intersection) players[turn].getDataPackage().getData();
                 if(turn==1){
-                    placedStone.setBlack(true);
+                    placedStone.setStoneBlack(true);
                 }else {
-                    placedStone.setBlack(false);
+                    placedStone.setStoneBlack(false);
                 }
-                if (board.isValidMove(placedStone)) {
+                if (gameManager.isValidMove(placedStone,turn)) {
                     lastMoveWasPass = false;
-                    board.processMove(placedStone);
+                    gameManager.processMove(placedStone,turn);
                 } else {
                     try {
                         players[turn].send(new DataPackage("Not valid move",DataPackage.Info.Info));
