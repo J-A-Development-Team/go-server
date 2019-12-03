@@ -40,8 +40,8 @@ public class Game implements Runnable {
         System.out.println("Ending game");
     }
     private void startPlayers(){
-        players[0].run();
-        players[1].run();
+        new Thread(players[0]).start();
+        new Thread(players[1]).start();
 
     }
     @Override
@@ -50,9 +50,9 @@ public class Game implements Runnable {
         System.out.println("Starting game");
         nextTurn();
         while (true) {
-            synchronized (this) {
+            synchronized (players[turn]) {
                 try {
-                    wait();
+                    this.wait();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }

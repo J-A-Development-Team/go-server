@@ -10,7 +10,7 @@ public class Server {
         while (true){
             Player[]  players = connector.initializePlayers();
             Game game = new Game(players,9);
-            game.run();
+            new Thread(game).start();
             System.out.println("Next Game");
         }
     }
