@@ -2,7 +2,7 @@ package JADevelopmentTeam.common;
 
 import java.io.Serializable;
 
-public class DataPackage implements Serializable {
+public class DataPackage <T> implements Serializable {
     private Object data;
     private Info info;
     public enum Info {

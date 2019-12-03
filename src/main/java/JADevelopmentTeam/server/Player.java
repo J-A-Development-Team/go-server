@@ -9,7 +9,7 @@ import java.net.Socket;
 
 public class Player implements Runnable {
     boolean inGame = true;
-    private Game context;
+    private Object lock;
     private ObjectInputStream is = null;
     private ObjectOutputStream os = null;
     DataPackage dataPackage;
@@ -33,8 +33,8 @@ public class Player implements Runnable {
         }
     }
 
-    public void setContext(Game context) {
-        this.context = context;
+    public void setLock(Object lock) {
+        this.lock = lock;
     }
 
     public void setPlayerState(PlayerState playerState) {
@@ -56,8 +56,8 @@ public class Player implements Runnable {
                 send(new DataPackage("Not your turn", DataPackage.Info.Info));
                 break;
             default:
-                synchronized (this){
-                    notify();
+                synchronized (lock){
+                    lock.notify();
                 }
         }
     }

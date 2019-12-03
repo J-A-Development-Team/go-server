@@ -10,11 +10,13 @@ public class Game implements Runnable {
     private Board board;
     private Player[] players;
     private boolean lastMoveWasPass = false;
+    private Object lock = this;
+
 
     Game(Player[] players, int boardSize) {
         this.players = players;
-        players[0].setContext(this);
-        players[1].setContext(this);
+        players[0].setLock(lock);
+        players[1].setLock(lock);
         board = new Board(boardSize);
     }
 
@@ -46,13 +48,13 @@ public class Game implements Runnable {
     }
     @Override
     public void run() {
-        startPlayers();
         System.out.println("Starting game");
         nextTurn();
+        startPlayers();
         while (true) {
-            synchronized (players[turn]) {
+            synchronized (lock) {
                 try {
-                    this.wait();
+                    lock.wait();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
