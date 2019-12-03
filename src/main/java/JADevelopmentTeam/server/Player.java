@@ -44,6 +44,7 @@ public class Player implements Runnable {
     public void send(DataPackage dataPackage) throws IOException {
         os.writeObject(dataPackage);
         os.flush();
+        os.reset();
     }
 
     public void receive() throws IOException, ClassNotFoundException {
