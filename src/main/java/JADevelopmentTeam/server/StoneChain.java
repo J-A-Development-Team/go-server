@@ -5,14 +5,14 @@ import JADevelopmentTeam.common.Intersection;
 import java.util.ArrayList;
 
 public class StoneChain {
-    private ArrayList <Intersection> stones = new ArrayList<>();
+    private ArrayList <Stone> stones = new ArrayList<>();
     private int liberties;
 
-    public StoneChain(ArrayList<Intersection> stones, int liberties) {
+    public StoneChain(ArrayList<Stone> stones, int liberties) {
         this.stones = stones;
         this.liberties = liberties;
     }
-    void addStone (Intersection stone){
+    void addStone (Stone stone){
         stones.add(stone);
     }
 
@@ -23,5 +23,9 @@ public class StoneChain {
 
     public void setLiberties(int liberties) {
         this.liberties = liberties;
+    }
+
+    public ArrayList<Stone> getStones() {
+        return stones;
     }
 }
