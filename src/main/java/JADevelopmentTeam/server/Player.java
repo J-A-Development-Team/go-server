@@ -46,8 +46,8 @@ public class Player implements Runnable {
         os.flush();
     }
 
-    private void receive() throws IOException, ClassNotFoundException {
-        DataPackage dataPackage = (DataPackage) is.readObject();
+    public void receive() throws IOException, ClassNotFoundException {
+        dataPackage = (DataPackage) is.readObject();
         switch (playerState) {
             case WaitForStart:
                 send(new DataPackage("Wait for start", DataPackage.Info.Info));
@@ -56,7 +56,7 @@ public class Player implements Runnable {
                 send(new DataPackage("Not your turn", DataPackage.Info.Info));
                 break;
             default:
-                synchronized (context){
+                synchronized (this){
                     notify();
                 }
         }
@@ -71,7 +71,7 @@ public class Player implements Runnable {
             try {
                 receive();
             } catch (IOException | ClassNotFoundException e) {
-                System.out.println("error :(");
+                e.printStackTrace();
             }
         }
 
