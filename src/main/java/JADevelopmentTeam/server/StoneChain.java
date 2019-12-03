@@ -8,14 +8,19 @@ public class StoneChain {
     private ArrayList <Stone> stones = new ArrayList<>();
     private int liberties;
 
-    public StoneChain(ArrayList<Stone> stones, int liberties) {
+    public StoneChain(ArrayList<Stone> stones) {
         this.stones = stones;
-        this.liberties = liberties;
     }
+    public StoneChain(Stone stone) {
+        this.stones.add(stone);
+    }
+
     void addStone (Stone stone){
         stones.add(stone);
     }
-
+    void addStones (ArrayList <Stone> newStones){
+        stones.addAll(newStones);
+    }
 
     public int getLiberties() {
         return liberties;
