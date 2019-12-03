@@ -68,7 +68,11 @@ public class Game implements Runnable {
                 nextTurn();
             } else {
                 Stone placedStone = (Stone) players[turn].getDataPackage().getData();
-
+                if(turn==1){
+                    placedStone.setBlack(true);
+                }else {
+                    placedStone.setBlack(false);
+                }
                 if (board.isValidMove(placedStone)) {
                     lastMoveWasPass = false;
                     board.processMove(placedStone);
