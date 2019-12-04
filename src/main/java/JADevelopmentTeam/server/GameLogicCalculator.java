@@ -108,11 +108,36 @@ public abstract class GameLogicCalculator {
     public static int checkIfMoveIsValid(Intersection chosenIntersection, GameManager gameManager, int turn) {
         Stone testStone = new Stone(chosenIntersection.getXCoordinate(), chosenIntersection.getYCoordinate());
         //TODO implement some real validation
-        ArrayList<Intersection> neighbor = getNeighborIntersections(testStone, gameManager.getBoard());
-        System.out.println("Muszę pomyśleć, mam " + neighbor.size() + "sąsiadów");
         if (gameManager.getBoardAsIntersections()[chosenIntersection.getXCoordinate()][chosenIntersection.getYCoordinate()].isHasStone()){
             return 1;
         }
+//        if (calculateLiberties(chosenIntersection,gameManager.getBoard())>0) {
+//            return 0;
+//        } else {
+//            System.out.println("Myślę");
+//           gameManager.processMove(chosenIntersection,turn);
+//           gameManager.removeDeadStoneChains(turn);
+//           gameManager.processStonesLiberties();
+//           if (turn==0){
+//               for (Stone stone: gameManager.playerOneStones){
+//                   if (stone.getLiberties()==0){
+//                       gameManager.removeStone(getStoneForIntersection(chosenIntersection,gameManager.playerOneStones));
+//                       return 2;
+//                   }
+//                   gameManager.removeStone(getStoneForIntersection(chosenIntersection,gameManager.playerOneStones));
+//               }
+//           } else {
+//               for (Stone stone: gameManager.playerTwoStones){
+//                   if (stone.getLiberties()==0){
+//                       gameManager.removeStone(getStoneForIntersection(chosenIntersection,gameManager.playerTwoStones));
+//                       return 2;
+//                   }
+//                   gameManager.removeStone(getStoneForIntersection(chosenIntersection,gameManager.playerTwoStones));
+//               }
+//           }
+//            System.out.println("Wymyśliłem");
+//           return 0;
+//        }
         return 0;
     }
 }

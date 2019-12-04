@@ -34,6 +34,7 @@ class GameManager {
         processStoneAdding(stone,turn);
         System.out.println("Magiczne czary");
         System.out.println(GameLogicCalculator.calculateLiberties(stone,board));
+
     }
     private void processStoneAdding(Stone stone, int turn){
         if(turn ==1){
@@ -43,6 +44,7 @@ class GameManager {
         }
         addStoneToChains(stone,turn);
         processStonesLiberties();
+        removeDeadStoneChains(turn);
     }
     private void addStoneToChains(Stone stone, int turn){
         ArrayList <StoneChain> playerStoneChains = null;
@@ -89,24 +91,36 @@ class GameManager {
             addStoneToChains(stone,0);
         }
     }
-    void removeDeadStoneChains(int turn){
-        ArrayList <StoneChain> playerStoneChains = null;
-        ArrayList <Stone> playerStones = null;
-        if(turn ==1 ){
+
+    void removeDeadStoneChains(int turn) {
+        ArrayList<StoneChain> playerStoneChains = null;
+        ArrayList<Stone> playerStones = null;
+        if (turn == 0) {
             playerStoneChains = playerOneStoneChains;
             playerStones = playerOneStones;
-        }else{
+        } else {
             playerStoneChains = playerTwoStoneChains;
             playerStones = playerTwoStones;
         }
-        for(StoneChain stoneChain:playerStoneChains){
-            if(GameLogicCalculator.calculateLiberties(stoneChain,board)==0){
-                for(Stone stone : stoneChain.getStones()){
+        for (int i = playerStoneChains.size() - 1; i >= 0; i--) {
+            if (GameLogicCalculator.calculateLiberties(playerStoneChains.get(i), board) == 0) {
+                ArrayList<Stone> stones = playerStoneChains.get(i).getStones();
+                for (int j =stones.size() - 1; j >= 0; j--) {
+                    Stone stone = stones.get(j);
                     playerStones.remove(stone);
+                    //getBoardAsIntersections()[stone.getXCoordinate()][stone.getYCoordinate()].setHasStone(false);
                 }
-                playerStoneChains.remove(stoneChain);
+                System.out.println("USUWAM chaina");
+                playerStoneChains.remove(playerStoneChains.get(i));
+                resetStoneChains();
             }
         }
+    }
+    void removeStone(Stone stone) {
+        playerTwoStones.remove(stone);
+        playerOneStones.remove(stone);
+        board.getIntersections()[stone.getXCoordinate()][stone.getYCoordinate()].setHasStone(false);
+        resetStoneChains();
     }
 
 }
