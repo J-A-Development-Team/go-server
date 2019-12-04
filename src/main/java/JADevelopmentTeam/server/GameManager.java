@@ -59,4 +59,14 @@ class GameManager {
             playerStoneChains.add(GameLogicCalculator.generateSuperStoneChain(neighborStoneChains,stone));
         }
     }
+    void resetStoneChains(){
+        playerOneStoneChains.clear();
+        playerTwoStoneChains.clear();
+        for(Stone stone : playerOneStones){
+            addStoneToChains(stone,1);
+        }
+        for(Stone stone: playerTwoStones){
+            addStoneToChains(stone,0);
+        }
+    }
 }
