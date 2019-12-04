@@ -108,10 +108,11 @@ public abstract class GameLogicCalculator {
     public static int checkIfMoveIsValid(Intersection chosenIntersection, GameManager gameManager, int turn) {
         Stone testStone = new Stone(chosenIntersection.getXCoordinate(), chosenIntersection.getYCoordinate());
         //TODO implement some real validation
-        ArrayList<Intersection> neighbor = getNeighborIntersections(testStone, gameManager.);
+        ArrayList<Intersection> neighbor = getNeighborIntersections(testStone, gameManager.getBoard());
         System.out.println("Muszę pomyśleć, mam " + neighbor.size() + "sąsiadów");
         if (gameManager.getBoardAsIntersections()[chosenIntersection.getXCoordinate()][chosenIntersection.getYCoordinate()].isHasStone()){
-
+            return 1;
         }
+        return 0;
     }
 }

@@ -19,11 +19,16 @@ class GameManager {
         return board.getIntersections();
     }
     boolean isValidMove(Intersection chosenIntersection,int turn){
-        int validation = GameLogicCalculator.checkIfMoveIsValid(chosenIntersection,board,turn);
+        int validation = GameLogicCalculator.checkIfMoveIsValid(chosenIntersection,this,turn);
         if(validation==0) return true;
         return false;
     }
-    void processMove(Intersection chosenIntersection,int turn){
+
+    public Board getBoard() {
+        return board;
+    }
+
+    void processMove(Intersection chosenIntersection, int turn){
         board.setIntersection(chosenIntersection);
         Stone stone = new Stone(chosenIntersection.getXCoordinate(),chosenIntersection.getYCoordinate());
         processStoneAdding(stone,turn);
@@ -37,6 +42,7 @@ class GameManager {
             playerTwoStones.add(stone);
         }
         addStoneToChains(stone,turn);
+        processStonesLiberties();
     }
     private void addStoneToChains(Stone stone, int turn){
         ArrayList <StoneChain> playerStoneChains = null;
@@ -57,6 +63,20 @@ class GameManager {
         }else{
             playerStoneChains.removeAll(neighborStoneChains);
             playerStoneChains.add(GameLogicCalculator.generateSuperStoneChain(neighborStoneChains,stone));
+        }
+    }
+    void processStonesLiberties(){
+        for(Stone stone : playerOneStones){
+            stone.setLiberties(GameLogicCalculator.calculateLiberties(stone,board));
+        }
+        for(Stone stone : playerTwoStones){
+            stone.setLiberties(GameLogicCalculator.calculateLiberties(stone,board));
+        }
+        for(StoneChain stoneChain : playerOneStoneChains){
+            stoneChain.setLiberties(GameLogicCalculator.calculateLiberties(stoneChain,board));
+        }
+        for(StoneChain stoneChain : playerTwoStoneChains){
+            stoneChain.setLiberties(GameLogicCalculator.calculateLiberties(stoneChain,board));
         }
     }
     void resetStoneChains(){
