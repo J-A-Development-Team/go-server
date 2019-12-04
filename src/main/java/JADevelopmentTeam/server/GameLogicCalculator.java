@@ -14,6 +14,14 @@ public abstract class GameLogicCalculator {
         return liberties;
     }
 
+    public static int calculateLiberties(Intersection intersection, Board board) {
+        int liberties = 0;
+        ArrayList<Intersection> possibleLiberties = getNeighborIntersections(intersection, board);
+        for (Intersection temp : possibleLiberties) {
+            if (!temp.isHasStone()) liberties++;
+        }
+        return liberties;
+    }
     public static int calculateLiberties(StoneChain stoneChain, Board board) {
         int liberties = 0;
         for (Stone stone : stoneChain.getStones()) {
@@ -58,6 +66,7 @@ public abstract class GameLogicCalculator {
         return -1;
     }
 
+
     private static ArrayList<Intersection> getNeighborIntersections(Stone stone, Board board) {
         int x = stone.getXCoordinate();
         int y = stone.getYCoordinate();
@@ -71,6 +80,23 @@ public abstract class GameLogicCalculator {
         return neighbors;
     }
 
+    private static ArrayList<Intersection> getNeighborIntersections(Intersection intersection, Board board) {
+        int x = intersection.getXCoordinate();
+        int y = intersection.getYCoordinate();
+        Stone stone = new Stone(x,y);
+        return getNeighborIntersections(stone,board);
+
+    }
+
+//    private static ArrayList<Stone> getNeighborStones(Stone stone, Board board){
+//        ArrayList<Intersection> intersections = getNeighborIntersections(stone,board);
+//        ArrayList<Stone> neighborStones = new ArrayList<>();
+//        for (Intersection intersection : intersections) {
+//            Stone temp = getStoneForIntersection(intersection,)
+//
+//        }
+//    }
+
     public static StoneChain generateSuperStoneChain(ArrayList<StoneChain> stoneChains, Stone connector) {
         StoneChain superStoneChain = new StoneChain(connector);
         for (StoneChain stoneChain : stoneChains) {
@@ -79,9 +105,13 @@ public abstract class GameLogicCalculator {
         return superStoneChain;
     }
 
-    public static int checkIfMoveIsValid(Intersection chosenIntersection, Board board, int turn) {
+    public static int checkIfMoveIsValid(Intersection chosenIntersection, GameManager gameManager, int turn) {
         Stone testStone = new Stone(chosenIntersection.getXCoordinate(), chosenIntersection.getYCoordinate());
         //TODO implement some real validation
-        return 0;
+        ArrayList<Intersection> neighbor = getNeighborIntersections(testStone, gameManager.);
+        System.out.println("Muszę pomyśleć, mam " + neighbor.size() + "sąsiadów");
+        if (gameManager.getBoardAsIntersections()[chosenIntersection.getXCoordinate()][chosenIntersection.getYCoordinate()].isHasStone()){
+
+        }
     }
 }
