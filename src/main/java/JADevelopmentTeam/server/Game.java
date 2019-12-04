@@ -69,9 +69,9 @@ public class Game implements Runnable {
             } else {
                 Intersection placedStone = (Intersection) players[turn].getDataPackage().getData();
                 if(turn==1){
-                    placedStone.setStoneBlack(true);
-                }else {
                     placedStone.setStoneBlack(false);
+                }else {
+                    placedStone.setStoneBlack(true);
                 }
                 if (gameManager.isValidMove(placedStone,turn)) {
                     lastMoveWasPass = false;
