@@ -89,4 +89,24 @@ class GameManager {
             addStoneToChains(stone,0);
         }
     }
+    void removeDeadStoneChains(int turn){
+        ArrayList <StoneChain> playerStoneChains = null;
+        ArrayList <Stone> playerStones = null;
+        if(turn ==1 ){
+            playerStoneChains = playerOneStoneChains;
+            playerStones = playerOneStones;
+        }else{
+            playerStoneChains = playerTwoStoneChains;
+            playerStones = playerTwoStones;
+        }
+        for(StoneChain stoneChain:playerStoneChains){
+            if(GameLogicCalculator.calculateLiberties(stoneChain,board)==0){
+                for(Stone stone : stoneChain.getStones()){
+                    playerStones.remove(stone);
+                }
+                playerStoneChains.remove(stoneChain);
+            }
+        }
+    }
+
 }
