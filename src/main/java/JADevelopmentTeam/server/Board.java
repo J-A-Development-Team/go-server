@@ -6,7 +6,6 @@ import java.util.ArrayList;
 
 public class Board {
     private Intersection[][] intersections;
-    private ArrayList <StoneChain> stoneChains;
     private int size;
 
     public Board(int size) {
@@ -17,7 +16,6 @@ public class Board {
                 intersections[i][j] = new Intersection(i,j,false);
             }
         }
-        stoneChains = new ArrayList<>();
     }
 
 

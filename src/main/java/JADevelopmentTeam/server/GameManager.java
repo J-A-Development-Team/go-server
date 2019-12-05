@@ -4,6 +4,7 @@ import JADevelopmentTeam.common.Intersection;
 
 import java.util.ArrayList;
 
+
 class GameManager {
     private Board board;
     private Board previousBoardState;
@@ -66,6 +67,7 @@ class GameManager {
             playerStoneChains.removeAll(neighborStoneChains);
             playerStoneChains.add(GameLogicCalculator.generateSuperStoneChain(neighborStoneChains,stone));
         }
+        processStonesLiberties();
     }
     void processStonesLiberties(){
         for(Stone stone : playerOneStones){
@@ -82,14 +84,15 @@ class GameManager {
         }
     }
     void resetStoneChains(){
-        playerOneStoneChains.clear();
-        playerTwoStoneChains.clear();
+        playerOneStoneChains = new ArrayList<>();
+        playerTwoStoneChains = new ArrayList<>();
         for(Stone stone : playerOneStones){
             addStoneToChains(stone,1);
         }
         for(Stone stone: playerTwoStones){
             addStoneToChains(stone,0);
         }
+        processStonesLiberties();
     }
 
     void removeDeadStoneChains(int turn) {
@@ -107,14 +110,17 @@ class GameManager {
                 ArrayList<Stone> stones = playerStoneChains.get(i).getStones();
                 for (int j =stones.size() - 1; j >= 0; j--) {
                     Stone stone = stones.get(j);
+                    board.getIntersections()[stone.getXCoordinate()][stone.getYCoordinate()].setHasStone(false);
                     playerStones.remove(stone);
+
                     //getBoardAsIntersections()[stone.getXCoordinate()][stone.getYCoordinate()].setHasStone(false);
                 }
                 System.out.println("USUWAM chaina");
                 playerStoneChains.remove(playerStoneChains.get(i));
-                resetStoneChains();
+
             }
         }
+        resetStoneChains();
     }
     void removeStone(Stone stone) {
         playerTwoStones.remove(stone);
