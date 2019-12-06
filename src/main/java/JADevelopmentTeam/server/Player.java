@@ -13,6 +13,7 @@ public class Player implements Runnable {
     private ObjectInputStream is = null;
     private ObjectOutputStream os = null;
     DataPackage dataPackage;
+    private PlayerState playerState = PlayerState.WaitForStart;
 
     public DataPackage getDataPackage() {
         return dataPackage;
@@ -22,13 +23,29 @@ public class Player implements Runnable {
         Receive, Send, WaitForStart, NotYourTurn, EndGame
     }
 
-    private PlayerState playerState = PlayerState.WaitForStart;
 
     public Player(Socket socket) {
         try {
             is = new ObjectInputStream(socket.getInputStream());
             os = new ObjectOutputStream(socket.getOutputStream());
+            sendTurnInfo();
         } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    public void sendTurnInfo() {
+        try {
+            switch (playerState) {
+                case WaitForStart:
+                    send(new DataPackage("Wait for start", DataPackage.Info.Turn));
+                    break;
+                case NotYourTurn:
+                    send(new DataPackage("Not your turn", DataPackage.Info.Turn));
+                    break;
+                default:
+                    send(new DataPackage("Your turn", DataPackage.Info.Turn));
+            }
+        }catch (IOException e){
             e.printStackTrace();
         }
     }

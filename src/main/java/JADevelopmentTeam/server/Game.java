@@ -36,6 +36,13 @@ public class Game implements Runnable {
         players[turn].setPlayerState(Player.PlayerState.Receive);
         players[Math.abs(turn - 1)].setPlayerState(Player.PlayerState.NotYourTurn);
         System.out.println("Players " + turn + " turn");
+        try {
+            players[turn].send(new DataPackage("Your turn",DataPackage.Info.Turn));
+            players[Math.abs(turn-1)].send(new DataPackage("Not your turn",DataPackage.Info.Turn));
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void endGame() {
