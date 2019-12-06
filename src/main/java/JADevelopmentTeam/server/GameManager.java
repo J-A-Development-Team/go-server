@@ -5,9 +5,8 @@ import JADevelopmentTeam.common.Intersection;
 import java.util.ArrayList;
 
 
-class GameManager implements Cloneable {
+class GameManager {
     private Board board;
-    private Board previousBoardState;
     ArrayList <Stone> playerOneStones = new ArrayList<>();
     ArrayList <Stone> playerTwoStones = new ArrayList<>();
     ArrayList <StoneChain> playerOneStoneChains = new ArrayList<>();
@@ -129,14 +128,9 @@ class GameManager implements Cloneable {
         resetStoneChains();
     }
 
-    @Override
-    public GameManager clone() {
-        GameManager clone = null;
-        try {
-            clone = (GameManager) super.clone();
-        } catch (CloneNotSupportedException e) {
-            clone = new GameManager(this.board.getSize());
-        }
+    public GameManager copy() {
+        GameManager clone = new GameManager(this.getBoard().getSize());
+        clone.board = this.board.copy();
         ArrayList<Stone> stones = new ArrayList<>();
         for (Stone original : playerOneStones) {
             Stone copy = new Stone(original.getXCoordinate(), original.getYCoordinate());
@@ -153,15 +147,14 @@ class GameManager implements Cloneable {
         clone.playerTwoStones = stones;
         ArrayList<StoneChain> chains = new ArrayList<>();
         for (StoneChain originalChain : playerOneStoneChains){
-            chains.add(originalChain.clone());
+            chains.add(originalChain.copy());
         }
         clone.playerOneStoneChains = chains;
         chains = new ArrayList<>();
         for (StoneChain originalChain : playerTwoStoneChains){
-            chains.add(originalChain.clone());
+            chains.add(originalChain.copy());
         }
         clone.playerTwoStoneChains = chains;
-        clone.previousBoardState = this.previousBoardState.clone();
         return clone;
     }
 

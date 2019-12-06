@@ -2,7 +2,7 @@ package JADevelopmentTeam.server;
 
 import java.util.ArrayList;
 
-public class StoneChain implements Cloneable {
+public class StoneChain {
     private ArrayList<Stone> stones = new ArrayList<>();
     private int liberties;
 
@@ -34,22 +34,15 @@ public class StoneChain implements Cloneable {
         return stones;
     }
 
-    @Override
-    public StoneChain clone() {
-        StoneChain clone = null;
-        try {
-            clone = (StoneChain) super.clone();
-        } catch (CloneNotSupportedException e) {
-            clone = new StoneChain(new ArrayList<>());
-        }
-        clone.setLiberties(this.getLiberties());
+    public StoneChain copy() {
         ArrayList<Stone> copy = new ArrayList<>();
         for (Stone original : this.getStones()){
             Stone temp = new Stone(original.getXCoordinate(),original.getYCoordinate());
             temp.setLiberties(original.getLiberties());
             copy.add(temp);
         }
-        clone.stones = copy;
+        StoneChain clone = new StoneChain(copy);
+        clone.setLiberties(this.getLiberties());
         return clone;
     }
 }
