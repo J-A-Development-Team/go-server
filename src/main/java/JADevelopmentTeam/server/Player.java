@@ -51,12 +51,13 @@ public class Player implements Runnable {
         dataPackage = (DataPackage) is.readObject();
         switch (playerState) {
             case WaitForStart:
-                send(new DataPackage("Wait for start", DataPackage.Info.Info));
+                send(new DataPackage("Wait for start", DataPackage.Info.Turn));
                 break;
             case NotYourTurn:
-                send(new DataPackage("Not your turn", DataPackage.Info.Info));
+                send(new DataPackage("Not your turn", DataPackage.Info.Turn));
                 break;
             default:
+                send(new DataPackage("Your turn",DataPackage.Info.Turn));
                 synchronized (lock){
                     lock.notify();
                 }

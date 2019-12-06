@@ -6,7 +6,7 @@ public class DataPackage <T> implements Serializable {
     private Object data;
     private Info info;
     public enum Info {
-        Stone, StoneTable, PlayerColor, Info, Pass
+        Stone, StoneTable, PlayerColor, Info, Pass, Turn
     }
 
     public DataPackage(Object data, Info info) {
