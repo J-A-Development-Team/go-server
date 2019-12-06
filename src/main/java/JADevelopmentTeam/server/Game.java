@@ -41,11 +41,13 @@ public class Game implements Runnable {
     private void endGame() {
         System.out.println("Ending game");
     }
-    private void startPlayers(){
+
+    private void startPlayers() {
         new Thread(players[0]).start();
         new Thread(players[1]).start();
 
     }
+
     @Override
     public void run() {
         System.out.println("Starting game");
@@ -68,16 +70,29 @@ public class Game implements Runnable {
                 nextTurn();
             } else {
                 Intersection placedStone = (Intersection) players[turn].getDataPackage().getData();
-                if(turn==1){
+                if (turn == 1) {
                     placedStone.setStoneBlack(false);
-                }else {
+                } else {
                     placedStone.setStoneBlack(true);
                 }
-                if (gameManager.processMove(placedStone,turn)==0) {
+                int moveResult = gameManager.processMove(placedStone, turn);
+                if (moveResult == 0) {
                     lastMoveWasPass = false;
                 } else {
+                    DataPackage badMoveData = null;
+                    switch (moveResult) {
+                        case 2:
+                            badMoveData = new DataPackage("Suicidal Move", DataPackage.Info.Info);
+                            break;
+                        case 3:
+                            badMoveData = new DataPackage("Illegal KO Move", DataPackage.Info.Info);
+                            break;
+                        default:
+                            badMoveData = new DataPackage("Bad Move", DataPackage.Info.Info);
+                            break;
+                    }
                     try {
-                        players[turn].send(new DataPackage("Not valid move",DataPackage.Info.Info));
+                        players[turn].send(badMoveData);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -86,7 +101,6 @@ public class Game implements Runnable {
                 updatePlayersBoard();
                 nextTurn();
             }
-
         }
         endGame();
     }

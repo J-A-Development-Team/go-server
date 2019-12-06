@@ -106,10 +106,10 @@ public abstract class GameLogicCalculator {
             return 1;
         }
         System.out.println("Myślę");
-        ArrayList <StoneChain> opponentStoneChains;
-        if(turn==0){
+        ArrayList<StoneChain> opponentStoneChains;
+        if (turn == 0) {
             opponentStoneChains = gameManager.playerOneStoneChains;
-        }else{
+        } else {
             opponentStoneChains = gameManager.playerTwoStoneChains;
         }
         int opponentStoneChainsCount = opponentStoneChains.size();
@@ -118,9 +118,9 @@ public abstract class GameLogicCalculator {
         gameManager.processStoneAdding(newStone, turn);
         gameManager.removeDeadStoneChains(turn);
         if (calculateLiberties(chosenIntersection, gameManager.getBoard()) <= 0) {
-            if(opponentStoneChainsCount>opponentStoneChains.size()){
+            if (opponentStoneChainsCount > opponentStoneChains.size()) {
                 return 0;
-            }else{
+            } else {
                 System.out.println("Przywracam z backupa");
                 gameManager.loadBackup(backup);
                 return 2;

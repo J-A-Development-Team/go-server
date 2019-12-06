@@ -67,7 +67,6 @@ public class Player implements Runnable {
     @Override
     public void run() {
         System.out.println("Lets Play!");
-
         while (inGame) {
             try {
                 receive();
