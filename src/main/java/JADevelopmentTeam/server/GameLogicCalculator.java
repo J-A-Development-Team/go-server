@@ -92,7 +92,6 @@ public abstract class GameLogicCalculator {
 
     }
 
-
     public static StoneChain generateSuperStoneChain(ArrayList<StoneChain> stoneChains, Stone connector) {
         StoneChain superStoneChain = new StoneChain(connector);
         for (StoneChain stoneChain : stoneChains) {
@@ -107,31 +106,26 @@ public abstract class GameLogicCalculator {
             return 1;
         }
         System.out.println("Myślę");
+        ArrayList <StoneChain> opponentStoneChains;
+        if(turn==0){
+            opponentStoneChains = gameManager.playerOneStoneChains;
+        }else{
+            opponentStoneChains = gameManager.playerTwoStoneChains;
+        }
+        int opponentStoneChainsCount = opponentStoneChains.size();
         gameManager.getBoard().setIntersection(chosenIntersection);
         Stone newStone = new Stone(chosenIntersection.getXCoordinate(), chosenIntersection.getYCoordinate());
         gameManager.processStoneAdding(newStone, turn);
-        if (calculateLiberties(chosenIntersection, gameManager.getBoard()) > 0) {
-            return 0;
-        } else {
-            if (turn == 1) {
-                for (Stone stone : gameManager.playerOneStones) {
-                    if (stone.getLiberties() == 0) {
-                        gameManager.loadBackup(backup);
-                        System.out.println("backup");
-                        return 2;
-                    }
-                }
-            } else {
-                for (Stone stone : gameManager.playerTwoStones) {
-                    if (stone.getLiberties() == 0) {
-                        gameManager.loadBackup(backup);
-                        System.out.println("Backup");
-                        return 2;
-                    }
-                }
+        gameManager.removeDeadStoneChains(turn);
+        if (calculateLiberties(chosenIntersection, gameManager.getBoard()) <= 0) {
+            if(opponentStoneChainsCount>opponentStoneChains.size()){
+                return 0;
+            }else{
+                System.out.println("Przywracam z backupa");
+                gameManager.loadBackup(backup);
+                return 2;
             }
-            System.out.println("Wymyśliłem");
-            return 0;
         }
+        return 0;
     }
 }

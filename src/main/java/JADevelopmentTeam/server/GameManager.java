@@ -18,11 +18,7 @@ class GameManager {
     Intersection[][] getBoardAsIntersections(){
         return board.getIntersections();
     }
-    boolean isValidMove(Intersection chosenIntersection,int turn){
-        int validation = GameLogicCalculator.processMove(chosenIntersection,this,turn);
-        if(validation==0) return true;
-        return false;
-    }
+
 
     public Board getBoard() {
         return board;
@@ -39,7 +35,7 @@ class GameManager {
         }
         addStoneToChains(stone,turn);
         processStonesLiberties();
-        removeDeadStoneChains(turn);
+        //removeDeadStoneChains(turn);
     }
     private void addStoneToChains(Stone stone, int turn){
         ArrayList <StoneChain> playerStoneChains = null;
