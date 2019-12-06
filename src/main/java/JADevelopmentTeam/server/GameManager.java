@@ -19,7 +19,7 @@ class GameManager {
         return board.getIntersections();
     }
     boolean isValidMove(Intersection chosenIntersection,int turn){
-        int validation = GameLogicCalculator.checkIfMoveIsValid(chosenIntersection,this,turn);
+        int validation = GameLogicCalculator.processMove(chosenIntersection,this,turn);
         if(validation==0) return true;
         return false;
     }
@@ -28,15 +28,10 @@ class GameManager {
         return board;
     }
 
-    void processMove(Intersection chosenIntersection, int turn){
-        board.setIntersection(chosenIntersection);
-        Stone stone = new Stone(chosenIntersection.getXCoordinate(),chosenIntersection.getYCoordinate());
-        processStoneAdding(stone,turn);
-        System.out.println("Magiczne czary");
-        System.out.println(GameLogicCalculator.calculateLiberties(stone,board));
-
+    int processMove(Intersection chosenIntersection, int turn){
+        return GameLogicCalculator.processMove(chosenIntersection, this,turn);
     }
-    private void processStoneAdding(Stone stone, int turn){
+    void processStoneAdding(Stone stone, int turn){
         if(turn ==1){
             playerOneStones.add(stone);
         }else{
@@ -119,12 +114,6 @@ class GameManager {
 
             }
         }
-        resetStoneChains();
-    }
-    void removeStone(Stone stone) {
-        playerTwoStones.remove(stone);
-        playerOneStones.remove(stone);
-        board.getIntersections()[stone.getXCoordinate()][stone.getYCoordinate()].setHasStone(false);
         resetStoneChains();
     }
 

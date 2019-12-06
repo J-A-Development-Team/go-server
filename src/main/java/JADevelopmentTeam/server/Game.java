@@ -73,9 +73,8 @@ public class Game implements Runnable {
                 }else {
                     placedStone.setStoneBlack(true);
                 }
-                if (gameManager.isValidMove(placedStone,turn)) {
+                if (gameManager.processMove(placedStone,turn)==0) {
                     lastMoveWasPass = false;
-                    gameManager.processMove(placedStone,turn);
                 } else {
                     try {
                         players[turn].send(new DataPackage("Not valid move",DataPackage.Info.Info));

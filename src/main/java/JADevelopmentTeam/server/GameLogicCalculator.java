@@ -109,36 +109,35 @@ public abstract class GameLogicCalculator {
         return superStoneChain;
     }
 
-    public static int checkIfMoveIsValid(Intersection chosenIntersection, GameManager gameManager, int turn) {
-        Stone testStone = new Stone(chosenIntersection.getXCoordinate(), chosenIntersection.getYCoordinate());
-        //TODO implement some real validation
+    public static int processMove(Intersection chosenIntersection, GameManager gameManager, int turn) {
+        GameManager backup = gameManager.copy();
         if (gameManager.getBoardAsIntersections()[chosenIntersection.getXCoordinate()][chosenIntersection.getYCoordinate()].isHasStone()) {
             return 1;
         }
+        System.out.println("Myślę");
+        gameManager.getBoard().setIntersection(chosenIntersection);
+        Stone newStone = new Stone(chosenIntersection.getXCoordinate(), chosenIntersection.getYCoordinate());
+        gameManager.processStoneAdding(newStone, turn);
         if (calculateLiberties(chosenIntersection, gameManager.getBoard()) > 0) {
+
             return 0;
         } else {
-            System.out.println("Myślę");
-//            gameManager.processMove(chosenIntersection, turn);
-//            gameManager.processStonesLiberties();
-//            if (turn == 0) {
-//                for (Stone stone : gameManager.playerOneStones) {
-//                    if (stone.getLiberties() == 0) {
-//                        gameManager.removeStone(getStoneForIntersection(chosenIntersection, gameManager.playerOneStones));
-//                        return 2;
-//                    }
-//                    gameManager.removeStone(getStoneForIntersection(chosenIntersection, gameManager.playerOneStones));
-//                }
-//            } else {
-//                for (Stone stone : gameManager.playerTwoStones) {
-//                    if (stone.getLiberties() == 0) {
-//                        gameManager.removeStone(getStoneForIntersection(chosenIntersection, gameManager.playerTwoStones));
-//                        return 2;
-//                    }
-//                    gameManager.removeStone(getStoneForIntersection(chosenIntersection, gameManager.playerTwoStones));
-//                }
-//            }
-//            System.out.println("Wymyśliłem");
+            if (turn == 0) {
+                for (Stone stone : gameManager.playerOneStones) {
+                    if (stone.getLiberties() == 0) {
+                        gameManager = backup;
+                        return 2;
+                    }
+                }
+            } else {
+                for (Stone stone : gameManager.playerTwoStones) {
+                    if (stone.getLiberties() == 0) {
+                        gameManager = backup;
+                        return 2;
+                    }
+                }
+            }
+            System.out.println("Wymyśliłem");
             return 0;
         }
     }
