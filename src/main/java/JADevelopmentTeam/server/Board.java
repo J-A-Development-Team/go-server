@@ -4,7 +4,7 @@ import JADevelopmentTeam.common.Intersection;
 
 import java.util.ArrayList;
 
-public class Board {
+public class Board implements Cloneable{
     private Intersection[][] intersections;
     private int size;
 
@@ -18,6 +18,9 @@ public class Board {
         }
     }
 
+    public int getSize() {
+        return size;
+    }
 
     public Intersection[][] getIntersections() {
         return intersections;
@@ -25,5 +28,25 @@ public class Board {
 
     public void setIntersection(Intersection intersection) {
         this.intersections[intersection.getXCoordinate()][intersection.getYCoordinate()] = intersection;
+    }
+
+    @Override
+    public Board clone() {
+        Board clone;
+        try {
+            clone = (Board) super.clone();
+        } catch (CloneNotSupportedException e) {
+            clone = new Board(this.getSize());
+        }
+        for (int i = 0; i < this.getSize(); i++) {
+            for (int j = 0; j < this.getSize(); j++) {
+                Intersection original = this.getIntersections()[j][i];
+                Intersection copy = new Intersection(j,i);
+                copy.setHasStone(original.isHasStone());
+                copy.setStoneBlack(original.isStoneBlack());
+                clone.setIntersection(copy);
+            }
+        }
+        return clone;
     }
 }
