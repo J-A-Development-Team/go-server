@@ -117,6 +117,14 @@ class GameManager {
         resetStoneChains();
     }
 
+    public void loadBackup(GameManager backup){
+        this.board = backup.board;
+        this.playerOneStoneChains = backup.playerOneStoneChains;
+        this.playerTwoStoneChains = backup.playerTwoStoneChains;
+        this.playerOneStones = backup.playerOneStones;
+        this.playerTwoStones = backup.playerTwoStones;
+    }
+
     public GameManager copy() {
         GameManager clone = new GameManager(this.getBoard().getSize());
         clone.board = this.board.copy();

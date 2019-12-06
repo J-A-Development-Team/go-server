@@ -92,14 +92,6 @@ public abstract class GameLogicCalculator {
 
     }
 
-//    private static ArrayList<Stone> getNeighborStones(Stone stone, Board board){
-//        ArrayList<Intersection> intersections = getNeighborIntersections(stone,board);
-//        ArrayList<Stone> neighborStones = new ArrayList<>();
-//        for (Intersection intersection : intersections) {
-//            Stone temp = getStoneForIntersection(intersection,)
-//
-//        }
-//    }
 
     public static StoneChain generateSuperStoneChain(ArrayList<StoneChain> stoneChains, Stone connector) {
         StoneChain superStoneChain = new StoneChain(connector);
@@ -119,20 +111,21 @@ public abstract class GameLogicCalculator {
         Stone newStone = new Stone(chosenIntersection.getXCoordinate(), chosenIntersection.getYCoordinate());
         gameManager.processStoneAdding(newStone, turn);
         if (calculateLiberties(chosenIntersection, gameManager.getBoard()) > 0) {
-
             return 0;
         } else {
-            if (turn == 0) {
+            if (turn == 1) {
                 for (Stone stone : gameManager.playerOneStones) {
                     if (stone.getLiberties() == 0) {
-                        gameManager = backup;
+                        gameManager.loadBackup(backup);
+                        System.out.println("backup");
                         return 2;
                     }
                 }
             } else {
                 for (Stone stone : gameManager.playerTwoStones) {
                     if (stone.getLiberties() == 0) {
-                        gameManager = backup;
+                        gameManager.loadBackup(backup);
+                        System.out.println("Backup");
                         return 2;
                     }
                 }
