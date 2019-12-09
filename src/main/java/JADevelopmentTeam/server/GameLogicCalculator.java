@@ -102,11 +102,14 @@ public abstract class GameLogicCalculator {
 
     public static int processMove(Intersection chosenIntersection, GameManager gameManager, int turn) {
         GameManager backup = gameManager.copy();
+        if (gameManager.lastRemovedStone != null)
+            if (gameManager.lastRemovedStone.getXCoordinate() == chosenIntersection.getXCoordinate() && gameManager.lastRemovedStone.getYCoordinate() == chosenIntersection.getYCoordinate())
+                return 3;
         if (gameManager.getBoardAsIntersections()[chosenIntersection.getXCoordinate()][chosenIntersection.getYCoordinate()].isHasStone()) {
             return 1;
         }
         System.out.println("Myślę");
-        ArrayList<StoneChain> opponentStoneChains,playerStoneChains;
+        ArrayList<StoneChain> opponentStoneChains, playerStoneChains;
         if (turn == 0) {
             opponentStoneChains = gameManager.playerOneStoneChains;
             playerStoneChains = gameManager.playerTwoStoneChains;
@@ -123,8 +126,8 @@ public abstract class GameLogicCalculator {
             if (opponentStoneChainsCount > opponentStoneChains.size()) {
                 return 0;
             } else {
-                for(StoneChain stoneChain : playerStoneChains){
-                    if(stoneChain.getLiberties()==0){
+                for (StoneChain stoneChain : playerStoneChains) {
+                    if (stoneChain.getLiberties() == 0) {
                         System.out.println("Przywracam z backupa");
                         gameManager.loadBackup(backup);
                         return 2;

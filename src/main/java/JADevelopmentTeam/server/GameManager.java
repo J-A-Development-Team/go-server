@@ -11,6 +11,7 @@ class GameManager {
     ArrayList <Stone> playerTwoStones = new ArrayList<>();
     ArrayList <StoneChain> playerOneStoneChains = new ArrayList<>();
     ArrayList <StoneChain> playerTwoStoneChains = new ArrayList<>();
+    Stone lastRemovedStone = null;
     GameManager(int boardSize) {
         board = new Board(boardSize);
     }
@@ -95,6 +96,8 @@ class GameManager {
             playerStoneChains = playerTwoStoneChains;
             playerStones = playerTwoStones;
         }
+        lastRemovedStone = null;
+        int deleteCounter=0;
         for (int i = playerStoneChains.size() - 1; i >= 0; i--) {
             if (GameLogicCalculator.calculateLiberties(playerStoneChains.get(i), board) == 0) {
                 ArrayList<Stone> stones = playerStoneChains.get(i).getStones();
@@ -106,8 +109,13 @@ class GameManager {
                     //getBoardAsIntersections()[stone.getXCoordinate()][stone.getYCoordinate()].setHasStone(false);
                 }
                 System.out.println("USUWAM chaina");
+                deleteCounter++;
+                if (playerStoneChains.get(i).getStones().size()==1)
+                    lastRemovedStone=playerStoneChains.get(i).getStones().get(0);
                 playerStoneChains.remove(playerStoneChains.get(i));
-
+            }
+            if (deleteCounter!=1){
+                lastRemovedStone = null;
             }
         }
         resetStoneChains();
@@ -124,6 +132,7 @@ class GameManager {
     public GameManager copy() {
         GameManager clone = new GameManager(this.getBoard().getSize());
         clone.board = this.board.copy();
+        clone.lastRemovedStone = this.lastRemovedStone;
         ArrayList<Stone> stones = new ArrayList<>();
         for (Stone original : playerOneStones) {
             Stone copy = new Stone(original.getXCoordinate(), original.getYCoordinate());
