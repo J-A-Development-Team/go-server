@@ -6,17 +6,18 @@ import java.util.ArrayList;
 
 
 class GameManager {
-    private Board board;
-    ArrayList <Stone> playerOneStones = new ArrayList<>();
-    ArrayList <Stone> playerTwoStones = new ArrayList<>();
-    ArrayList <StoneChain> playerOneStoneChains = new ArrayList<>();
-    ArrayList <StoneChain> playerTwoStoneChains = new ArrayList<>();
+    ArrayList<Stone> playerOneStones = new ArrayList<>();
+    ArrayList<Stone> playerTwoStones = new ArrayList<>();
+    ArrayList<StoneChain> playerOneStoneChains = new ArrayList<>();
+    ArrayList<StoneChain> playerTwoStoneChains = new ArrayList<>();
     Stone lastRemovedStone = null;
+    private Board board;
+
     GameManager(int boardSize) {
         board = new Board(boardSize);
     }
 
-    Intersection[][] getBoardAsIntersections(){
+    Intersection[][] getBoardAsIntersections() {
         return board.getIntersections();
     }
 
@@ -25,63 +26,107 @@ class GameManager {
         return board;
     }
 
-    int processMove(Intersection chosenIntersection, int turn){
-        return GameLogicCalculator.processMove(chosenIntersection, this,turn);
+    int processMove(Intersection chosenIntersection, int turn) {
+        return GameLogicCalculator.processMove(chosenIntersection, this, turn);
     }
-    void processStoneAdding(Stone stone, int turn){
-        if(turn ==1){
-            playerOneStones.add(stone);
+    int processDeadDeclaration(Intersection chosenIntersection){
+        int x = chosenIntersection.getXCoordinate();
+        int y = chosenIntersection.getYCoordinate();
+        if(board.getIntersections()[x][y].isHasStone()){
+            Stone stone;
+            stone = GameLogicCalculator.getStoneForIntersection(board.getIntersections()[x][y],playerOneStones);
+            if(stone!=null){
+                int stoneChainID = GameLogicCalculator.getStoneChainIDForStone(stone,playerOneStoneChains);
+                StoneChain stoneChain = playerOneStoneChains.get(stoneChainID);
+                changeChainFlag(stoneChain);
+            }else{
+                stone = GameLogicCalculator.getStoneForIntersection(board.getIntersections()[x][y],playerTwoStones);
+                int stoneChainID = GameLogicCalculator.getStoneChainIDForStone(stone,playerTwoStoneChains);
+                StoneChain stoneChain = playerTwoStoneChains.get(stoneChainID);
+                changeChainFlag(stoneChain);
+            }
+            return 0;
         }else{
+            return 1;
+        }
+    }
+    void changeChainFlag(StoneChain chainToFlag){
+        if(!chainToFlag.isDead()){
+            setChainFlag(chainToFlag,true);
+        }else{
+            setChainFlag(chainToFlag,false);
+        }
+    }
+    void setChainFlag(StoneChain chainToMakeFlag,boolean flag){
+        ArrayList <Intersection> chainIntersections = new ArrayList<>();
+        for(Stone stone: chainToMakeFlag.getStones()){
+            chainIntersections.add(GameLogicCalculator.getIntersectionForStone(stone,board));
+        }
+        for(Intersection intersection : chainIntersections){
+            intersection.setStoneDead(flag);
+        }
+        chainToMakeFlag.setDead(flag);
+    }
+
+    void setChainDead(StoneChain chainToMakeDead){
+
+    }
+    void processStoneAdding(Stone stone, int turn) {
+        if (turn == 1) {
+            playerOneStones.add(stone);
+        } else {
             playerTwoStones.add(stone);
         }
-        addStoneToChains(stone,turn);
+        addStoneToChains(stone, turn);
         processStonesLiberties();
-        //removeDeadStoneChains(turn);
     }
-    private void addStoneToChains(Stone stone, int turn){
-        ArrayList <StoneChain> playerStoneChains = null;
-        ArrayList <Stone> playerStones = null;
-        if(turn ==1 ){
+
+    private void addStoneToChains(Stone stone, int turn) {
+        ArrayList<StoneChain> playerStoneChains = null;
+        ArrayList<Stone> playerStones = null;
+        if (turn == 1) {
             playerStoneChains = playerOneStoneChains;
             playerStones = playerOneStones;
-        }else{
+        } else {
             playerStoneChains = playerTwoStoneChains;
             playerStones = playerTwoStones;
         }
-        ArrayList <StoneChain> neighborStoneChains = GameLogicCalculator.getNeighborChains(stone,board,playerStoneChains,playerStones);
-        if (neighborStoneChains.size()==0){
+        ArrayList<StoneChain> neighborStoneChains = GameLogicCalculator.getNeighborChains(stone, board, playerStoneChains, playerStones);
+        if (neighborStoneChains.size() == 0) {
             StoneChain stoneChain = new StoneChain(stone);
             playerStoneChains.add(stoneChain);
-        }else if(neighborStoneChains.size()==1){
+        } else if (neighborStoneChains.size() == 1) {
             playerStoneChains.get(playerStoneChains.indexOf(neighborStoneChains.get(0))).addStone(stone);
-        }else{
+        } else {
             playerStoneChains.removeAll(neighborStoneChains);
-            playerStoneChains.add(GameLogicCalculator.generateSuperStoneChain(neighborStoneChains,stone));
+            playerStoneChains.add(GameLogicCalculator.generateSuperStoneChain(neighborStoneChains, stone));
         }
         processStonesLiberties();
     }
-    void processStonesLiberties(){
-        for(Stone stone : playerOneStones){
-            stone.setLiberties(GameLogicCalculator.calculateLiberties(stone,board));
+
+    void processStonesLiberties() {
+        for (Stone stone : playerOneStones) {
+            stone.setLiberties(GameLogicCalculator.calculateLiberties(stone, board));
         }
-        for(Stone stone : playerTwoStones){
-            stone.setLiberties(GameLogicCalculator.calculateLiberties(stone,board));
+        for (Stone stone : playerTwoStones) {
+            stone.setLiberties(GameLogicCalculator.calculateLiberties(stone, board));
         }
-        for(StoneChain stoneChain : playerOneStoneChains){
-            stoneChain.setLiberties(GameLogicCalculator.calculateLiberties(stoneChain,board));
+        for (StoneChain stoneChain : playerOneStoneChains) {
+            stoneChain.setLiberties(GameLogicCalculator.calculateLiberties(stoneChain, board));
         }
-        for(StoneChain stoneChain : playerTwoStoneChains){
-            stoneChain.setLiberties(GameLogicCalculator.calculateLiberties(stoneChain,board));
+        for (StoneChain stoneChain : playerTwoStoneChains) {
+            stoneChain.setLiberties(GameLogicCalculator.calculateLiberties(stoneChain, board));
         }
     }
-    void resetStoneChains(){
+
+    void resetStoneChains() {
         playerOneStoneChains = new ArrayList<>();
         playerTwoStoneChains = new ArrayList<>();
-        for(Stone stone : playerOneStones){
-            addStoneToChains(stone,1);
+        for (Stone stone : playerOneStones) {
+            addStoneToChains(stone, 1);
         }
-        for(Stone stone: playerTwoStones){
-            addStoneToChains(stone,0);
+        for (Stone stone : playerTwoStones) {
+            addStoneToChains(stone, 0);
         }
         processStonesLiberties();
     }
@@ -97,31 +142,29 @@ class GameManager {
             playerStones = playerTwoStones;
         }
         lastRemovedStone = null;
-        int deleteCounter=0;
+        int deleteCounter = 0;
         for (int i = playerStoneChains.size() - 1; i >= 0; i--) {
             if (GameLogicCalculator.calculateLiberties(playerStoneChains.get(i), board) == 0) {
                 ArrayList<Stone> stones = playerStoneChains.get(i).getStones();
-                for (int j =stones.size() - 1; j >= 0; j--) {
+                for (int j = stones.size() - 1; j >= 0; j--) {
                     Stone stone = stones.get(j);
                     board.getIntersections()[stone.getXCoordinate()][stone.getYCoordinate()].setHasStone(false);
                     playerStones.remove(stone);
-
-                    //getBoardAsIntersections()[stone.getXCoordinate()][stone.getYCoordinate()].setHasStone(false);
                 }
                 System.out.println("USUWAM chaina");
                 deleteCounter++;
-                if (playerStoneChains.get(i).getStones().size()==1)
-                    lastRemovedStone=playerStoneChains.get(i).getStones().get(0);
+                if (playerStoneChains.get(i).getStones().size() == 1)
+                    lastRemovedStone = playerStoneChains.get(i).getStones().get(0);
                 playerStoneChains.remove(playerStoneChains.get(i));
             }
-            if (deleteCounter!=1){
+            if (deleteCounter != 1) {
                 lastRemovedStone = null;
             }
         }
         resetStoneChains();
     }
 
-    public void loadBackup(GameManager backup){
+    public void loadBackup(GameManager backup) {
         this.board = backup.board;
         this.playerOneStoneChains = backup.playerOneStoneChains;
         this.playerTwoStoneChains = backup.playerTwoStoneChains;
@@ -148,12 +191,12 @@ class GameManager {
         }
         clone.playerTwoStones = stones;
         ArrayList<StoneChain> chains = new ArrayList<>();
-        for (StoneChain originalChain : playerOneStoneChains){
+        for (StoneChain originalChain : playerOneStoneChains) {
             chains.add(originalChain.copy());
         }
         clone.playerOneStoneChains = chains;
         chains = new ArrayList<>();
-        for (StoneChain originalChain : playerTwoStoneChains){
+        for (StoneChain originalChain : playerTwoStoneChains) {
             chains.add(originalChain.copy());
         }
         clone.playerTwoStoneChains = chains;

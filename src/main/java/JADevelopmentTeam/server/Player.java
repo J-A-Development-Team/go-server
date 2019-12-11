@@ -9,6 +9,8 @@ import java.net.Socket;
 
 public class Player implements Runnable {
     boolean inGame = true;
+    boolean receivedData = false;
+    boolean acceptedStones = false;
     private Object lock;
     private ObjectInputStream is = null;
     private ObjectOutputStream os = null;
@@ -33,6 +35,15 @@ public class Player implements Runnable {
             e.printStackTrace();
         }
     }
+
+    public boolean isAcceptedStones() {
+        return acceptedStones;
+    }
+
+    public void setAcceptedStones(boolean acceptedStones) {
+        this.acceptedStones = acceptedStones;
+    }
+
     public void sendTurnInfo() {
         try {
             switch (playerState) {
@@ -76,6 +87,7 @@ public class Player implements Runnable {
             default:
                 send(new DataPackage("Your turn",DataPackage.Info.Turn));
                 synchronized (lock){
+                    receivedData = true;
                     lock.notify();
                 }
         }

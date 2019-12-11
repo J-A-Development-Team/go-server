@@ -7,6 +7,7 @@ public class Intersection implements Serializable {
     private int yCoordinate;
     private boolean isStoneBlack;
     private boolean hasStone;
+    private boolean isStoneDead = false;
 
     public Intersection(int xCoordinate, int yCoordinate) {
         this.xCoordinate = xCoordinate;
@@ -30,6 +31,14 @@ public class Intersection implements Serializable {
 
     public boolean isHasStone() {
         return hasStone;
+    }
+
+    public boolean isStoneDead() {
+        return isStoneDead;
+    }
+
+    public void setStoneDead(boolean stoneDead) {
+        isStoneDead = stoneDead;
     }
 
     public int getXCoordinate() {

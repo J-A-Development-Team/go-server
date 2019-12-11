@@ -51,7 +51,7 @@ public abstract class GameLogicCalculator {
         return neighborStoneChains;
     }
 
-    private static Stone getStoneForIntersection(Intersection intersection, ArrayList<Stone> stones) {
+    static Stone getStoneForIntersection(Intersection intersection, ArrayList<Stone> stones) {
         for (Stone stone : stones) {
             if (stone.getXCoordinate() == intersection.getXCoordinate()
                     && stone.getYCoordinate() == intersection.getYCoordinate()) {
@@ -60,8 +60,12 @@ public abstract class GameLogicCalculator {
         }
         return null;
     }
-
-    private static int getStoneChainIDForStone(Stone stone, ArrayList<StoneChain> stoneChains) {
+    static Intersection getIntersectionForStone(Stone stone,Board board){
+        int x = stone.getXCoordinate();
+        int y = stone.getYCoordinate();
+        return board.getIntersections()[x][y];
+    }
+    static int getStoneChainIDForStone(Stone stone, ArrayList<StoneChain> stoneChains) {
         for (StoneChain stoneChain : stoneChains) {
             if (stoneChain.getStones().indexOf(stone) != -1) {
                 return stoneChains.indexOf(stoneChain);

@@ -5,6 +5,15 @@ import java.util.ArrayList;
 public class StoneChain {
     private ArrayList<Stone> stones = new ArrayList<>();
     private int liberties;
+    private boolean isDead;
+
+    public boolean isDead() {
+        return isDead;
+    }
+
+    public void setDead(boolean dead) {
+        isDead = dead;
+    }
 
     public StoneChain(ArrayList<Stone> stones) {
         this.stones = stones;

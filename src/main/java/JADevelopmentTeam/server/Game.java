@@ -33,13 +33,23 @@ public class Game implements Runnable {
 
     private void nextTurn() {
         turn = Math.abs(turn - 1);
-        players[turn].setPlayerState(Player.PlayerState.Receive);
         players[Math.abs(turn - 1)].setPlayerState(Player.PlayerState.NotYourTurn);
         System.out.println("Players " + turn + " turn");
         try {
-            players[turn].send(new DataPackage("Your turn",DataPackage.Info.Turn));
-            players[Math.abs(turn-1)].send(new DataPackage("Not your turn",DataPackage.Info.Turn));
+            players[turn].send(new DataPackage("Your turn", DataPackage.Info.Turn));
+            players[Math.abs(turn - 1)].send(new DataPackage("Not your turn", DataPackage.Info.Turn));
 
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void proceedToEndGame() {
+        players[0].setPlayerState(Player.PlayerState.Receive);
+        players[1].setPlayerState(Player.PlayerState.Receive);
+        try {
+            players[0].send(new DataPackage("Remove Dead Stones", DataPackage.Info.Turn));
+            players[1].send(new DataPackage("Remove Dead Stones", DataPackage.Info.Turn));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -53,8 +63,8 @@ public class Game implements Runnable {
         new Thread(players[0]).start();
         new Thread(players[1]).start();
         try {
-            players[0].send(new DataPackage("black",DataPackage.Info.PlayerColor));
-            players[1].send(new DataPackage("white",DataPackage.Info.PlayerColor));
+            players[0].send(new DataPackage("black", DataPackage.Info.PlayerColor));
+            players[1].send(new DataPackage("white", DataPackage.Info.PlayerColor));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -112,6 +122,36 @@ public class Game implements Runnable {
                 }
                 updatePlayersBoard();
                 nextTurn();
+            }
+        }
+        System.out.println("A teraz mili państwo usuwamy kamienie");
+        proceedToEndGame();
+        while (true) {
+            synchronized (lock) {
+                try {
+                    wait();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                DataPackage receivedData;
+                int playerThatSend;
+                if (players[0].receivedData) {
+                    receivedData = players[0].getDataPackage();
+                    playerThatSend = 0;
+                } else {
+                    receivedData = players[1].getDataPackage();
+                    playerThatSend = 1;
+                }
+                if (receivedData.getInfo() == DataPackage.Info.Pass) {
+                    players[playerThatSend].setAcceptedStones(true);
+                    if (players[Math.abs(playerThatSend - 1)].isAcceptedStones()) {
+                        break;
+                    }
+                } else {
+                    if (gameManager.processDeadDeclaration((Intersection) receivedData.getData()) == 0) {
+                        updatePlayersBoard();
+                    }
+                }
             }
         }
         endGame();
