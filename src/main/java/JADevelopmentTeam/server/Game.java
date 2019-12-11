@@ -33,6 +33,7 @@ public class Game implements Runnable {
 
     private void nextTurn() {
         turn = Math.abs(turn - 1);
+        players[turn].setPlayerState(Player.PlayerState.Receive);
         players[Math.abs(turn - 1)].setPlayerState(Player.PlayerState.NotYourTurn);
         System.out.println("Players " + turn + " turn");
         try {
