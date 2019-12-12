@@ -21,10 +21,15 @@ public class Game implements Runnable {
     }
 
     private void updatePlayersBoard() {
-        DataPackage dataToSend = new DataPackage(gameManager.getBoardAsIntersections(), DataPackage.Info.StoneTable);
+        DataPackage boardData = new DataPackage(gameManager.getBoardAsIntersections(), DataPackage.Info.StoneTable);
+        DataPackage pointsDataOne = new DataPackage(gameManager.getPlayersOnePoints(), DataPackage.Info.Points);
+        DataPackage pointsDataTwo = new DataPackage(gameManager.getPlayerTwoPoints(), DataPackage.Info.Points);
+
         try {
-            players[0].send(dataToSend);
-            players[1].send(dataToSend);
+            players[0].send(boardData);
+            players[1].send(pointsDataOne);
+            players[1].send(boardData);
+            players[0].send(pointsDataTwo);
         } catch (IOException e) {
             e.printStackTrace();
         }

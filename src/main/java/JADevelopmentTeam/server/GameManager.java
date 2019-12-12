@@ -10,6 +10,25 @@ class GameManager {
     ArrayList<Stone> playerTwoStones = new ArrayList<>();
     ArrayList<StoneChain> playerOneStoneChains = new ArrayList<>();
     ArrayList<StoneChain> playerTwoStoneChains = new ArrayList<>();
+
+    public int getPlayersOnePoints() {
+        return playersOnePoints;
+    }
+
+    public void setPlayersOnePoints(int playersOnePoints) {
+        this.playersOnePoints = playersOnePoints;
+    }
+
+    public int getPlayerTwoPoints() {
+        return playerTwoPoints;
+    }
+
+    public void setPlayerTwoPoints(int playerTwoPoints) {
+        this.playerTwoPoints = playerTwoPoints;
+    }
+
+    int playersOnePoints = 0;
+    int playerTwoPoints = 0;
     Stone lastRemovedStone = null;
     private Board board;
 
@@ -68,9 +87,6 @@ class GameManager {
         chainToMakeFlag.setDead(flag);
     }
 
-    void setChainDead(StoneChain chainToMakeDead){
-
-    }
     void processStoneAdding(Stone stone, int turn) {
         if (turn == 1) {
             playerOneStones.add(stone);
@@ -146,6 +162,11 @@ class GameManager {
         for (int i = playerStoneChains.size() - 1; i >= 0; i--) {
             if (GameLogicCalculator.calculateLiberties(playerStoneChains.get(i), board) == 0) {
                 ArrayList<Stone> stones = playerStoneChains.get(i).getStones();
+                if (turn==0){
+                    playerTwoPoints+=stones.size();
+                }else{
+                    playersOnePoints+=stones.size();
+                }
                 for (int j = stones.size() - 1; j >= 0; j--) {
                     Stone stone = stones.get(j);
                     board.getIntersections()[stone.getXCoordinate()][stone.getYCoordinate()].setHasStone(false);
