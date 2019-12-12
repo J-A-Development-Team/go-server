@@ -41,13 +41,8 @@ public class Game implements Runnable {
         players[turn].setPlayerState(Player.PlayerState.Receive);
         players[Math.abs(turn - 1)].setPlayerState(Player.PlayerState.NotYourTurn);
         System.out.println("Players " + turn + " turn");
-        try {
-            players[turn].send(new DataPackage("Your turn", DataPackage.Info.Turn));
-            players[Math.abs(turn - 1)].send(new DataPackage("Not your turn", DataPackage.Info.Turn));
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        players[0].sendTurnInfo();
+        players[1].sendTurnInfo();
     }
 
     private void proceedToEndGame() {
@@ -143,9 +138,11 @@ public class Game implements Runnable {
                 int playerThatSend;
                 if (players[0].receivedData) {
                     receivedData = players[0].getDataPackage();
+                    players[0].receivedData = false;
                     playerThatSend = 0;
                 } else {
                     receivedData = players[1].getDataPackage();
+                    players[1].receivedData = false;
                     playerThatSend = 1;
                 }
                 if (receivedData.getInfo() == DataPackage.Info.Pass) {

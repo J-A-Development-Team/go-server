@@ -48,6 +48,7 @@ public class Player implements Runnable {
         try {
             switch (playerState) {
                 case WaitForStart:
+                    System.out.println("Sending start info");
                     send(new DataPackage("Wait for start", DataPackage.Info.Turn));
                     break;
                 case NotYourTurn:
@@ -77,19 +78,11 @@ public class Player implements Runnable {
 
     public void receive() throws IOException, ClassNotFoundException {
         dataPackage = (DataPackage) is.readObject();
-        switch (playerState) {
-            case WaitForStart:
-                send(new DataPackage("Wait for start", DataPackage.Info.Turn));
-                break;
-            case NotYourTurn:
-                send(new DataPackage("Not your turn", DataPackage.Info.Turn));
-                break;
-            default:
-                send(new DataPackage("Your turn",DataPackage.Info.Turn));
-                synchronized (lock){
-                    receivedData = true;
-                    lock.notify();
-                }
+        if (playerState == PlayerState.Receive) {
+            synchronized (lock) {
+                receivedData = true;
+                lock.notify();
+            }
         }
     }
 
