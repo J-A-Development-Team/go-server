@@ -253,8 +253,14 @@ class GameManager {
                     case Black:
                         System.out.print(" 1 ");
                         break;
-                    default:
+                    case Verified:
+                        System.out.print(" V ");
+                        break;
+                    case None:
                         System.out.print(" N ");
+                        break;
+                    case Unknown:
+                        System.out.print(" U ");
                         break;
                 }
             }

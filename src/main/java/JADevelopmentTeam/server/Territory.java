@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public abstract class Territory {
     public enum TerritoryStates {
-        Black, White, Unknown, None, ProbablyBlack, ProbablyWhite, Border
+        Black, White, Unknown, None, ProbablyBlack, ProbablyWhite, Verified
     }
 
     private static TerritoryStates[][] createTerritoryBoard(Intersection[][] board, int size) {
@@ -41,35 +41,53 @@ public abstract class Territory {
         return territories;
     }
 
-    //hypothetical:
-    // -1 none
-    // 0 white
-    // 1 black
-    private static TerritoryStates calculate(TerritoryStates[][] board, int x, int y, int size) {
-        if (!(y < 0 || y == size || x < 0 || x == size)) {
-            if (board[x][y] != TerritoryStates.Unknown) {
-                ArrayList<TerritoryStates> territoryStatesArrayList = new ArrayList<>();
-                territoryStatesArrayList.add(calculate(board, x-1, y, size));
-                territoryStatesArrayList.add(calculate(board, x, y-1, size));
-                territoryStatesArrayList.add(calculate(board, x+1, y, size));
-                territoryStatesArrayList.add(calculate(board, x, y+1, size));
-                TerritoryStates pom = null;
-                for (TerritoryStates territoryStates: territoryStatesArrayList){
-                    if (territoryStates!=TerritoryStates.Border){
-                        pom = territoryStates;
-                        break;
-                    }
-                }
-                for (TerritoryStates territoryStates: territoryStatesArrayList){
-                    if (territoryStates!=pom && territoryStates!=TerritoryStates.Border)
-                        return TerritoryStates.None;
-                }
-                return pom;
-            } else {
-                return board[x][y];
+    private static TerritoryStates calculate(TerritoryStates[][] territories, int x, int y, int size) {
+        if (territories[x][y] != TerritoryStates.Unknown || territories[x][y] == TerritoryStates.Verified)
+            return territories[x][y];
+
+        territories[x][y] = TerritoryStates.Verified;
+
+        ArrayList<TerritoryStates> nearbyTerritory = new ArrayList<>();
+        if (x > 0)
+            nearbyTerritory.add(calculate(territories, x - 1, y, size));
+        if (x < size - 2)
+            nearbyTerritory.add(calculate(territories, x + 1, y, size));
+        if (y < size - 2)
+            nearbyTerritory.add(calculate(territories, x, y + 1, size));
+        if (y > 0)
+            nearbyTerritory.add(calculate(territories, x, y - 1, size));
+
+        for (int i = nearbyTerritory.size() - 1; i >= 0; i--) {
+            if (nearbyTerritory.get(i)==TerritoryStates.ProbablyBlack){
+                nearbyTerritory.set(i,TerritoryStates.Black);
+            } else if (nearbyTerritory.get(i) == TerritoryStates.ProbablyWhite){
+                nearbyTerritory.set(i,TerritoryStates.White);
             }
-        } else {
-            return TerritoryStates.Border;
+            if (nearbyTerritory.get(i)==TerritoryStates.Verified){
+                nearbyTerritory.remove(nearbyTerritory.get(i));
+            }
         }
+
+        if (nearbyTerritory.size() == 0){
+            territories[x][y] = TerritoryStates.None;
+            return territories[x][y];
+        }
+
+        for (int i = 1; i < nearbyTerritory.size(); i++) {
+            if (nearbyTerritory.get(i) != nearbyTerritory.get(0)) {
+
+                territories[x][y] = TerritoryStates.None;
+                return territories[x][y];
+            }
+        }
+
+        if (nearbyTerritory.get(0)==TerritoryStates.Black){
+            territories[x][y] = TerritoryStates.ProbablyBlack;
+        } else if (nearbyTerritory.get(0) == TerritoryStates.White){
+            territories[x][y] = TerritoryStates.ProbablyWhite;
+        } else {
+            territories[x][y] = nearbyTerritory.get(0);
+        }
+        return territories[x][y];
     }
 }
