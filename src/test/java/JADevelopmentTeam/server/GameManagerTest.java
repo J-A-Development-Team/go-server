@@ -52,10 +52,37 @@ public class GameManagerTest {
     @Test
     public void countTerritory() {
         GameManager gameManager = new GameManager(9);
+        Assert.assertEquals(0,gameManager.processMove(new Intersection(0, 4),0));
+        Assert.assertEquals(0,gameManager.processMove(new Intersection(1, 3),0));
+        Assert.assertEquals(0,gameManager.processMove(new Intersection(2, 2),0));
+        Assert.assertEquals(0,gameManager.processMove(new Intersection(3, 0),1));
+        Assert.assertEquals(0,gameManager.processMove(new Intersection(4, 0),1));
+        Assert.assertEquals(0,gameManager.processMove(new Intersection(4, 1),0));
+        Assert.assertEquals(0,gameManager.processMove(new Intersection(5, 1),0));
+        Assert.assertEquals(0,gameManager.processMove(new Intersection(5, 4),1));
+        Assert.assertEquals(0,gameManager.processMove(new Intersection(6, 5),1));
+        Assert.assertEquals(0,gameManager.processMove(new Intersection(7, 6),1));
+        Assert.assertEquals(0,gameManager.processMove(new Intersection(8, 6),1));
+        Assert.assertEquals(0,gameManager.processMove(new Intersection(8, 3),1));
+        Assert.assertEquals(0,gameManager.processMove(new Intersection(7, 3),1));
+        Assert.assertEquals(0,gameManager.processMove(new Intersection(6, 3),1));
+        Assert.assertEquals(0,gameManager.processMove(new Intersection(2, 3),0));
+        Assert.assertEquals(0,gameManager.processMove(new Intersection(2, 4),0));
+        Assert.assertEquals(0,gameManager.processMove(new Intersection(2, 5),0));
+        Assert.assertEquals(0,gameManager.processMove(new Intersection(2, 6),0));
+        Assert.assertEquals(0,gameManager.processMove(new Intersection(2, 7),0));
+        Assert.assertEquals(0,gameManager.processMove(new Intersection(2, 8),0));
+        gameManager.addTerritoryPoints();
+        Assert.assertEquals(5,gameManager.getPlayerOnePoints());
+        Assert.assertEquals(9,gameManager.getPlayerTwoPoints());
+    }
+    @Test
+    public void countTerritory2() {
+        GameManager gameManager = new GameManager(9);
         Assert.assertEquals(0,gameManager.processMove(new Intersection(0, 4),1));
         Assert.assertEquals(0,gameManager.processMove(new Intersection(1, 3),1));
         Assert.assertEquals(0,gameManager.processMove(new Intersection(2, 2),1));
-        Assert.assertEquals(0,gameManager.processMove(new Intersection(3, 0),1));
+        Assert.assertEquals(0,gameManager.processMove(new Intersection(3, 0),0));
         Assert.assertEquals(0,gameManager.processMove(new Intersection(4, 0),0));
         Assert.assertEquals(0,gameManager.processMove(new Intersection(4, 1),1));
         Assert.assertEquals(0,gameManager.processMove(new Intersection(5, 1),1));
@@ -75,6 +102,5 @@ public class GameManagerTest {
         gameManager.addTerritoryPoints();
         Assert.assertEquals(9,gameManager.getPlayerOnePoints());
         Assert.assertEquals(5,gameManager.getPlayerTwoPoints());
-
     }
 }
