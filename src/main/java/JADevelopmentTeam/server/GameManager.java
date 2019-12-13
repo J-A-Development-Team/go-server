@@ -226,7 +226,11 @@ class GameManager {
         clone.playerTwoStoneChains = chains;
         return clone;
     }
-
+    public void addTerritoryPoints(){
+        Integer [] pointToAdd = countTerritory();
+        playersOnePoints += pointToAdd[0];
+        playerTwoPoints += pointToAdd[1];
+    }
     public Integer[] countTerritory() {
         Integer[] counter = new Integer[2];
         counter[0]=0;

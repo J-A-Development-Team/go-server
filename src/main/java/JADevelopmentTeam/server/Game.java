@@ -57,6 +57,8 @@ public class Game implements Runnable {
     }
 
     private void endGame() {
+        gameManager.addTerritoryPoints();
+        updatePlayersBoard();
         System.out.println("Ending game");
     }
 
