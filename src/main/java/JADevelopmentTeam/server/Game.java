@@ -22,7 +22,7 @@ public class Game implements Runnable {
 
     private void updatePlayersBoard() {
         DataPackage boardData = new DataPackage(gameManager.getBoardAsIntersections(), DataPackage.Info.StoneTable);
-        DataPackage pointsDataOne = new DataPackage(gameManager.getPlayersOnePoints(), DataPackage.Info.Points);
+        DataPackage pointsDataOne = new DataPackage(gameManager.getPlayerOnePoints(), DataPackage.Info.Points);
         DataPackage pointsDataTwo = new DataPackage(gameManager.getPlayerTwoPoints(), DataPackage.Info.Points);
 
         try {
@@ -95,11 +95,6 @@ public class Game implements Runnable {
                 nextTurn();
             } else {
                 Intersection placedStone = (Intersection) players[turn].getDataPackage().getData();
-                if (turn == 1) {
-                    placedStone.setStoneBlack(false);
-                } else {
-                    placedStone.setStoneBlack(true);
-                }
                 int moveResult = gameManager.processMove(placedStone, turn);
                 if (moveResult == 0) {
                     lastMoveWasPass = false;

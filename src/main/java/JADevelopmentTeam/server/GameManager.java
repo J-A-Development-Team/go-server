@@ -10,17 +10,17 @@ class GameManager {
     ArrayList<Stone> playerTwoStones = new ArrayList<>();
     ArrayList<StoneChain> playerOneStoneChains = new ArrayList<>();
     ArrayList<StoneChain> playerTwoStoneChains = new ArrayList<>();
-    int playersOnePoints = 0;
+    int playerOnePoints = 0;
     int playerTwoPoints = 0;
     Stone lastRemovedStone = null;
     private Board board;
 
-    public int getPlayersOnePoints() {
-        return playersOnePoints;
+    public int getPlayerOnePoints() {
+        return playerOnePoints;
     }
 
-    public void setPlayersOnePoints(int playersOnePoints) {
-        this.playersOnePoints = playersOnePoints;
+    public void setPlayerOnePoints(int playerOnePoints) {
+        this.playerOnePoints = playerOnePoints;
     }
 
     public int getPlayerTwoPoints() {
@@ -46,6 +46,11 @@ class GameManager {
     }
 
     int processMove(Intersection chosenIntersection, int turn) {
+        if (turn == 1) {
+            chosenIntersection.setStoneBlack(false);
+        } else {
+            chosenIntersection.setStoneBlack(true);
+        }
         return GameLogicCalculator.processMove(chosenIntersection, this, turn);
     }
 
@@ -168,7 +173,7 @@ class GameManager {
                 if (turn == 0) {
                     playerTwoPoints += stones.size();
                 } else {
-                    playersOnePoints += stones.size();
+                    playerOnePoints += stones.size();
                 }
                 for (int j = stones.size() - 1; j >= 0; j--) {
                     Stone stone = stones.get(j);
@@ -228,7 +233,7 @@ class GameManager {
     }
     public void addTerritoryPoints(){
         Integer [] pointToAdd = countTerritory();
-        playersOnePoints += pointToAdd[0];
+        playerOnePoints += pointToAdd[0];
         playerTwoPoints += pointToAdd[1];
     }
     public Integer[] countTerritory() {

@@ -89,43 +89,6 @@ public abstract class Territory {
 
         if (nearbyTerritory.size() == 0) {
             territories[x][y] = TerritoryStates.None;
-            for (int i = 0; i < size; i++) {
-                for (int j = 0; j < size; j++) {
-                    switch (territories[j][i]){
-                        case White:
-                            System.out.print(" 0 ");
-                            break;
-                        case WhiteTerritory:
-                            System.out.print(" W ");
-                            break;
-                        case BlackTerritory:
-                            System.out.print(" B ");
-                            break;
-                        case Black:
-                            System.out.print(" 1 ");
-                            break;
-                        case Verified:
-                            System.out.print(" V ");
-                            break;
-                        case None:
-                            System.out.print(" N ");
-                            break;
-                        case Unknown:
-                            System.out.print(" U ");
-                            break;
-                        case ProbablyBlack:
-                            System.out.print(" A ");
-                            break;
-                        case ProbablyWhite:
-                            System.out.println(" Q ");
-                            break;
-                    }
-                }
-                System.out.print("\n");
-
-            }
-            System.out.println("DRAMAT!!!");
-
             return territories[x][y];
         }
         boolean blackExpected;
