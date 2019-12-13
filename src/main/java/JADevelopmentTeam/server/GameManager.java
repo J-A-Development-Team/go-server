@@ -242,11 +242,11 @@ class GameManager {
                     case White:
                         System.out.print(" 0 ");
                         break;
-                    case ProbablyWhite:
+                    case WhiteTerritory:
                         counter[0]++;
                         System.out.print(" W ");
                         break;
-                    case ProbablyBlack:
+                    case BlackTerritory:
                         counter[1]++;
                         System.out.print(" B ");
                         break;
@@ -261,6 +261,12 @@ class GameManager {
                         break;
                     case Unknown:
                         System.out.print(" U ");
+                        break;
+                    case ProbablyBlack:
+                        System.out.print(" A ");
+                        break;
+                    case ProbablyWhite:
+                        System.out.println(" Q ");
                         break;
                 }
             }
