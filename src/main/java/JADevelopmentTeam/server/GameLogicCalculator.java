@@ -67,8 +67,9 @@ public abstract class GameLogicCalculator {
     }
     static int getStoneChainIDForStone(Stone stone, ArrayList<StoneChain> stoneChains) {
         for (StoneChain stoneChain : stoneChains) {
-            if (stoneChain.getStones().indexOf(stone) != -1) {
-                return stoneChains.indexOf(stoneChain);
+            for (Stone selected : stoneChain.getStones()){
+                if (selected.getYCoordinate() == stone.getYCoordinate() && selected.getXCoordinate() == stone.getXCoordinate())
+                    return stoneChains.indexOf(stoneChain);
             }
         }
         return -1;
