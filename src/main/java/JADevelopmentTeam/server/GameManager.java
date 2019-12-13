@@ -240,15 +240,26 @@ class GameManager {
             for (int j = 0; j < board.getSize(); j++) {
                 switch (territories[j][i]){
                     case White:
+                        System.out.print(" 0 ");
+                        break;
                     case ProbablyWhite:
                         counter[0]++;
+                        System.out.print(" W ");
                         break;
                     case ProbablyBlack:
-                    case Black:
                         counter[1]++;
+                        System.out.print(" B ");
+                        break;
+                    case Black:
+                        System.out.print(" 1 ");
+                        break;
+                    default:
+                        System.out.print(" N ");
                         break;
                 }
             }
+            System.out.print("\n");
+
         }
         return counter;
     }
