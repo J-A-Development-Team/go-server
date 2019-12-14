@@ -8,7 +8,7 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 public class Player implements Runnable {
-    boolean inGame = true;
+    boolean inGame = false;
     boolean receivedData = false;
     boolean acceptedStones = false;
     private Object lock;
@@ -90,12 +90,16 @@ public class Player implements Runnable {
 
     @Override
     public void run() {
+        inGame = true;
         System.out.println("Lets Play!");
         while (inGame) {
             try {
                 receive();
             } catch (IOException | ClassNotFoundException e) {
                 System.out.println("Gracz się rozłączył");
+                synchronized (lock) {
+                    lock.notify();
+                }
                 inGame = false;
             }
         }

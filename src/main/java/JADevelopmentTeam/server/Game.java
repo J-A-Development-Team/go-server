@@ -59,6 +59,16 @@ public class Game implements Runnable {
             return false;
         }
     }
+    private void handlePlayerRunningAway(){
+        if(!players[0].inGame){
+            notifyPlayerAboutOpponentResignation(players[1]);
+            System.out.println("Player 0 disconnected");
+        }else if(!players[1].inGame){
+            notifyPlayerAboutOpponentResignation(players[0]);
+            System.out.println("Player 1 disconnected");
+
+        }
+    }
 
     private void endGame() {
         gameManager.addTerritoryPoints();
@@ -131,7 +141,10 @@ public class Game implements Runnable {
     public void run() {
         System.out.println("Starting game");
         nextTurn();
-        startPlayers();
+        if(!startPlayers()){
+            handlePlayerRunningAway();
+            return;
+        }
         while (true) {
             synchronized (lock) {
                 try {
@@ -140,9 +153,13 @@ public class Game implements Runnable {
                     e.printStackTrace();
                 }
             }
+            handlePlayerRunningAway();
             DataPackage receivedData = players[turn].getDataPackage();
             if (receivedData.getInfo() == DataPackage.Info.Pass) {
-                notifyOpponentAboutPass(players[Math.abs(turn-1)]);
+                if(!notifyOpponentAboutPass(players[Math.abs(turn-1)])){
+                    handlePlayerRunningAway();
+                    return;
+                }
                 if (lastMoveWasPass) {
                     break;
                 }
@@ -173,13 +190,22 @@ public class Game implements Runnable {
                     }
                     continue;
                 }
-                updatePlayersBoard();
-                sendLastPlacedStone(placedStone);
+                if(!updatePlayersBoard()){
+                    handlePlayerRunningAway();
+                    return;
+                }
+                if(!sendLastPlacedStone(placedStone)){
+                    handlePlayerRunningAway();
+                    return;
+                }
                 nextTurn();
             }
         }
         System.out.println("A teraz mili państwo usuwamy kamienie");
-        proceedToStoneRemoval();
+        if(!proceedToStoneRemoval()){
+            handlePlayerRunningAway();
+            return;
+        }
         while (true) {
             synchronized (lock) {
                 try {
@@ -205,7 +231,10 @@ public class Game implements Runnable {
                     }
                 } else {
                     if (gameManager.processDeadDeclaration((Intersection) receivedData.getData()) == 0) {
-                        updatePlayersBoard();
+                        if(!updatePlayersBoard()){
+                            handlePlayerRunningAway();
+                            return;
+                        }
                     }
                 }
             }
