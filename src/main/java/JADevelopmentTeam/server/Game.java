@@ -60,15 +60,17 @@ public class Game implements Runnable {
             return false;
         }
     }
-    private void handlePlayerRunningAway(){
+    private boolean handlePlayerRunningAway(){
         if(!players[0].inGame){
             notifyPlayerAboutOpponentResignation(players[1]);
             System.out.println("Player 0 disconnected");
         }else if(!players[1].inGame){
             notifyPlayerAboutOpponentResignation(players[0]);
             System.out.println("Player 1 disconnected");
-
+        }else{
+            return true;
         }
+        return false;
     }
 
     private void endGame() {
@@ -154,7 +156,9 @@ public class Game implements Runnable {
                     e.printStackTrace();
                 }
             }
-            handlePlayerRunningAway();
+            if(!handlePlayerRunningAway()){
+                return;
+            }
             DataPackage receivedData = players[turn].getDataPackage();
             if (receivedData.getInfo() == DataPackage.Info.Pass) {
                 if(!notifyOpponentAboutPass(players[Math.abs(turn-1)])){
@@ -213,6 +217,9 @@ public class Game implements Runnable {
                     wait();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
+                }
+                if(!handlePlayerRunningAway()){
+                    return;
                 }
                 DataPackage receivedData;
                 int playerThatSend;
