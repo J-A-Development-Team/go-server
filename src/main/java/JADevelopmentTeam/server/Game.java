@@ -2,6 +2,7 @@ package JADevelopmentTeam.server;
 
 import JADevelopmentTeam.common.DataPackage;
 import JADevelopmentTeam.common.Intersection;
+import JADevelopmentTeam.common.TerritoryStates;
 
 import java.io.IOException;
 
@@ -103,7 +104,7 @@ public class Game implements Runnable {
     }
 
     private boolean sendTerritory() {
-        Territory.TerritoryStates[][] territory = gameManager.getTerritories();
+        TerritoryStates[][] territory = gameManager.getTerritories();
         DataPackage dataPackage = new DataPackage(territory, DataPackage.Info.StoneTable);
         try {
             players[0].send(dataPackage);

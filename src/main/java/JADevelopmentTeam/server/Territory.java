@@ -1,6 +1,7 @@
 package JADevelopmentTeam.server;
 
 import JADevelopmentTeam.common.Intersection;
+import JADevelopmentTeam.common.TerritoryStates;
 
 import java.util.ArrayList;
 
@@ -116,7 +117,5 @@ public abstract class Territory {
         return territories[x][y];
     }
 
-    public enum TerritoryStates {
-        Black, White, Unknown, None, ProbablyBlack, ProbablyWhite,WhiteTerritory,BlackTerritory, Verified
-    }
+
 }
