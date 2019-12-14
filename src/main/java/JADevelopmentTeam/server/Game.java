@@ -62,7 +62,7 @@ public class Game implements Runnable {
 
     private void endGame() {
         gameManager.addTerritoryPoints();
-        updatePlayersBoard();
+        sendTerritory();
         System.out.println("Ending game");
     }
 
@@ -78,7 +78,8 @@ public class Game implements Runnable {
             return false;
         }
     }
-    private boolean sendLastPlacedStone(Intersection lastPlacedStone){
+
+    private boolean sendLastPlacedStone(Intersection lastPlacedStone) {
         DataPackage dataPackage = new DataPackage(lastPlacedStone, DataPackage.Info.Stone);
         try {
             players[0].send(dataPackage);
@@ -90,7 +91,9 @@ public class Game implements Runnable {
 
         }
     }
-    private boolean sendTerritory(Territory.TerritoryStates[][] territory){
+
+    private boolean sendTerritory() {
+        Territory.TerritoryStates[][] territory = gameManager.getTerritories();
         DataPackage dataPackage = new DataPackage(territory, DataPackage.Info.StoneTable);
         try {
             players[0].send(dataPackage);
@@ -101,8 +104,9 @@ public class Game implements Runnable {
             return false;
         }
     }
-    private boolean notifyOpponentAboutPass(Player player){
-        DataPackage dataPackage = new DataPackage("Przeciwnik spasował", DataPackage.Info.Pass);
+
+    private boolean notifyOpponentAboutPass(Player player) {
+        DataPackage dataPackage = new DataPackage("Opponent passed", DataPackage.Info.Pass);
         try {
             player.send(dataPackage);
             return true;
@@ -110,6 +114,17 @@ public class Game implements Runnable {
             e.printStackTrace();
             return false;
         }
+    }
+
+    private boolean notifyPlayerAboutOpponentResignation(Player player) {
+        DataPackage dataPackage = new DataPackage("Connection to opponent lost", DataPackage.Info.Info);
+        try {
+            player.send(dataPackage);
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     @Override

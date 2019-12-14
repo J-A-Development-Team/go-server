@@ -10,10 +10,19 @@ class GameManager {
     ArrayList<Stone> playerTwoStones = new ArrayList<>();
     ArrayList<StoneChain> playerOneStoneChains = new ArrayList<>();
     ArrayList<StoneChain> playerTwoStoneChains = new ArrayList<>();
+    Territory.TerritoryStates[][] territories = null;
     int playerOnePoints = 0;
     int playerTwoPoints = 0;
     Stone lastRemovedStone = null;
     private Board board;
+
+    public Territory.TerritoryStates[][] getTerritories() {
+        return territories;
+    }
+
+    public void setTerritories(Territory.TerritoryStates[][] territories) {
+        this.territories = territories;
+    }
 
     public int getPlayerOnePoints() {
         return playerOnePoints;
@@ -240,7 +249,7 @@ class GameManager {
         Integer[] counter = new Integer[2];
         counter[0]=0;
         counter[1]=0;
-        Territory.TerritoryStates[][] territories = Territory.calculateTerritory(board.getIntersections(), board.getSize());
+        territories = Territory.calculateTerritory(board.getIntersections(), board.getSize());
         for (int i = 0; i < board.getSize(); i++) {
             for (int j = 0; j < board.getSize(); j++) {
                 switch (territories[j][i]){
