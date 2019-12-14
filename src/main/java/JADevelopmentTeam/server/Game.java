@@ -127,6 +127,7 @@ public class Game implements Runnable {
             }
             DataPackage receivedData = players[turn].getDataPackage();
             if (receivedData.getInfo() == DataPackage.Info.Pass) {
+                notifyOpponentAboutPass(players[Math.abs(turn-1)]);
                 if (lastMoveWasPass) {
                     break;
                 }
