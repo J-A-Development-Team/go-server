@@ -61,12 +61,7 @@ public abstract class Territory {
         territories[x][y] = TerritoryStates.Verified;
 
         ArrayList<TerritoryStates> nearbyTerritory = new ArrayList<>();
-        if (x > 0) {
-            TerritoryStates tempTerritory = calculate(territories, x - 1, y, size);
-            if (tempTerritory != TerritoryStates.Verified) {
-                nearbyTerritory.add(tempTerritory);
-            }
-        }
+
 
         if (x < size - 1) {
             TerritoryStates tempTerritory = calculate(territories, x + 1, y, size);
@@ -86,7 +81,12 @@ public abstract class Territory {
                 nearbyTerritory.add(tempTerritory);
             }
         }
-
+        if (x > 0) {
+            TerritoryStates tempTerritory = calculate(territories, x - 1, y, size);
+            if (tempTerritory != TerritoryStates.Verified) {
+                nearbyTerritory.add(tempTerritory);
+            }
+        }
         if (nearbyTerritory.size() == 0) {
             territories[x][y] = TerritoryStates.None;
             return territories[x][y];
