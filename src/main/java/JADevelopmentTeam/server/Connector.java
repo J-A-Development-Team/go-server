@@ -9,7 +9,6 @@ import java.util.concurrent.Executors;
 class Connector {
     private static Connector instance = null;
     private ServerSocket serverSocket = null;
-    private ExecutorService pool;
 
 
     private Connector() {
@@ -31,8 +30,8 @@ class Connector {
 
     Player[] initializePlayers() {
         Player[] players = new Player[2];
-        players[0] = connectPlayer(pool);
-        players[1] = connectPlayer(pool);
+        players[0] = connectPlayer();
+        players[1] = connectPlayer();
         if (players[0] == null || players[1] == null) {
             System.out.println("Accept failed: 4444");
             System.exit(-1);
@@ -40,7 +39,7 @@ class Connector {
         return players;
     }
 
-    private Player connectPlayer(ExecutorService pool) {
+    private Player connectPlayer() {
         Socket socket;
         System.out.println("Oczekuję na klienta");
         try {

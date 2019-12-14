@@ -60,14 +60,16 @@ public abstract class GameLogicCalculator {
         }
         return null;
     }
-    static Intersection getIntersectionForStone(Stone stone,Board board){
+
+    static Intersection getIntersectionForStone(Stone stone, Board board) {
         int x = stone.getXCoordinate();
         int y = stone.getYCoordinate();
         return board.getIntersections()[x][y];
     }
+
     static int getStoneChainIDForStone(Stone stone, ArrayList<StoneChain> stoneChains) {
         for (StoneChain stoneChain : stoneChains) {
-            for (Stone selected : stoneChain.getStones()){
+            for (Stone selected : stoneChain.getStones()) {
                 if (selected.getYCoordinate() == stone.getYCoordinate() && selected.getXCoordinate() == stone.getXCoordinate())
                     return stoneChains.indexOf(stoneChain);
             }
@@ -108,12 +110,12 @@ public abstract class GameLogicCalculator {
     public static int processMove(Intersection chosenIntersection, GameManager gameManager, int turn) {
         GameManager backup = gameManager.copy();
         if (gameManager.lastRemovedStone != null)
-            if (gameManager.lastRemovedStone.getXCoordinate() == chosenIntersection.getXCoordinate() && gameManager.lastRemovedStone.getYCoordinate() == chosenIntersection.getYCoordinate())
+            if (gameManager.lastRemovedStone.getXCoordinate() == chosenIntersection.getXCoordinate() &&
+                    gameManager.lastRemovedStone.getYCoordinate() == chosenIntersection.getYCoordinate())
                 return 3;
         if (gameManager.getBoardAsIntersections()[chosenIntersection.getXCoordinate()][chosenIntersection.getYCoordinate()].isHasStone()) {
             return 1;
         }
-        System.out.println("Myślę");
         ArrayList<StoneChain> opponentStoneChains, playerStoneChains;
         if (turn == 0) {
             opponentStoneChains = gameManager.playerOneStoneChains;
@@ -133,7 +135,6 @@ public abstract class GameLogicCalculator {
             } else {
                 for (StoneChain stoneChain : playerStoneChains) {
                     if (stoneChain.getLiberties() == 0) {
-                        System.out.println("Przywracam z backupa");
                         gameManager.loadBackup(backup);
                         return 2;
                     }

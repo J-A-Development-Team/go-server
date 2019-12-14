@@ -20,7 +20,7 @@ public class Game implements Runnable {
         gameManager = new GameManager(boardSize);
     }
 
-    private void updatePlayersBoard() {
+    private boolean updatePlayersBoard() {
         DataPackage boardData = new DataPackage(gameManager.getBoardAsIntersections(), DataPackage.Info.StoneTable);
         DataPackage pointsDataOne = new DataPackage(gameManager.getPlayerOnePoints(), DataPackage.Info.Points);
         DataPackage pointsDataTwo = new DataPackage(gameManager.getPlayerTwoPoints(), DataPackage.Info.Points);
@@ -30,8 +30,10 @@ public class Game implements Runnable {
             players[1].send(pointsDataOne);
             players[1].send(boardData);
             players[0].send(pointsDataTwo);
+            return true;
         } catch (IOException e) {
             e.printStackTrace();
+            return false;
         }
 
     }
@@ -45,14 +47,16 @@ public class Game implements Runnable {
         players[1].sendTurnInfo();
     }
 
-    private void proceedToStoneRemoval() {
+    private boolean proceedToStoneRemoval() {
         players[0].setPlayerState(Player.PlayerState.Receive);
         players[1].setPlayerState(Player.PlayerState.Receive);
         try {
             players[0].send(new DataPackage("Remove Dead Stones", DataPackage.Info.Turn));
             players[1].send(new DataPackage("Remove Dead Stones", DataPackage.Info.Turn));
+            return true;
         } catch (IOException e) {
             e.printStackTrace();
+            return false;
         }
     }
 
@@ -62,25 +66,52 @@ public class Game implements Runnable {
         System.out.println("Ending game");
     }
 
-    private void startPlayers() {
+    private boolean startPlayers() {
         new Thread(players[0]).start();
         new Thread(players[1]).start();
         try {
             players[0].send(new DataPackage("black", DataPackage.Info.PlayerColor));
             players[1].send(new DataPackage("white", DataPackage.Info.PlayerColor));
+            return true;
         } catch (IOException e) {
             e.printStackTrace();
+            return false;
         }
     }
-    private void sendLastPlacedStone(Intersection lastPlacedStone){
+    private boolean sendLastPlacedStone(Intersection lastPlacedStone){
         DataPackage dataPackage = new DataPackage(lastPlacedStone, DataPackage.Info.Stone);
         try {
             players[0].send(dataPackage);
             players[1].send(dataPackage);
+            return true;
         } catch (IOException e) {
             e.printStackTrace();
+            return false;
+
         }
     }
+    private boolean sendTerritory(Territory.TerritoryStates[][] territory){
+        DataPackage dataPackage = new DataPackage(territory, DataPackage.Info.StoneTable);
+        try {
+            players[0].send(dataPackage);
+            players[1].send(dataPackage);
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    private boolean notifyOpponentAboutPass(Player player){
+        DataPackage dataPackage = new DataPackage("Przeciwnik spasował", DataPackage.Info.Pass);
+        try {
+            player.send(dataPackage);
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     @Override
     public void run() {
         System.out.println("Starting game");
