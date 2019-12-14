@@ -56,6 +56,7 @@ public class Player implements Runnable {
                     break;
                 default:
                     send(new DataPackage("Your turn", DataPackage.Info.Turn));
+                    break;
             }
         }catch (IOException e){
             e.printStackTrace();
@@ -94,7 +95,8 @@ public class Player implements Runnable {
             try {
                 receive();
             } catch (IOException | ClassNotFoundException e) {
-                e.printStackTrace();
+                System.out.println("Gracz się rozłączył");
+                inGame = false;
             }
         }
 
