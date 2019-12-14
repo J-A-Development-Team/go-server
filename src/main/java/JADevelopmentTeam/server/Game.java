@@ -45,7 +45,7 @@ public class Game implements Runnable {
         players[1].sendTurnInfo();
     }
 
-    private void proceedToEndGame() {
+    private void proceedToStoneRemoval() {
         players[0].setPlayerState(Player.PlayerState.Receive);
         players[1].setPlayerState(Player.PlayerState.Receive);
         try {
@@ -72,7 +72,15 @@ public class Game implements Runnable {
             e.printStackTrace();
         }
     }
-
+    private void sendLastPlacedStone(Intersection lastPlacedStone){
+        DataPackage dataPackage = new DataPackage(lastPlacedStone, DataPackage.Info.Stone);
+        try {
+            players[0].send(dataPackage);
+            players[1].send(dataPackage);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
     @Override
     public void run() {
         System.out.println("Starting game");
@@ -119,11 +127,12 @@ public class Game implements Runnable {
                     continue;
                 }
                 updatePlayersBoard();
+                sendLastPlacedStone(placedStone);
                 nextTurn();
             }
         }
         System.out.println("A teraz mili państwo usuwamy kamienie");
-        proceedToEndGame();
+        proceedToStoneRemoval();
         while (true) {
             synchronized (lock) {
                 try {
