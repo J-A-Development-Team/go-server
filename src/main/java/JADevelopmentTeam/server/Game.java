@@ -107,7 +107,7 @@ public class Game implements Runnable {
 
     private boolean sendTerritory() {
         TerritoryStates[][] territory = gameManager.getTerritories();
-        DataPackage dataPackage = new DataPackage(territory, DataPackage.Info.StoneTable);
+        DataPackage dataPackage = new DataPackage(territory, DataPackage.Info.TerritoryTable);
         try {
             players[0].send(dataPackage);
             players[1].send(dataPackage);
@@ -235,6 +235,7 @@ public class Game implements Runnable {
                 if (receivedData.getInfo() == DataPackage.Info.Pass) {
                     players[playerThatSend].setAcceptedStones(true);
                     if (players[Math.abs(playerThatSend - 1)].isAcceptedStones()) {
+
                         break;
                     }
                 } else {
