@@ -130,14 +130,14 @@ public abstract class Territory {
         if (nearbyTerritory.size() == 0) {
             switch (possible) {
                 case -1:
-                    territories[x][y] = TerritoryStates.WhiteTerritory;
+                    territories[x][y] = TerritoryStates.ProbablyWhite;
                     break;
                 case -2:
                 case 0:
                     territories[x][y] = TerritoryStates.None;
                     break;
                 case 1:
-                    territories[x][y] = TerritoryStates.BlackTerritory;
+                    territories[x][y] = TerritoryStates.ProbablyBlack;
 
             }
             return territories[x][y];
