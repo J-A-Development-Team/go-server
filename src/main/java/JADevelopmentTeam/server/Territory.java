@@ -30,20 +30,20 @@ public abstract class Territory {
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
                 if (territories[j][i] == TerritoryStates.Unknown) {
-                    TerritoryStates resultTerritory = calculate(territories, j, i, size);
+                    TerritoryStates resultTerritory = calculate(territories, j, i, size, 0);
                     for (int k = 0; k < size; k++) {
                         for (int m = 0; m < size; m++) {
-                            if(resultTerritory==TerritoryStates.None){
-                                if(territories[m][k]==TerritoryStates.ProbablyBlack||territories[m][k]==TerritoryStates.ProbablyWhite||territories[m][k]==TerritoryStates.Verified){
-                                    territories[m][k]=TerritoryStates.None;
+                            if (resultTerritory == TerritoryStates.None) {
+                                if (territories[m][k] == TerritoryStates.ProbablyBlack || territories[m][k] == TerritoryStates.ProbablyWhite || territories[m][k] == TerritoryStates.Verified) {
+                                    territories[m][k] = TerritoryStates.None;
                                 }
-                            }else if(resultTerritory==TerritoryStates.ProbablyBlack){
-                                if(territories[m][k]==TerritoryStates.ProbablyBlack||territories[m][k]==TerritoryStates.Verified){
-                                    territories[m][k]=TerritoryStates.BlackTerritory;
+                            } else if (resultTerritory == TerritoryStates.ProbablyBlack) {
+                                if (territories[m][k] == TerritoryStates.ProbablyBlack || territories[m][k] == TerritoryStates.Verified) {
+                                    territories[m][k] = TerritoryStates.BlackTerritory;
                                 }
-                            }else{
-                                if(territories[m][k]==TerritoryStates.ProbablyWhite||territories[m][k]==TerritoryStates.Verified){
-                                    territories[m][k]=TerritoryStates.WhiteTerritory;
+                            } else {
+                                if (territories[m][k] == TerritoryStates.ProbablyWhite || territories[m][k] == TerritoryStates.Verified) {
+                                    territories[m][k] = TerritoryStates.WhiteTerritory;
                                 }
                             }
                         }
@@ -55,7 +55,46 @@ public abstract class Territory {
         return territories;
     }
 
-    private static TerritoryStates calculate(TerritoryStates[][] territories, int x, int y, int size) {
+    private static int changePossible(int x, int y, int size, Integer possible, TerritoryStates[][] territories) {
+        ArrayList<TerritoryStates> nearbyTerritory = new ArrayList<>();
+        if (x < size - 1) {
+            nearbyTerritory.add(territories[x + 1][y]);
+        }
+        if (y < size - 1) {
+            nearbyTerritory.add(territories[x][y + 1]);
+        }
+        if (y > 0) {
+            nearbyTerritory.add(territories[x][y - 1]);
+        }
+        if (x > 0) {
+            nearbyTerritory.add(territories[x - 1][y]);
+        }
+        switch (possible) {
+            case -1:
+                if (nearbyTerritory.contains(TerritoryStates.Black) || nearbyTerritory.contains(TerritoryStates.ProbablyBlack))
+                    possible = -2;
+                break;
+            case 0:
+                if ((nearbyTerritory.contains(TerritoryStates.Black) || nearbyTerritory.contains(TerritoryStates.ProbablyBlack)) && !(nearbyTerritory.contains(TerritoryStates.White) || nearbyTerritory.contains(TerritoryStates.ProbablyWhite))) {
+                    possible = 1;
+                } else if ((nearbyTerritory.contains(TerritoryStates.White) || nearbyTerritory.contains(TerritoryStates.ProbablyWhite)) && !(nearbyTerritory.contains(TerritoryStates.Black) || nearbyTerritory.contains(TerritoryStates.ProbablyBlack))) {
+                    possible = -1;
+                    break;
+                }
+            case 1:
+                if (nearbyTerritory.contains(TerritoryStates.White) || nearbyTerritory.contains(TerritoryStates.ProbablyWhite))
+                    possible = -2;
+        }
+        return possible;
+    }
+
+    //    possible:
+//    1 black
+//    0 unknown
+//    -1 white
+    // -2 none for 100%
+    private static TerritoryStates calculate(TerritoryStates[][] territories, int x, int y, int size, Integer possible) {
+        possible = changePossible(x,y,size,possible,territories);
         if (territories[x][y] != TerritoryStates.Unknown || territories[x][y] == TerritoryStates.Verified)
             return territories[x][y];
 
@@ -65,31 +104,42 @@ public abstract class Territory {
 
 
         if (x < size - 1) {
-            TerritoryStates tempTerritory = calculate(territories, x + 1, y, size);
+            TerritoryStates tempTerritory = calculate(territories, x + 1, y, size, possible);
             if (tempTerritory != TerritoryStates.Verified) {
                 nearbyTerritory.add(tempTerritory);
             }
         }
         if (y < size - 1) {
-            TerritoryStates tempTerritory = calculate(territories, x, y + 1, size);
+            TerritoryStates tempTerritory = calculate(territories, x, y + 1, size, possible);
             if (tempTerritory != TerritoryStates.Verified) {
                 nearbyTerritory.add(tempTerritory);
             }
         }
         if (y > 0) {
-            TerritoryStates tempTerritory = calculate(territories, x, y - 1, size);
+            TerritoryStates tempTerritory = calculate(territories, x, y - 1, size, possible);
             if (tempTerritory != TerritoryStates.Verified) {
                 nearbyTerritory.add(tempTerritory);
             }
         }
         if (x > 0) {
-            TerritoryStates tempTerritory = calculate(territories, x - 1, y, size);
+            TerritoryStates tempTerritory = calculate(territories, x - 1, y, size, possible);
             if (tempTerritory != TerritoryStates.Verified) {
                 nearbyTerritory.add(tempTerritory);
             }
         }
         if (nearbyTerritory.size() == 0) {
-            territories[x][y] = TerritoryStates.None;
+            switch (possible) {
+                case -1:
+                    territories[x][y] = TerritoryStates.WhiteTerritory;
+                    break;
+                case -2:
+                case 0:
+                    territories[x][y] = TerritoryStates.None;
+                    break;
+                case 1:
+                    territories[x][y] = TerritoryStates.BlackTerritory;
+
+            }
             return territories[x][y];
         }
         boolean blackExpected;
