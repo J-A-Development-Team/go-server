@@ -119,4 +119,19 @@ public class GameManagerTest {
         Assert.assertEquals(15,gameManager.getPlayerOnePoints());
         Assert.assertEquals(0,gameManager.getPlayerTwoPoints());
     }
+    @Test
+    public void countTerritory5() {
+        GameManager gameManager = new GameManager(9);
+        Assert.assertEquals(0,gameManager.processMove(new Intersection(1, 0),1));
+        Assert.assertEquals(0,gameManager.processMove(new Intersection(0, 1),1));
+        Assert.assertEquals(0,gameManager.processMove(new Intersection(2, 1),1));
+        Assert.assertEquals(0,gameManager.processMove(new Intersection(0, 2),1));
+        Assert.assertEquals(0,gameManager.processMove(new Intersection(1, 3),1));
+        Assert.assertEquals(0,gameManager.processMove(new Intersection(2, 2),1));
+        Assert.assertEquals(0,gameManager.processMove(new Intersection(3, 2),1));
+        Assert.assertEquals(0,gameManager.processMove(new Intersection(5, 4),0));
+        gameManager.addTerritoryPoints();
+        Assert.assertEquals(2,gameManager.getPlayerOnePoints());
+        Assert.assertEquals(0,gameManager.getPlayerTwoPoints());
+    }
 }
