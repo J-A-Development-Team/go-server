@@ -25,7 +25,7 @@ public class GameConfig {
 
     public boolean checkIfValid(){
         switch (boardSize){
-            case 5: case 9: case 13:
+            case 5: case 9: case 13: case 19:
                 return true;
             default:
                 return false;

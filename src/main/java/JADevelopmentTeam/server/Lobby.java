@@ -8,9 +8,12 @@ public class Lobby implements Runnable {
     Stack<Player> playersWaitingFor9X9Game = new Stack<>();
     Stack<Player> playersWaitingFor5X5Game = new Stack<>();
     Stack<Player> playersWaitingFor13X13Game = new Stack<>();
+    Stack<Player> playersWaitingFor19X19Game = new Stack<>();
     Stack<Player> playersWaitingFor9X9GameWithBot = new Stack<>();
     Stack<Player> playersWaitingFor5X5GameWithBot = new Stack<>();
     Stack<Player> playersWaitingFor13X13GameWithBot = new Stack<>();
+    Stack<Player> playersWaitingFor19X19GameWithBot = new Stack<>();
+
     ArrayList<Player> playersChilling = new ArrayList<>();
     ArrayList<Game> gamesLobby = new ArrayList<>();
     Object lock = null;
@@ -61,6 +64,12 @@ public class Lobby implements Runnable {
                             playersWaitingFor13X13Game.push(chillingPlayer);
                         }
                         break;
+                    case 19:
+                        if(chillingPlayer.getGameConfig().isWithBot()){
+                            playersWaitingFor19X19GameWithBot.push(chillingPlayer);
+                        }else{
+                            playersWaitingFor19X19Game.push(chillingPlayer);
+                        }
                 }
             }
         }
@@ -90,6 +99,12 @@ public class Lobby implements Runnable {
             players[1] = playersWaitingFor13X13Game.pop();
             gamesLobby.add(prepareGame(players, 13));
         }
+        if (playersWaitingFor19X19Game.size() > 1) {
+            Player[] players = new Player[2];
+            players[0] = playersWaitingFor19X19Game.pop();
+            players[1] = playersWaitingFor19X19Game.pop();
+            gamesLobby.add(prepareGame(players, 19));
+        }
         if (playersWaitingFor5X5GameWithBot.size() > 0) {
             Player[] players = new Player[2];
             players[0] = playersWaitingFor5X5GameWithBot.pop();
@@ -107,6 +122,12 @@ public class Lobby implements Runnable {
             players[0] = playersWaitingFor13X13GameWithBot.pop();
             players[1] = new Bot(null);
             gamesLobby.add(prepareGame(players, 13));
+        }
+        if (playersWaitingFor19X19GameWithBot.size() > 0) {
+            Player[] players = new Player[2];
+            players[0] = playersWaitingFor19X19GameWithBot.pop();
+            players[1] = new Bot(null);
+            gamesLobby.add(prepareGame(players, 19));
         }
     }
 
