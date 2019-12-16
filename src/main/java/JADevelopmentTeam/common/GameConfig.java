@@ -1,6 +1,8 @@
 package JADevelopmentTeam.common;
 
-public class GameConfig {
+import java.io.Serializable;
+
+public class GameConfig implements Serializable {
     boolean withBot;
     int boardSize;
     boolean wantsToStart;
