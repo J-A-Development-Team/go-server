@@ -19,6 +19,9 @@ public class Player implements Runnable {
     DataPackage dataPackage;
     private PlayerState playerState = PlayerState.ConfigureGame;
 
+    public Player() {
+    }
+
     public DataPackage getDataPackage() {
         return dataPackage;
     }
