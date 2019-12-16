@@ -1,18 +1,33 @@
 package JADevelopmentTeam.server;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Date;
+public class Server implements Runnable {
+    Lobby lobby;
+    Object lock = this;
 
-public class Server {
-    public static void main(String[] args) {
-        Connector connector = Connector.getInstance();
-        while (true){
-            Player[]  players = connector.initializePlayers();
-            Game game = new Game(players,9);
-            new Thread(game).start();
+    public Server() {
+    }
+
+    public void setLobby() {
+        lobby = Lobby.getInstance(this);
+    }
+
+    @Override
+    public void run() {
+        setLobby();
+        lobby.run();
+        while (true) {
+            synchronized (lock) {
+                try {
+                    wait();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+            for(Game game : lobby.gamesLobby){
+                new Thread(game).start();
+            }
+            lobby.gamesLobby.clear();
             System.out.println("Next Game");
         }
     }
-
 }
