@@ -60,14 +60,15 @@ public class Game implements Runnable {
             return false;
         }
     }
-    private boolean handlePlayerRunningAway(){
-        if(!players[0].inGame){
+
+    private boolean handlePlayerRunningAway() {
+        if (!players[0].inGame) {
             notifyPlayerAboutOpponentResignation(players[1]);
             System.out.println("Player 0 disconnected");
-        }else if(!players[1].inGame){
+        } else if (!players[1].inGame) {
             notifyPlayerAboutOpponentResignation(players[0]);
             System.out.println("Player 1 disconnected");
-        }else{
+        } else {
             return true;
         }
         return false;
@@ -145,7 +146,7 @@ public class Game implements Runnable {
     public void run() {
         System.out.println("Starting game");
         nextTurn();
-        if(!startPlayers()){
+        if (!startPlayers()) {
             handlePlayerRunningAway();
             return;
         }
@@ -157,12 +158,12 @@ public class Game implements Runnable {
                     e.printStackTrace();
                 }
             }
-            if(!handlePlayerRunningAway()){
+            if (!handlePlayerRunningAway()) {
                 return;
             }
             DataPackage receivedData = players[turn].getDataPackage();
             if (receivedData.getInfo() == DataPackage.Info.Pass) {
-                if(!notifyOpponentAboutPass(players[Math.abs(turn-1)])){
+                if (!notifyOpponentAboutPass(players[Math.abs(turn - 1)])) {
                     handlePlayerRunningAway();
                     return;
                 }
@@ -196,11 +197,11 @@ public class Game implements Runnable {
                     }
                     continue;
                 }
-                if(!updatePlayersBoard()){
+                if (!updatePlayersBoard()) {
                     handlePlayerRunningAway();
                     return;
                 }
-                if(!sendLastPlacedStone(placedStone)){
+                if (!sendLastPlacedStone(placedStone)) {
                     handlePlayerRunningAway();
                     return;
                 }
@@ -208,7 +209,7 @@ public class Game implements Runnable {
             }
         }
         System.out.println("A teraz mili państwo usuwamy kamienie");
-        if(!proceedToStoneRemoval()){
+        if (!proceedToStoneRemoval()) {
             handlePlayerRunningAway();
             return;
         }
@@ -219,35 +220,36 @@ public class Game implements Runnable {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                if(!handlePlayerRunningAway()){
-                    return;
-                }
-                DataPackage receivedData;
-                int playerThatSend;
-                if (players[0].receivedData) {
-                    receivedData = players[0].getDataPackage();
-                    players[0].receivedData = false;
-                    playerThatSend = 0;
-                } else {
-                    receivedData = players[1].getDataPackage();
-                    players[1].receivedData = false;
-                    playerThatSend = 1;
-                }
-                if (receivedData.getInfo() == DataPackage.Info.Pass) {
-                    players[playerThatSend].setAcceptedStones(true);
-                    if (players[Math.abs(playerThatSend - 1)].isAcceptedStones()) {
+            }
+            if (!handlePlayerRunningAway()) {
+                return;
+            }
+            DataPackage receivedData;
+            int playerThatSend;
+            if (players[0].receivedData) {
+                receivedData = players[0].getDataPackage();
+                players[0].receivedData = false;
+                playerThatSend = 0;
+            } else {
+                receivedData = players[1].getDataPackage();
+                players[1].receivedData = false;
+                playerThatSend = 1;
+            }
+            if (receivedData.getInfo() == DataPackage.Info.Pass) {
+                players[playerThatSend].setAcceptedStones(true);
+                if (players[Math.abs(playerThatSend - 1)].isAcceptedStones()) {
 
-                        break;
-                    }
-                } else {
-                    if (gameManager.processDeadDeclaration((Intersection) receivedData.getData()) == 0) {
-                        if(!updatePlayersBoard()){
-                            handlePlayerRunningAway();
-                            return;
-                        }
+                    break;
+                }
+            } else {
+                if (gameManager.processDeadDeclaration((Intersection) receivedData.getData()) == 0) {
+                    if (!updatePlayersBoard()) {
+                        handlePlayerRunningAway();
+                        return;
                     }
                 }
             }
+
         }
         endGame();
     }
