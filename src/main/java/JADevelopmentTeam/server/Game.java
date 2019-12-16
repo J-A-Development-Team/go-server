@@ -85,7 +85,16 @@ public class Game implements Runnable {
         try {
             players[0].send(new DataPackage("black", DataPackage.Info.PlayerColor));
             players[1].send(new DataPackage("white", DataPackage.Info.PlayerColor));
+            if(players[0] instanceof Bot){
+                new Thread(players[0]).start();
+                players[0].inGame = true;
+                ((Bot)players[0]).setGameManager(gameManager);
+            }else if(players[1] instanceof Bot){
+                new Thread(players[1]).start();
+                players[1].inGame = true;
+                ((Bot)players[1]).setGameManager(gameManager);
 
+            }
             return true;
         } catch (IOException e) {
             e.printStackTrace();
@@ -144,12 +153,12 @@ public class Game implements Runnable {
     @Override
     public void run() {
         System.out.println("Starting game");
-        nextTurn();
         if (!startPlayers()) {
             handlePlayerRunningAway();
             return;
         }
         while (true) {
+            nextTurn();
             synchronized (lock) {
                 try {
                     lock.wait();
@@ -204,7 +213,6 @@ public class Game implements Runnable {
                     handlePlayerRunningAway();
                     return;
                 }
-                nextTurn();
             }
         }
         System.out.println("A teraz mili państwo usuwamy kamienie");

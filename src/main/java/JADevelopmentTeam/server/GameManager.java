@@ -250,7 +250,7 @@ class GameManager {
         Integer[] counter = new Integer[2];
         counter[0]=0;
         counter[1]=0;
-        territories = Territory.calculateTerritory(board.getIntersections(), board.getSize());
+        territories = TerritoryCalculator.calculateTerritory(board.getIntersections(), board.getSize());
         for (int i = 0; i < board.getSize(); i++) {
             for (int j = 0; j < board.getSize(); j++) {
                 switch (territories[j][i]){

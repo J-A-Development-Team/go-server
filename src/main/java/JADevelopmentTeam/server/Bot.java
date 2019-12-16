@@ -2,8 +2,6 @@ package JADevelopmentTeam.server;
 
 import JADevelopmentTeam.common.DataPackage;
 import JADevelopmentTeam.common.Intersection;
-import JADevelopmentTeam.common.TerritoryStates;
-
 
 import java.io.IOException;
 
@@ -14,6 +12,7 @@ public class Bot extends Player {
     boolean opponentPassed;
     int points;
     GameManager gameManager;
+
     public Bot() {
         setPlayerState(PlayerState.WaitForStart);
     }
@@ -28,12 +27,16 @@ public class Bot extends Player {
             case Info:
                 String i = (String) dataPackage.getData();
                 if (i.equals("Connection to opponent lost"))
-                    inGame =false;
+                    inGame = false;
                 break;
             case Turn:
                 String info = (String) dataPackage.getData();
                 botTurn = info.equals("Your turn");
-                setPlayerState(PlayerState.Receive);
+                if(botTurn){
+                    setPlayerState(PlayerState.Receive);
+                }else{
+                    setPlayerState(PlayerState.NotYourTurn);
+                }
                 if (info.equals("Remove Dead Stones")) {
                     setPlayerState(PlayerState.EndGame);
                 }
@@ -52,24 +55,48 @@ public class Bot extends Player {
                 break;
         }
     }
-    void makeMove(){
 
+    private void makeMove() {
+        dataPackage =  BotBrain.getOptimalMove(gameManager,isPlayingBlack);
     }
+
     @Override
     public void receive() throws IOException, ClassNotFoundException {
-
+        makeMove();
+        receivedData = true;
+        setPlayerState(PlayerState.NotYourTurn);
+        synchronized (lock) {
+            lock.notify();
+        }
     }
 
     @Override
     public void run() {
-        while(true){
-            switch (getPlayerState()){
+        while (true) {
+            switch (getPlayerState()) {
                 case Receive:
                     try {
                         receive();
-                    } catch (IOException e) {
+                    } catch (IOException | ClassNotFoundException e) {
                         e.printStackTrace();
-                    } catch (ClassNotFoundException e) {
+                    }
+                    break;
+                case NotYourTurn:
+                    synchronized (this){
+                        try {
+                            wait(1000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    receivedData = false;
+                    break;
+                default:
+                    try {
+                        synchronized (this){
+                            wait(1000);
+                        }
+                    } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
             }

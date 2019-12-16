@@ -5,7 +5,7 @@ import JADevelopmentTeam.common.TerritoryStates;
 
 import java.util.ArrayList;
 
-public abstract class Territory {
+public abstract class TerritoryCalculator {
     private static TerritoryStates[][] createTerritoryBoard(Intersection[][] board, int size) {
         TerritoryStates[][] territories = new TerritoryStates[size][size];
         for (int i = 0; i < size; i++) {

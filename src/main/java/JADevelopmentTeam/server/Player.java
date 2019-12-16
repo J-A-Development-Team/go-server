@@ -12,7 +12,7 @@ public class Player implements Runnable {
     boolean inGame = false;
     boolean receivedData = false;
     boolean acceptedStones = false;
-    private Object lock;
+    Object lock;
     private ObjectInputStream is = null;
     private ObjectOutputStream os = null;
     GameConfig gameConfig = null;
