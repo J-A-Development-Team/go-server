@@ -18,9 +18,9 @@ public class Lobby implements Runnable {
     ArrayList<Game> gamesLobby = new ArrayList<>();
     Object lock = null;
     Connector connector;
+
     private Lobby(Object lock) {
         this.lock = lock;
-        connector = Connector.getInstance();
     }
 
     static Lobby getInstance(Object lock) {
@@ -65,9 +65,9 @@ public class Lobby implements Runnable {
                         }
                         break;
                     case 19:
-                        if(chillingPlayer.getGameConfig().isWithBot()){
+                        if (chillingPlayer.getGameConfig().isWithBot()) {
                             playersWaitingFor19X19GameWithBot.push(chillingPlayer);
-                        }else{
+                        } else {
                             playersWaitingFor19X19Game.push(chillingPlayer);
                         }
                 }
@@ -136,13 +136,16 @@ public class Lobby implements Runnable {
         while (true) {
             processChillingPlayers();
             groupPlayersIntoGames();
-            if(gamesLobby.size()>0){
-                synchronized (lock){
+            if (gamesLobby.size() > 0) {
+                synchronized (lock) {
                     lock.notify();
                 }
             }
             try {
-                wait(1000);
+                synchronized (this) {
+                    wait(1000);
+
+                }
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

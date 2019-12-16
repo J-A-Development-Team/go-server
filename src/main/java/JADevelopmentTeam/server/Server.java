@@ -14,7 +14,7 @@ public class Server implements Runnable {
     @Override
     public void run() {
         setLobby();
-        lobby.run();
+        new Thread(lobby).start();
         while (true) {
             synchronized (lock) {
                 try {
