@@ -1,6 +1,7 @@
 package JADevelopmentTeam.server;
 
 import JADevelopmentTeam.common.DataPackage;
+import JADevelopmentTeam.common.GameConfig;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -14,15 +15,16 @@ public class Player implements Runnable {
     private Object lock;
     private ObjectInputStream is = null;
     private ObjectOutputStream os = null;
+    GameConfig gameConfig = null;
     DataPackage dataPackage;
-    private PlayerState playerState = PlayerState.WaitForStart;
+    private PlayerState playerState = PlayerState.ConfigureGame;
 
     public DataPackage getDataPackage() {
         return dataPackage;
     }
 
     public enum PlayerState {
-        Receive, Send, WaitForStart, NotYourTurn, EndGame
+        Receive, Send, WaitForStart, NotYourTurn, EndGame, ConfigureGame
     }
 
 
@@ -34,6 +36,14 @@ public class Player implements Runnable {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public GameConfig getGameConfig() {
+        return gameConfig;
+    }
+
+    public PlayerState getPlayerState() {
+        return playerState;
     }
 
     public boolean isAcceptedStones() {
@@ -86,10 +96,27 @@ public class Player implements Runnable {
             }
         }
     }
-
+    public void configureGame() throws IOException, ClassNotFoundException{
+        DataPackage dataPackage = (DataPackage) is.readObject();
+        if (dataPackage.getInfo() == DataPackage.Info.GameConfig){
+            GameConfig tempConfig = (GameConfig) dataPackage.getData();
+            if (tempConfig.checkIfValid()){
+                gameConfig = tempConfig;
+                playerState = PlayerState.WaitForStart;
+            }
+        }
+    }
 
     @Override
     public void run() {
+        while (playerState==PlayerState.ConfigureGame){
+            try {
+                configureGame();
+            }catch (IOException | ClassNotFoundException e){
+                System.out.println("Gracz się rozłączył przedwcześnie");
+                return;
+            }
+        }
         inGame = true;
         System.out.println("Lets Play!");
         while (inGame) {
