@@ -41,7 +41,7 @@ public abstract class Territory {
                                 if (territories[m][k] == TerritoryStates.ProbablyBlack || territories[m][k] == TerritoryStates.Verified) {
                                     territories[m][k] = TerritoryStates.BlackTerritory;
                                 }
-                            } else {
+                            } else if (resultTerritory == TerritoryStates.ProbablyWhite){
                                 if (territories[m][k] == TerritoryStates.ProbablyWhite || territories[m][k] == TerritoryStates.Verified) {
                                     territories[m][k] = TerritoryStates.WhiteTerritory;
                                 }
@@ -145,14 +145,14 @@ public abstract class Territory {
         boolean blackExpected;
         blackExpected = (nearbyTerritory.get(0) == TerritoryStates.Black || nearbyTerritory.get(0) == TerritoryStates.ProbablyBlack);
 
-        for (int i = 1; i < nearbyTerritory.size(); i++) {
+        for (TerritoryStates territoryStates : nearbyTerritory) {
             if (blackExpected) {
-                if (nearbyTerritory.get(i) != TerritoryStates.ProbablyBlack && nearbyTerritory.get(i) != TerritoryStates.Black) {
+                if (!(territoryStates == TerritoryStates.ProbablyBlack || territoryStates == TerritoryStates.Black)) {
                     territories[x][y] = TerritoryStates.None;
                     return territories[x][y];
                 }
             } else {
-                if (nearbyTerritory.get(i) != TerritoryStates.ProbablyWhite && nearbyTerritory.get(i) != TerritoryStates.White) {
+                if (!(territoryStates == TerritoryStates.ProbablyWhite || territoryStates == TerritoryStates.White)) {
                     territories[x][y] = TerritoryStates.None;
                     return territories[x][y];
                 }
