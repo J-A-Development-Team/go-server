@@ -143,7 +143,7 @@ public class Lobby implements Runnable {
             }
             try {
                 synchronized (this) {
-                    wait(10000);
+                    wait(1000);
 
                 }
             } catch (InterruptedException e) {
