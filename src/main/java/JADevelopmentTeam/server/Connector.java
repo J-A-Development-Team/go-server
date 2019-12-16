@@ -3,8 +3,6 @@ package JADevelopmentTeam.server;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 class Connector {
     private static Connector instance = null;
@@ -37,6 +35,15 @@ class Connector {
             System.exit(-1);
         }
         return players;
+    }
+
+    Player initializePlayer() {
+        Player player = connectPlayer();
+        if (player == null){
+            System.out.println("Accept failed: 4444");
+            System.exit(-1);
+        }
+        return player;
     }
 
     private Player connectPlayer() {
