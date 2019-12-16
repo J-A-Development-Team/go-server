@@ -35,7 +35,6 @@ public class Player implements Runnable {
         try {
             is = new ObjectInputStream(socket.getInputStream());
             os = new ObjectOutputStream(socket.getOutputStream());
-            sendTurnInfo();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -66,6 +65,8 @@ public class Player implements Runnable {
                     break;
                 case NotYourTurn:
                     send(new DataPackage("Not your turn", DataPackage.Info.Turn));
+                    break;
+                case ConfigureGame:
                     break;
                 default:
                     send(new DataPackage("Your turn", DataPackage.Info.Turn));

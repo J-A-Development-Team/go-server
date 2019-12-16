@@ -82,11 +82,10 @@ public class Game implements Runnable {
     }
 
     private boolean startPlayers() {
-        new Thread(players[0]).start();
-        new Thread(players[1]).start();
         try {
             players[0].send(new DataPackage("black", DataPackage.Info.PlayerColor));
             players[1].send(new DataPackage("white", DataPackage.Info.PlayerColor));
+
             return true;
         } catch (IOException e) {
             e.printStackTrace();

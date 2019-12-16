@@ -5,15 +5,12 @@ public class Server implements Runnable {
     Object lock = this;
 
     public Server() {
-    }
-
-    public void setLobby() {
         lobby = Lobby.getInstance(this);
     }
 
+
     @Override
     public void run() {
-        setLobby();
         new Thread(lobby).start();
         while (true) {
             synchronized (lock) {
