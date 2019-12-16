@@ -131,7 +131,7 @@ public class GameManagerTest {
         Assert.assertEquals(0,gameManager.processMove(new Intersection(3, 2),1));
         Assert.assertEquals(0,gameManager.processMove(new Intersection(5, 4),0));
         gameManager.addTerritoryPoints();
-        Assert.assertEquals(2,gameManager.getPlayerOnePoints());
+        Assert.assertEquals(3,gameManager.getPlayerOnePoints());
         Assert.assertEquals(0,gameManager.getPlayerTwoPoints());
     }
 }
