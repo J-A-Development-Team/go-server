@@ -107,6 +107,7 @@ public class Player implements Runnable {
             if (tempConfig.checkIfValid()){
                 gameConfig = tempConfig;
                 playerState = PlayerState.WaitForStart;
+                sendTurnInfo();
             }
         }
     }
