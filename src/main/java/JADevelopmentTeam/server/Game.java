@@ -28,9 +28,9 @@ public class Game implements Runnable {
 
         try {
             players[0].send(boardData);
-            players[1].send(pointsDataOne);
+            players[0].send(pointsDataOne);
             players[1].send(boardData);
-            players[0].send(pointsDataTwo);
+            players[1].send(pointsDataTwo);
             return true;
         } catch (IOException e) {
             e.printStackTrace();
