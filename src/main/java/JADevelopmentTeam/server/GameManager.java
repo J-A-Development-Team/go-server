@@ -214,7 +214,11 @@ class GameManager {
     public GameManager copy() {
         GameManager clone = new GameManager(this.getBoard().getSize());
         clone.board = this.board.copy();
-        clone.lastRemovedStone = this.lastRemovedStone;
+        if (this.lastRemovedStone != null){
+            clone.lastRemovedStone = new Stone(this.lastRemovedStone.getXCoordinate(),this.lastRemovedStone.getYCoordinate());
+        } else {
+            clone.lastRemovedStone = null;
+        }
         ArrayList<Stone> stones = new ArrayList<>();
         for (Stone original : playerOneStones) {
             Stone copy = new Stone(original.getXCoordinate(), original.getYCoordinate());
