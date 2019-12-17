@@ -6,6 +6,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.ArrayList;
+
 public class GameLogicCalculatorTest {
 private GameManager gameManager;
     @Before
@@ -72,6 +74,11 @@ private GameManager gameManager;
 
     @Test
     public void generateSuperStoneChain() {
+        ArrayList<StoneChain> stoneChains = new ArrayList<>();
+        stoneChains.add(new StoneChain(new Stone(0,0)));
+        stoneChains.add(new StoneChain(new Stone(2,0)));
+        stoneChains.add(new StoneChain(new Stone(1,1)));
+        Assert.assertEquals(4,GameLogicCalculator.generateSuperStoneChain(stoneChains,new Stone(1,0)).getStones().size());
     }
 
     @Test
@@ -83,5 +90,12 @@ private GameManager gameManager;
         Assert.assertEquals(0,gameManager.processMove(new Intersection(0, 2),0));
         Intersection intersection = new Intersection(0,0);
         Assert.assertEquals(2,GameLogicCalculator.processMove(intersection,gameManager,0));
+    }
+
+    @Test
+    public void getSumOfLiberties() {
+        Assert.assertEquals(19,GameLogicCalculator.getSumOfLiberties(gameManager,0));
+        Assert.assertEquals(7,GameLogicCalculator.getSumOfLiberties(gameManager,1));
+
     }
 }
