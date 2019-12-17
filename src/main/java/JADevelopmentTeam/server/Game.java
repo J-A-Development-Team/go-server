@@ -21,6 +21,35 @@ public class Game implements Runnable {
         gameManager = new GameManager(boardSize);
     }
 
+    private String wonInfo(int turn) {
+        gameManager.addTerritoryPoints();
+        int yourPoints = gameManager.playersPoints[turn] + gameManager.playersTerritoryPoints[turn];
+        int opponentPoints = gameManager.playersPoints[Math.abs(turn - 1)] + gameManager.playersTerritoryPoints[Math.abs(turn - 1)];
+        String result = "";
+        String handicap;
+        if (turn == 0) {
+            handicap = "You had handicap +6 points";
+        } else {
+            handicap = "Your opponent had handicap +6 points";
+        }
+
+        if (yourPoints > opponentPoints) {
+            result += "You won\n";
+        } else {
+            result += "You lost\n";
+        }
+        result += "Your points: " + gameManager.playersPoints[turn] + "\n" +
+                "Opponent points: " + gameManager.playersPoints[Math.abs(turn - 1)] + "\n" +
+                "Your territory points: " + gameManager.playersTerritoryPoints[turn] + "\n" +
+                "Opponent territory points:" + gameManager.playersTerritoryPoints[Math.abs(turn - 1)] + "\n" +
+                handicap + "\n" +
+                "Sum of Your points: " + yourPoints + "\n" +
+                "Sum of Opponent points" + opponentPoints + "\n" +
+                "Thanks for playing\n" +
+                "Artur Pazurkiewicz & Joachim Schmidt";
+        return result;
+    }
+
     private boolean updatePlayersBoard() {
         DataPackage boardData = new DataPackage(gameManager.getBoardAsIntersections(), DataPackage.Info.StoneTable);
         DataPackage pointsDataOne = new DataPackage(gameManager.playersPoints[0], DataPackage.Info.Points);
@@ -78,6 +107,13 @@ public class Game implements Runnable {
         gameManager.addTerritoryPoints();
         sendTerritory();
         updatePlayersBoard();
+        for (int i = 0; i < 2; i++) {
+            try {
+                players[i].send(new DataPackage(wonInfo(i), DataPackage.Info.GameResult));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
         System.out.println("Ending game");
     }
 
@@ -85,14 +121,14 @@ public class Game implements Runnable {
         try {
             players[1].send(new DataPackage("black", DataPackage.Info.PlayerColor));
             players[0].send(new DataPackage("white", DataPackage.Info.PlayerColor));
-            if(players[0] instanceof Bot){
+            if (players[0] instanceof Bot) {
                 new Thread(players[0]).start();
                 players[0].inGame = true;
-                ((Bot)players[0]).setGameManager(gameManager);
-            }else if(players[1] instanceof Bot){
+                ((Bot) players[0]).setGameManager(gameManager);
+            } else if (players[1] instanceof Bot) {
                 new Thread(players[1]).start();
                 players[1].inGame = true;
-                ((Bot)players[1]).setGameManager(gameManager);
+                ((Bot) players[1]).setGameManager(gameManager);
 
             }
             return true;
@@ -221,6 +257,7 @@ public class Game implements Runnable {
             handlePlayerRunningAway();
             return;
         }
+        int playerThatSend = -1;
         while (true) {
             synchronized (lock) {
                 try {
@@ -232,17 +269,17 @@ public class Game implements Runnable {
             if (!handlePlayerRunningAway()) {
                 return;
             }
-            DataPackage receivedData;
-            int playerThatSend;
+            DataPackage receivedData = null;
             if (players[0].receivedData) {
                 receivedData = players[0].getDataPackage();
                 players[0].receivedData = false;
                 playerThatSend = 0;
-            } else {
+            } else if (players[1].receivedData){
                 receivedData = players[1].getDataPackage();
                 players[1].receivedData = false;
                 playerThatSend = 1;
             }
+            assert receivedData != null;
             if (receivedData.getInfo() == DataPackage.Info.Pass) {
                 players[playerThatSend].setAcceptedStones(true);
                 if (players[Math.abs(playerThatSend - 1)].isAcceptedStones()) {

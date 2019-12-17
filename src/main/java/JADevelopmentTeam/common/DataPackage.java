@@ -20,6 +20,6 @@ public class DataPackage<T> implements Serializable {
     }
 
     public enum Info {
-        Stone, StoneTable, PlayerColor, Info, Pass, Turn, Points, TerritoryTable, GameConfig
+        Stone, StoneTable, PlayerColor, Info, Pass, Turn, Points, TerritoryTable, GameConfig, GameResult
     }
 }
