@@ -36,12 +36,7 @@ public abstract class BotBrain {
         for (int i = 0; i < gameManager.getBoard().getSize(); i++) {
             for (int j = 0; j < gameManager.getBoard().getSize(); j++) {
                 Intersection intersection = new Intersection(i, j);
-                if(i==0&&j==1){
-                    System.out.println("Co się odpierdala");
-                }
                 if (gameManager.processMove(intersection,turn) == 0) {
-                    gameManager.loadBackup(backup.copy());
-                    System.out.println("x: "+i+" y: "+j+" Move result: " +GameLogicCalculator.processMove(intersection,gameManager,turn));
                     possibleMoves.add(intersection);
                 }
                 gameManager.loadBackup(backup.copy());

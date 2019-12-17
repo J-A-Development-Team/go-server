@@ -164,10 +164,11 @@ class GameManager {
     }
 
     public void loadBackup(GameManager backup) {
-        this.board = backup.board;
+        this.board = backup.board.copy();
         this.lastRemovedStone = backup.lastRemovedStone;
         this.playersStoneChains = backup.playersStoneChains;
         this.playersStones = backup.playersStones;
+        this.resetStoneChains();
     }
 
     public GameManager copy() {

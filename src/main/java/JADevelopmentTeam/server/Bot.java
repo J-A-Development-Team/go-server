@@ -22,15 +22,16 @@ public class Bot extends Player {
     }
 
     @Override
-    public void send(DataPackage dataPackage) throws IOException {
-        switch (dataPackage.getInfo()) {
+    public void send(DataPackage dataPackageToSend) throws IOException {
+        switch (dataPackageToSend.getInfo()) {
             case Info:
-                String i = (String) dataPackage.getData();
+                String i = (String) dataPackageToSend.getData();
                 if (i.equals("Connection to opponent lost"))
                     inGame = false;
+                System.out.println(i);
                 break;
             case Turn:
-                String info = (String) dataPackage.getData();
+                String info = (String) dataPackageToSend.getData();
                 botTurn = info.equals("Your turn");
                 if(botTurn){
                     setPlayerState(PlayerState.Receive);
@@ -43,22 +44,24 @@ public class Bot extends Player {
                 }
                 break;
             case PlayerColor:
-                String color = (String) dataPackage.getData();
+                String color = (String) dataPackageToSend.getData();
                 isPlayingBlack = color.equals("black");
                 break;
             case Points:
-                points = (Integer) dataPackage.getData();
+                points = (Integer) dataPackageToSend.getData();
                 break;
             case Pass:
                 opponentPassed = true;
                 break;
             default:
+                System.out.println(dataPackageToSend.getInfo());
                 break;
         }
     }
 
     private void makeMove() {
         dataPackage =  BotBrain.getOptimalMove(gameManager,isPlayingBlack);
+        System.out.println("Robię ruch: "+dataPackage.getInfo());
     }
 
     @Override
@@ -107,6 +110,7 @@ public class Bot extends Player {
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
+                    break;
             }
         }
     }

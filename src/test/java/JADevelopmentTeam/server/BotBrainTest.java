@@ -49,7 +49,46 @@ public class BotBrainTest {
             Assert.assertEquals(false, intersection.getXCoordinate() == 0 && intersection.getYCoordinate() == 1);
         }
         Assert.assertEquals(19, possibleMoves.size());
-
-
     }
+    @Test
+    public void testPossibleMoves3() {
+        GameManager gameManager = new GameManager(5);
+        Assert.assertEquals(0, gameManager.processMove(new Intersection(2, 2), 1));
+        simulateMoveChecking(gameManager);
+        Assert.assertEquals(0, gameManager.processMove(new Intersection(3, 0), 0));
+        Assert.assertEquals(0, gameManager.processMove(new Intersection(1, 1), 1));
+        simulateMoveChecking(gameManager);
+        Assert.assertEquals(0, gameManager.processMove(new Intersection(1, 4), 0));
+        Assert.assertEquals(0, gameManager.processMove(new Intersection(1, 3), 1));
+        simulateMoveChecking(gameManager);
+        Assert.assertEquals(0, gameManager.processMove(new Intersection(2, 0), 0));
+        Assert.assertEquals(0, gameManager.processMove(new Intersection(2, 1), 1));
+        simulateMoveChecking(gameManager);
+        Assert.assertEquals(0, gameManager.processMove(new Intersection(0, 4), 0));
+        Assert.assertEquals(0, gameManager.processMove(new Intersection(0, 3), 1));
+        simulateMoveChecking(gameManager);
+        Assert.assertEquals(0, gameManager.processMove(new Intersection(4, 0), 0));
+        Assert.assertEquals(0, gameManager.processMove(new Intersection(0, 0), 1));
+        simulateMoveChecking(gameManager);
+        Assert.assertEquals(0, gameManager.processMove(new Intersection(3, 2), 0));
+        Assert.assertEquals(0, gameManager.processMove(new Intersection(4, 1), 1));
+        simulateMoveChecking(gameManager);
+        Assert.assertEquals(0, gameManager.processMove(new Intersection(0, 2), 0));
+        Assert.assertEquals(0, gameManager.processMove(new Intersection(0, 1), 1));
+        simulateMoveChecking(gameManager);
+        Assert.assertEquals(0, gameManager.processMove(new Intersection(3, 3), 0));
+        Assert.assertEquals(0, gameManager.processMove(new Intersection(1, 2), 1));
+        simulateMoveChecking(gameManager);
+        Assert.assertEquals(0, gameManager.processMove(new Intersection(4, 4), 0));
+        Assert.assertEquals(0, gameManager.processMove(new Intersection(4, 3), 1));
+        simulateMoveChecking(gameManager);
+        Assert.assertEquals(0, gameManager.processMove(new Intersection(4, 2), 0));
+        Assert.assertEquals(0, gameManager.processMove(new Intersection(3, 1), 1));
+        gameManager.countTerritory();
+    }
+    public void simulateMoveChecking(GameManager gameManager){
+        GameManager backup = gameManager.copy();
+        BotBrain.getPossibleMoves(gameManager, false, backup);
+    }
+
 }
