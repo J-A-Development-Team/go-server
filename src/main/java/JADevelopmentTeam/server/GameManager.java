@@ -205,10 +205,13 @@ class GameManager {
 
     public void loadBackup(GameManager backup) {
         this.board = backup.board;
+        this.lastRemovedStone = backup.lastRemovedStone;
         this.playerOneStoneChains = backup.playerOneStoneChains;
         this.playerTwoStoneChains = backup.playerTwoStoneChains;
         this.playerOneStones = backup.playerOneStones;
         this.playerTwoStones = backup.playerTwoStones;
+        this.playerOnePoints = backup.playerOnePoints;
+        this.playerTwoPoints = backup.playerTwoPoints;
     }
 
     public GameManager copy() {
@@ -243,6 +246,8 @@ class GameManager {
             chains.add(originalChain.copy());
         }
         clone.playerTwoStoneChains = chains;
+        clone.playerOnePoints = this.playerOnePoints;
+        clone.playerTwoPoints = this.playerTwoPoints;
         return clone;
     }
     public void addTerritoryPoints(){
