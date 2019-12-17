@@ -26,23 +26,24 @@ public class Game implements Runnable {
         int yourPoints = gameManager.playersPoints[turn] + gameManager.playersTerritoryPoints[turn];
         int opponentPoints = gameManager.playersPoints[Math.abs(turn - 1)] + gameManager.playersTerritoryPoints[Math.abs(turn - 1)];
         String result = "";
-        String handicap;
+        String komi;
         if (turn == 0) {
-            handicap = "You had handicap +6 points";
+            komi = "You had komi +6 points\n";
         } else {
-            handicap = "Your opponent had handicap +6 points";
+            komi = "Your opponent had komi +6 points\n";
         }
-
         if (yourPoints > opponentPoints) {
             result += "You won\n";
-        } else {
+        } else if (yourPoints<opponentPoints){
             result += "You lost\n";
+        } else {
+            result += "Draw";
         }
         result += "Your points: " + gameManager.playersPoints[turn] + "\n" +
                 "Opponent points: " + gameManager.playersPoints[Math.abs(turn - 1)] + "\n" +
                 "Your territory points: " + gameManager.playersTerritoryPoints[turn] + "\n" +
                 "Opponent territory points:" + gameManager.playersTerritoryPoints[Math.abs(turn - 1)] + "\n" +
-                handicap + "\n" +
+                komi + "\n" +
                 "Sum of Your points: " + yourPoints + "\n" +
                 "Sum of Opponent points" + opponentPoints + "\n" +
                 "Thanks for playing\n" +
