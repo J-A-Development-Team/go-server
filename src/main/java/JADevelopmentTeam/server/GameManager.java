@@ -192,16 +192,6 @@ class GameManager {
             stones.add(copy);
         }
         clone.playersStones.set(1,stones);
-        ArrayList<StoneChain> chains = new ArrayList<>();
-        for (StoneChain originalChain : playersStoneChains.get(0)) {
-            chains.add(originalChain.copy());
-        }
-        clone.playersStoneChains.set(0,chains);
-        chains = new ArrayList<>();
-        for (StoneChain originalChain : playersStoneChains.get(1)) {
-            chains.add(originalChain.copy());
-        }
-        clone.playersStoneChains.set(1,chains);
         clone.playersPoints[0] = this.playersPoints[0];
         clone.playersPoints[1] = this.playersPoints[1];
         clone.resetStoneChains();
