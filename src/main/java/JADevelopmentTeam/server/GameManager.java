@@ -10,9 +10,8 @@ class GameManager {
     ArrayList< ArrayList<StoneChain>>  playersStoneChains = new ArrayList<>();
     ArrayList< ArrayList <Stone>> playersStones = new ArrayList<>();
     int [] playersPoints = new int[2];
+    int [] playersTerritoryPoints = new int[2];
     TerritoryStates[][] territories = null;
-    int playerOnePoints = 0;
-    int playerTwoPoints = 0;
     Stone lastRemovedStone = null;
     private Board board;
 
@@ -199,8 +198,8 @@ class GameManager {
     }
     public void addTerritoryPoints(){
         Integer [] pointToAdd = countTerritory();
-        playersPoints[0] += pointToAdd[0];
-        playersPoints[1] += pointToAdd[1];
+        playersTerritoryPoints[0] = pointToAdd[0];
+        playersTerritoryPoints[1] = pointToAdd[1];
     }
     public Integer[] countTerritory() {
         Integer[] counter = new Integer[2];
