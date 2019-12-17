@@ -130,7 +130,7 @@ public abstract class GameLogicCalculator {
             } else {
                 for (StoneChain stoneChain : playerStoneChains) {
                     if (stoneChain.getLiberties() == 0) {
-                        gameManager.loadBackup(backup);
+                        gameManager.loadBackup(backup.copy());
                         return 2;
                     }
                 }

@@ -43,9 +43,9 @@ class GameManager {
 
     int processMove(Intersection chosenIntersection, int turn) {
         if (turn == 1) {
-            chosenIntersection.setStoneBlack(false);
-        } else {
             chosenIntersection.setStoneBlack(true);
+        } else {
+            chosenIntersection.setStoneBlack(false);
         }
         return GameLogicCalculator.processMove(chosenIntersection, this, turn);
     }
@@ -150,7 +150,6 @@ class GameManager {
                     board.getIntersections()[stone.getXCoordinate()][stone.getYCoordinate()].setHasStone(false);
                     playersStones.get(Math.abs(turn-1)).remove(stone);
                 }
-                System.out.println("USUWAM chaina");
                 deleteCounter++;
                 if (playersStoneChains.get(Math.abs(turn-1)).get(i).getStones().size() == 1)
                     lastRemovedStone = playersStoneChains.get(Math.abs(turn-1)).get(i).getStones().get(0);

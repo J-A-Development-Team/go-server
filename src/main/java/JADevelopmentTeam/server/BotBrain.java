@@ -10,7 +10,8 @@ public abstract class BotBrain {
     public static DataPackage getOptimalMove(GameManager gameManager, boolean isBlack) {
         GameManager backup = gameManager.copy();
         ArrayList<Intersection> possibleMoves = getPossibleMoves(gameManager, isBlack, backup);
-        if (possibleMoves.size() == 0) return getPassDataPackage();
+        if (possibleMoves.size() == 0)
+            return getPassDataPackage();
         return getIntersectionDataPackage(getRandomMove(possibleMoves));
     }
 
