@@ -153,12 +153,12 @@ public class Game implements Runnable {
     @Override
     public void run() {
         System.out.println("Starting game");
+        nextTurn();
         if (!startPlayers()) {
             handlePlayerRunningAway();
             return;
         }
         while (true) {
-            nextTurn();
             synchronized (lock) {
                 try {
                     lock.wait();
@@ -179,6 +179,7 @@ public class Game implements Runnable {
                     break;
                 }
                 lastMoveWasPass = true;
+                nextTurn();
             } else {
                 Intersection placedStone = (Intersection) players[turn].getDataPackage().getData();
                 int moveResult = gameManager.processMove(placedStone, turn);
@@ -212,6 +213,7 @@ public class Game implements Runnable {
                     handlePlayerRunningAway();
                     return;
                 }
+                nextTurn();
             }
         }
         System.out.println("A teraz mili państwo usuwamy kamienie");

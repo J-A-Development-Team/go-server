@@ -39,6 +39,7 @@ public class Bot extends Player {
                 }
                 if (info.equals("Remove Dead Stones")) {
                     setPlayerState(PlayerState.EndGame);
+                    setAcceptedStones(true);
                 }
                 break;
             case PlayerColor:
@@ -75,6 +76,13 @@ public class Bot extends Player {
         while (true) {
             switch (getPlayerState()) {
                 case Receive:
+                    synchronized (this){
+                        try {
+                            wait(1000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
                     try {
                         receive();
                     } catch (IOException | ClassNotFoundException e) {
