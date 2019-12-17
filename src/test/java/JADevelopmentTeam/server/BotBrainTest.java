@@ -15,7 +15,7 @@ public class BotBrainTest {
         Assert.assertEquals(0, gameManager.processMove(new Intersection(0, 1), 1));
         Assert.assertEquals(0, gameManager.processMove(new Intersection(0, 2), 0));
         GameManager backup = gameManager.copy();
-        ArrayList<Intersection> possibleMoves = BotBrain.getPossibleMoves(gameManager, false, backup);
+        ArrayList<Move> possibleMoves = BotBrain.getPossibleMoves(gameManager, 0, backup);
         Assert.assertEquals(gameManager.getBoardAsIntersections()[0][1].isHasStone(), backup.getBoardAsIntersections()[0][1].isHasStone());
         Assert.assertEquals(gameManager.getBoardAsIntersections()[1][0].isHasStone(), backup.getBoardAsIntersections()[1][0].isHasStone());
         Assert.assertEquals(gameManager.getBoardAsIntersections()[0][1].isStoneBlack(), backup.getBoardAsIntersections()[0][1].isStoneBlack());
@@ -25,8 +25,8 @@ public class BotBrainTest {
         Assert.assertEquals(gameManager.playersStones.get(0).size(), backup.playersStones.get(0).size());
         Assert.assertEquals(gameManager.playersStones.get(1).size(), backup.playersStones.get(1).size());
         Assert.assertEquals(21, possibleMoves.size());
-        for (Intersection intersection : possibleMoves) {
-            Assert.assertEquals(false, intersection.getXCoordinate() == 0 && intersection.getYCoordinate() == 0);
+        for (Move move : possibleMoves) {
+            Assert.assertEquals(false, move.intersection.getXCoordinate() == 0 && move.intersection.getYCoordinate() == 0);
         }
 
 
@@ -41,12 +41,12 @@ public class BotBrainTest {
         Assert.assertEquals(0, gameManager.processMove(new Intersection(2, 1), 0));
         Assert.assertEquals(0, gameManager.processMove(new Intersection(1, 1), 1));
         GameManager backup = gameManager.copy();
-        ArrayList<Intersection> possibleMoves = BotBrain.getPossibleMoves(gameManager, false, backup);
+        ArrayList<Move> possibleMoves = BotBrain.getPossibleMoves(gameManager, 0, backup);
         Intersection testIntersection = new Intersection(0,1);
         testIntersection.setStoneBlack(false);
         Assert.assertEquals(2,GameLogicCalculator.processMove(testIntersection,gameManager,0));
-        for (Intersection intersection : possibleMoves) {
-            Assert.assertEquals(false, intersection.getXCoordinate() == 0 && intersection.getYCoordinate() == 1);
+        for (Move move : possibleMoves) {
+            Assert.assertEquals(false, move.intersection.getXCoordinate() == 0 && move.intersection.getYCoordinate() == 1);
         }
         Assert.assertEquals(19, possibleMoves.size());
     }
@@ -88,7 +88,7 @@ public class BotBrainTest {
     }
     public void simulateMoveChecking(GameManager gameManager){
         GameManager backup = gameManager.copy();
-        BotBrain.getPossibleMoves(gameManager, false, backup);
+        BotBrain.getPossibleMoves(gameManager, 0, backup);
     }
 
 }

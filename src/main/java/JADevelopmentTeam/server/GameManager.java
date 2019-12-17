@@ -210,37 +210,37 @@ class GameManager {
             for (int j = 0; j < board.getSize(); j++) {
                 switch (territories[j][i]){
                     case White:
-                        System.out.print(" 0 ");
+            //            System.out.print(" 0 ");
                         break;
                     case WhiteTerritory:
                         counter[0]++;
-                        System.out.print(" W ");
+            //            System.out.print(" W ");
                         break;
                     case BlackTerritory:
                         counter[1]++;
-                        System.out.print(" B ");
+            //            System.out.print(" B ");
                         break;
                     case Black:
-                        System.out.print(" 1 ");
+            //            System.out.print(" 1 ");
                         break;
                     case Verified:
-                        System.out.print(" V ");
+            //            System.out.print(" V ");
                         break;
                     case None:
-                        System.out.print(" N ");
+            //            System.out.print(" N ");
                         break;
                     case Unknown:
-                        System.out.print(" U ");
+            //            System.out.print(" U ");
                         break;
                     case ProbablyBlack:
-                        System.out.print(" A ");
+            //            System.out.print(" A ");
                         break;
                     case ProbablyWhite:
-                        System.out.println(" Q ");
+            //            System.out.println(" Q ");
                         break;
                 }
             }
-            System.out.print("\n");
+            //System.out.print("\n");
 
         }
         return counter;
