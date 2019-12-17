@@ -107,6 +107,14 @@ public abstract class GameLogicCalculator {
         return superStoneChain;
     }
 
+    public static int getSumOfLiberties(GameManager gameManager, int turn) {
+        int sumOfLiberties = 0;
+        for (StoneChain stoneChain : gameManager.playersStoneChains.get(turn)) {
+            sumOfLiberties += calculateLiberties(stoneChain, gameManager.getBoard());
+        }
+        return sumOfLiberties;
+    }
+
     public static int processMove(Intersection chosenIntersection, GameManager gameManager, int turn) {
         GameManager backup = gameManager.copy();
         if (gameManager.lastRemovedStone != null)
@@ -117,7 +125,7 @@ public abstract class GameLogicCalculator {
             return 1;
         }
         ArrayList<StoneChain> opponentStoneChains, playerStoneChains;
-        opponentStoneChains = gameManager.playersStoneChains.get(Math.abs(turn-1));
+        opponentStoneChains = gameManager.playersStoneChains.get(Math.abs(turn - 1));
         playerStoneChains = gameManager.playersStoneChains.get(turn);
         int opponentStoneChainsCount = opponentStoneChains.size();
         gameManager.getBoard().setIntersection(chosenIntersection);
