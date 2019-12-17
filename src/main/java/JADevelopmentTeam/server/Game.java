@@ -179,7 +179,6 @@ public class Game implements Runnable {
                     break;
                 }
                 lastMoveWasPass = true;
-                nextTurn();
             } else {
                 Intersection placedStone = (Intersection) players[turn].getDataPackage().getData();
                 int moveResult = gameManager.processMove(placedStone, turn);
