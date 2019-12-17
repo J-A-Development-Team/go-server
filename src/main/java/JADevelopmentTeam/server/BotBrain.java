@@ -31,13 +31,17 @@ public abstract class BotBrain {
 
     public static ArrayList<Intersection> getPossibleMoves(GameManager gameManager, boolean isBlack, GameManager backup) {
         ArrayList<Intersection> possibleMoves = new ArrayList<>();
-        int turn = 1;
-        if (isBlack) turn = 0;
+        int turn = 0;
+        if (isBlack) turn = 1;
         for (int i = 0; i < gameManager.getBoard().getSize(); i++) {
             for (int j = 0; j < gameManager.getBoard().getSize(); j++) {
                 Intersection intersection = new Intersection(i, j);
-                intersection.setStoneBlack(isBlack);
-                if (GameLogicCalculator.processMove(intersection, gameManager, turn) == 0) {
+                if(i==0&&j==1){
+                    System.out.println("Co się odpierdala");
+                }
+                if (gameManager.processMove(intersection,turn) == 0) {
+                    gameManager.loadBackup(backup.copy());
+                    System.out.println("x: "+i+" y: "+j+" Move result: " +GameLogicCalculator.processMove(intersection,gameManager,turn));
                     possibleMoves.add(intersection);
                 }
                 gameManager.loadBackup(backup.copy());

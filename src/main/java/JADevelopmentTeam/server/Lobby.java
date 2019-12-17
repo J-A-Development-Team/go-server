@@ -107,26 +107,26 @@ public class Lobby implements Runnable {
         }
         if (playersWaitingFor5X5GameWithBot.size() > 0) {
             Player[] players = new Player[2];
-            players[0] = playersWaitingFor5X5GameWithBot.pop();
-            players[1] = new Bot();
+            players[1] = playersWaitingFor5X5GameWithBot.pop();
+            players[0] = new Bot();
             gamesLobby.add(prepareGame(players, 5));
         }
         if (playersWaitingFor9X9GameWithBot.size() > 0) {
             Player[] players = new Player[2];
-            players[0] = playersWaitingFor9X9GameWithBot.pop();
-            players[1] = new Bot();
+            players[1] = playersWaitingFor9X9GameWithBot.pop();
+            players[0] = new Bot();
             gamesLobby.add(prepareGame(players, 9));
         }
         if (playersWaitingFor13X13GameWithBot.size() > 0) {
             Player[] players = new Player[2];
-            players[0] = playersWaitingFor13X13GameWithBot.pop();
-            players[1] = new Bot();
+            players[1] = playersWaitingFor13X13GameWithBot.pop();
+            players[0] = new Bot();
             gamesLobby.add(prepareGame(players, 13));
         }
         if (playersWaitingFor19X19GameWithBot.size() > 0) {
             Player[] players = new Player[2];
-            players[0] = playersWaitingFor19X19GameWithBot.pop();
-            players[1] = new Bot();
+            players[1] = playersWaitingFor19X19GameWithBot.pop();
+            players[0] = new Bot();
             gamesLobby.add(prepareGame(players, 19));
         }
     }

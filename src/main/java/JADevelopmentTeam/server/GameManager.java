@@ -141,19 +141,20 @@ class GameManager {
     void removeDeadStoneChains(int turn) {
         lastRemovedStone = null;
         int deleteCounter = 0;
-        for (int i = playersStoneChains.get(Math.abs(turn-1)).size() - 1; i >= 0; i--) {
-            if (GameLogicCalculator.calculateLiberties(playersStoneChains.get(Math.abs(turn-1)).get(i), board) == 0) {
-                ArrayList<Stone> stones = playersStoneChains.get(Math.abs(turn-1)).get(i).getStones();
+        int opponent = Math.abs(turn-1);
+        for (int i = playersStoneChains.get(opponent).size() - 1; i >= 0; i--) {
+            if (GameLogicCalculator.calculateLiberties(playersStoneChains.get(opponent).get(i), board) == 0) {
+                ArrayList<Stone> stones = playersStoneChains.get(opponent).get(i).getStones();
                 playersPoints[turn] +=stones.size();
                 for (int j = stones.size() - 1; j >= 0; j--) {
                     Stone stone = stones.get(j);
                     board.getIntersections()[stone.getXCoordinate()][stone.getYCoordinate()].setHasStone(false);
-                    playersStones.get(Math.abs(turn-1)).remove(stone);
+                    playersStones.get(opponent).remove(stone);
                 }
                 deleteCounter++;
-                if (playersStoneChains.get(Math.abs(turn-1)).get(i).getStones().size() == 1)
-                    lastRemovedStone = playersStoneChains.get(Math.abs(turn-1)).get(i).getStones().get(0);
-                playersStoneChains.get(Math.abs(turn-1)).remove(playersStoneChains.get(Math.abs(turn-1)).get(i));
+                if (playersStoneChains.get(opponent).get(i).getStones().size() == 1)
+                    lastRemovedStone = playersStoneChains.get(opponent).get(i).getStones().get(0);
+                playersStoneChains.get(opponent).remove(i);
             }
             if (deleteCounter != 1) {
                 lastRemovedStone = null;

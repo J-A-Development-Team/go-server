@@ -7,7 +7,7 @@ import JADevelopmentTeam.common.TerritoryStates;
 import java.io.IOException;
 
 public class Game implements Runnable {
-    private int turn = 1;
+    private int turn = 0;
     private GameManager gameManager;
     private Player[] players;
     private boolean lastMoveWasPass = false;
@@ -83,8 +83,8 @@ public class Game implements Runnable {
 
     private boolean startPlayers() {
         try {
-            players[0].send(new DataPackage("black", DataPackage.Info.PlayerColor));
-            players[1].send(new DataPackage("white", DataPackage.Info.PlayerColor));
+            players[1].send(new DataPackage("black", DataPackage.Info.PlayerColor));
+            players[0].send(new DataPackage("white", DataPackage.Info.PlayerColor));
             if(players[0] instanceof Bot){
                 new Thread(players[0]).start();
                 players[0].inGame = true;
