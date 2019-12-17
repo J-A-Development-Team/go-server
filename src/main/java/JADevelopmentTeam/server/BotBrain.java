@@ -29,7 +29,7 @@ public abstract class BotBrain {
         return new DataPackage(intersection, DataPackage.Info.Stone);
     }
 
-    private static ArrayList<Intersection> getPossibleMoves(GameManager gameManager, boolean isBlack, GameManager backup) {
+    public static ArrayList<Intersection> getPossibleMoves(GameManager gameManager, boolean isBlack, GameManager backup) {
         ArrayList<Intersection> possibleMoves = new ArrayList<>();
         int turn = 1;
         if (isBlack) turn = 0;
