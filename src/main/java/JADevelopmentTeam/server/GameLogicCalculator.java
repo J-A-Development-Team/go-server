@@ -117,13 +117,8 @@ public abstract class GameLogicCalculator {
             return 1;
         }
         ArrayList<StoneChain> opponentStoneChains, playerStoneChains;
-        if (turn == 0) {
-            opponentStoneChains = gameManager.playerOneStoneChains;
-            playerStoneChains = gameManager.playerTwoStoneChains;
-        } else {
-            opponentStoneChains = gameManager.playerTwoStoneChains;
-            playerStoneChains = gameManager.playerOneStoneChains;
-        }
+        opponentStoneChains = gameManager.playersStoneChains.get(Math.abs(turn-1));
+        playerStoneChains = gameManager.playersStoneChains.get(turn);
         int opponentStoneChainsCount = opponentStoneChains.size();
         gameManager.getBoard().setIntersection(chosenIntersection);
         Stone newStone = new Stone(chosenIntersection.getXCoordinate(), chosenIntersection.getYCoordinate());

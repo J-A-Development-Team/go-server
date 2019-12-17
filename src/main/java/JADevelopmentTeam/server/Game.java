@@ -23,8 +23,8 @@ public class Game implements Runnable {
 
     private boolean updatePlayersBoard() {
         DataPackage boardData = new DataPackage(gameManager.getBoardAsIntersections(), DataPackage.Info.StoneTable);
-        DataPackage pointsDataOne = new DataPackage(gameManager.getPlayerOnePoints(), DataPackage.Info.Points);
-        DataPackage pointsDataTwo = new DataPackage(gameManager.getPlayerTwoPoints(), DataPackage.Info.Points);
+        DataPackage pointsDataOne = new DataPackage(gameManager.playersPoints[0], DataPackage.Info.Points);
+        DataPackage pointsDataTwo = new DataPackage(gameManager.playersPoints[1], DataPackage.Info.Points);
 
         try {
             players[0].send(boardData);
@@ -246,7 +246,6 @@ public class Game implements Runnable {
             if (receivedData.getInfo() == DataPackage.Info.Pass) {
                 players[playerThatSend].setAcceptedStones(true);
                 if (players[Math.abs(playerThatSend - 1)].isAcceptedStones()) {
-
                     break;
                 }
             } else {
