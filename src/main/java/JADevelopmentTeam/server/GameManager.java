@@ -168,7 +168,6 @@ class GameManager {
         this.lastRemovedStone = backup.lastRemovedStone;
         this.playersStoneChains = backup.playersStoneChains;
         this.playersStones = backup.playersStones;
-        this.resetStoneChains();
     }
 
     public GameManager copy() {
@@ -205,6 +204,7 @@ class GameManager {
         clone.playersStoneChains.set(1,chains);
         clone.playersPoints[0] = this.playersPoints[0];
         clone.playersPoints[1] = this.playersPoints[1];
+        clone.resetStoneChains();
         return clone;
     }
     public void addTerritoryPoints(){
