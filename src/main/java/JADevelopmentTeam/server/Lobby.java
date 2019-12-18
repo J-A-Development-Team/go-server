@@ -41,7 +41,7 @@ public class Lobby implements Runnable {
         return game;
     }
 
-    private void processChillingPlayers() {
+    void processChillingPlayers() {
         for (Player chillingPlayer : playersChilling) {
             if (chillingPlayer.getPlayerState() == Player.PlayerState.WaitForStart) {
                 switch (chillingPlayer.getGameConfig().getBoardSize()) {
@@ -82,7 +82,7 @@ public class Lobby implements Runnable {
         }
     }
 
-    private void groupPlayersIntoGames() {
+    void groupPlayersIntoGames() {
         if (playersWaitingFor5X5Game.size() > 1) {
             Player[] players = new Player[2];
             players[0] = playersWaitingFor5X5Game.pop();
