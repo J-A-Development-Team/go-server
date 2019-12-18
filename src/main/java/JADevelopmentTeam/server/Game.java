@@ -31,12 +31,14 @@ public class Game implements Runnable {
         String komi;
         if (turn == 0) {
             komi = "You had komi +6 points\n";
+            yourPoints += 6;
         } else {
             komi = "Your opponent had komi +6 points\n";
+            opponentPoints += 6;
         }
         if (yourPoints > opponentPoints) {
             result += "You won\n";
-        } else if (yourPoints<opponentPoints){
+        } else if (yourPoints < opponentPoints) {
             result += "You lost\n";
         } else {
             result += "Draw";
@@ -47,7 +49,7 @@ public class Game implements Runnable {
                 "Opponent territory points:" + gameManager.playersTerritoryPoints[Math.abs(turn - 1)] + "\n" +
                 komi + "\n" +
                 "Sum of Your points: " + yourPoints + "\n" +
-                "Sum of Opponent points" + opponentPoints + "\n" +
+                "Sum of Opponent points: " + opponentPoints + "\n\n" +
                 "Thanks for playing\n" +
                 "Artur Pazurkiewicz & Joachim Schmidt";
         return result;
@@ -261,6 +263,7 @@ public class Game implements Runnable {
             return;
         }
         int playerThatSend = -1;
+        boolean firstEdit = true;
         while (true) {
             synchronized (lock) {
                 try {
@@ -288,15 +291,23 @@ public class Game implements Runnable {
                 if (players[Math.abs(playerThatSend - 1)].isAcceptedStones()) {
                     break;
                 }
+                if (!firstEdit)
+                    try {
+                        players[Math.abs(playerThatSend - 1)].send(new DataPackage("Opponent accepted", DataPackage.Info.Pass));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
             } else {
                 if (gameManager.processDeadDeclaration((Intersection) receivedData.getData()) == 0) {
+                    players[0].setAcceptedStones(false);
+                    players[1].setAcceptedStones(false);
+                    firstEdit = false;
                     if (!updatePlayersBoard()) {
                         handlePlayerRunningAway();
                         return;
                     }
                 }
             }
-
         }
         endGame();
     }
