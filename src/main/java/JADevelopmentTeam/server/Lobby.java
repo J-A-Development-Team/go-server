@@ -1,5 +1,7 @@
 package JADevelopmentTeam.server;
 
+import JADevelopmentTeam.server.Bot.Bot;
+
 import java.util.ArrayList;
 import java.util.Stack;
 

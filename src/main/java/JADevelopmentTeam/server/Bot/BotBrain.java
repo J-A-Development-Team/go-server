@@ -1,7 +1,9 @@
-package JADevelopmentTeam.server;
+package JADevelopmentTeam.server.Bot;
 
 import JADevelopmentTeam.common.DataPackage;
 import JADevelopmentTeam.common.Intersection;
+import JADevelopmentTeam.server.GameLogic.GameLogicCalculator;
+import JADevelopmentTeam.server.GameLogic.GameManager;
 
 import java.util.ArrayList;
 import java.util.Random;

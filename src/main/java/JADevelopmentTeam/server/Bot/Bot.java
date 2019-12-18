@@ -1,7 +1,9 @@
-package JADevelopmentTeam.server;
+package JADevelopmentTeam.server.Bot;
 
 import JADevelopmentTeam.common.DataPackage;
 import JADevelopmentTeam.common.GameConfig;
+import JADevelopmentTeam.server.GameLogic.GameManager;
+import JADevelopmentTeam.server.Player;
 
 import java.io.IOException;
 

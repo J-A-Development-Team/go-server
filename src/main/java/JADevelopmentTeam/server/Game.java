@@ -3,6 +3,8 @@ package JADevelopmentTeam.server;
 import JADevelopmentTeam.common.DataPackage;
 import JADevelopmentTeam.common.Intersection;
 import JADevelopmentTeam.common.TerritoryStates;
+import JADevelopmentTeam.server.Bot.Bot;
+import JADevelopmentTeam.server.GameLogic.GameManager;
 
 import java.io.IOException;
 

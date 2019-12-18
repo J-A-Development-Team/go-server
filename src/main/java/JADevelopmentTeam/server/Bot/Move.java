@@ -1,9 +1,9 @@
-package JADevelopmentTeam.server;
+package JADevelopmentTeam.server.Bot;
 
 import JADevelopmentTeam.common.Intersection;
 
 public class Move {
-    Intersection intersection;
+    public Intersection intersection;
     int territoryChange;
     int stonesKilled;
     int chainsConnected;

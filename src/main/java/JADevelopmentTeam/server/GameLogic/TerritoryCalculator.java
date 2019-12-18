@@ -1,4 +1,4 @@
-package JADevelopmentTeam.server;
+package JADevelopmentTeam.server.GameLogic;
 
 import JADevelopmentTeam.common.Intersection;
 import JADevelopmentTeam.common.TerritoryStates;

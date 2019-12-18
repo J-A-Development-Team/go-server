@@ -1,6 +1,7 @@
 package JADevelopmentTeam.server;
 
 import JADevelopmentTeam.common.Intersection;
+import JADevelopmentTeam.server.GameLogic.GameManager;
 import org.junit.Assert;
 import org.junit.Test;
 

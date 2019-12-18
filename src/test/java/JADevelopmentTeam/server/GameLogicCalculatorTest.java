@@ -1,7 +1,10 @@
 package JADevelopmentTeam.server;
 
 import JADevelopmentTeam.common.Intersection;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import JADevelopmentTeam.server.GameLogic.GameLogicCalculator;
+import JADevelopmentTeam.server.GameLogic.GameManager;
+import JADevelopmentTeam.server.GameLogic.Stone;
+import JADevelopmentTeam.server.GameLogic.StoneChain;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -27,7 +30,7 @@ private GameManager gameManager;
 
     @Test
     public void testCalculateLiberties() {
-        Assert.assertEquals(2,GameLogicCalculator.calculateLiberties(new Stone(0,0),gameManager.getBoard()));
+        Assert.assertEquals(2, GameLogicCalculator.calculateLiberties(new Stone(0,0),gameManager.getBoard()));
         Assert.assertEquals(4,GameLogicCalculator.calculateLiberties(new Stone(3,1),gameManager.getBoard()));
         Assert.assertEquals(3,GameLogicCalculator.calculateLiberties(new Stone(1,2),gameManager.getBoard()));
 

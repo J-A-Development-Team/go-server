@@ -1,4 +1,4 @@
-package JADevelopmentTeam.server;
+package JADevelopmentTeam.server.GameLogic;
 
 import JADevelopmentTeam.common.Intersection;
 
@@ -51,7 +51,7 @@ public abstract class GameLogicCalculator {
         return neighborStoneChains;
     }
 
-    static Stone getStoneForIntersection(Intersection intersection, ArrayList<Stone> stones) {
+    public static Stone getStoneForIntersection(Intersection intersection, ArrayList<Stone> stones) {
         for (Stone stone : stones) {
             if (stone.getXCoordinate() == intersection.getXCoordinate()
                     && stone.getYCoordinate() == intersection.getYCoordinate()) {
@@ -61,13 +61,13 @@ public abstract class GameLogicCalculator {
         return null;
     }
 
-    static Intersection getIntersectionForStone(Stone stone, Board board) {
+    public static Intersection getIntersectionForStone(Stone stone, Board board) {
         int x = stone.getXCoordinate();
         int y = stone.getYCoordinate();
         return board.getIntersections()[x][y];
     }
 
-    static int getStoneChainIDForStone(Stone stone, ArrayList<StoneChain> stoneChains) {
+    public static int getStoneChainIDForStone(Stone stone, ArrayList<StoneChain> stoneChains) {
         for (StoneChain stoneChain : stoneChains) {
             for (Stone selected : stoneChain.getStones()) {
                 if (selected.getYCoordinate() == stone.getYCoordinate() && selected.getXCoordinate() == stone.getXCoordinate())

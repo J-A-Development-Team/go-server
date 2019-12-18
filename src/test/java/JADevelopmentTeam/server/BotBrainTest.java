@@ -1,6 +1,10 @@
 package JADevelopmentTeam.server;
 
 import JADevelopmentTeam.common.Intersection;
+import JADevelopmentTeam.server.Bot.BotBrain;
+import JADevelopmentTeam.server.Bot.Move;
+import JADevelopmentTeam.server.GameLogic.GameLogicCalculator;
+import JADevelopmentTeam.server.GameLogic.GameManager;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -44,7 +48,7 @@ public class BotBrainTest {
         ArrayList<Move> possibleMoves = BotBrain.getPossibleMoves(gameManager, 0, backup);
         Intersection testIntersection = new Intersection(0,1);
         testIntersection.setStoneBlack(false);
-        Assert.assertEquals(2,GameLogicCalculator.processMove(testIntersection,gameManager,0));
+        Assert.assertEquals(2, GameLogicCalculator.processMove(testIntersection,gameManager,0));
         for (Move move : possibleMoves) {
             Assert.assertEquals(false, move.intersection.getXCoordinate() == 0 && move.intersection.getYCoordinate() == 1);
         }

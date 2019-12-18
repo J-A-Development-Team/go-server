@@ -1,4 +1,4 @@
-package JADevelopmentTeam.server;
+package JADevelopmentTeam.server.GameLogic;
 
 import JADevelopmentTeam.common.Intersection;
 import JADevelopmentTeam.common.TerritoryStates;
@@ -6,16 +6,16 @@ import JADevelopmentTeam.common.TerritoryStates;
 import java.util.ArrayList;
 
 
-class GameManager {
-    ArrayList<ArrayList<StoneChain>> playersStoneChains = new ArrayList<>();
-    ArrayList<ArrayList<Stone>> playersStones = new ArrayList<>();
-    int[] playersPoints = new int[2];
-    int[] playersTerritoryPoints = new int[2];
+public class GameManager {
+    public ArrayList<ArrayList<StoneChain>> playersStoneChains = new ArrayList<>();
+    public ArrayList<ArrayList<Stone>> playersStones = new ArrayList<>();
+    public int[] playersPoints = new int[2];
+    public int[] playersTerritoryPoints = new int[2];
     TerritoryStates[][] territories = null;
     Stone lastRemovedStone = null;
     private Board board;
 
-    GameManager(int boardSize) {
+    public GameManager(int boardSize) {
         board = new Board(boardSize);
         playersStoneChains.add(new ArrayList<>());
         playersStoneChains.add(new ArrayList<>());
@@ -31,7 +31,7 @@ class GameManager {
         this.territories = territories;
     }
 
-    Intersection[][] getBoardAsIntersections() {
+    public Intersection[][] getBoardAsIntersections() {
         return board.getIntersections();
     }
 
@@ -40,7 +40,7 @@ class GameManager {
         return board;
     }
 
-    int processMove(Intersection chosenIntersection, int turn) {
+    public int processMove(Intersection chosenIntersection, int turn) {
         if (turn == 1) {
             chosenIntersection.setStoneBlack(true);
         } else {
@@ -49,7 +49,7 @@ class GameManager {
         return GameLogicCalculator.processMove(chosenIntersection, this, turn);
     }
 
-    int processDeadDeclaration(Intersection chosenIntersection) {
+    public int processDeadDeclaration(Intersection chosenIntersection) {
         int x = chosenIntersection.getXCoordinate();
         int y = chosenIntersection.getYCoordinate();
         if (board.getIntersections()[x][y].isHasStone()) {
