@@ -48,8 +48,8 @@ public class Game implements Runnable {
         } else {
             result += "Draw";
         }
-        result += "Your points: " + gameManager.playersPoints[turn] + "\n" +
-                "Opponent points: " + gameManager.playersPoints[Math.abs(turn - 1)] + "\n" +
+        result += "Your Prisoners: " + gameManager.playersPoints[turn] + "\n" +
+                "Opponent Prisoners: " + gameManager.playersPoints[Math.abs(turn - 1)] + "\n" +
                 "Your territory points: " + gameManager.playersTerritoryPoints[turn] + "\n" +
                 "Opponent territory points:" + gameManager.playersTerritoryPoints[Math.abs(turn - 1)] + "\n" +
                 komi + "\n" +

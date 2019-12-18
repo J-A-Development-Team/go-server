@@ -167,6 +167,7 @@ public class GameManager {
         this.lastRemovedStone = backup.lastRemovedStone;
         this.playersStoneChains = backup.playersStoneChains;
         this.playersStones = backup.playersStones;
+        this.playersPoints = backup.playersPoints;
     }
 
     public GameManager copy() {
