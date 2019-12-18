@@ -13,7 +13,7 @@ public class Game implements Runnable {
     private GameManager gameManager;
     private Player[] players;
     private boolean lastMoveWasPass = false;
-    private Object lock = this;
+    private final Object lock = this;
 
 
     Game(Player[] players, int boardSize) {
@@ -29,13 +29,18 @@ public class Game implements Runnable {
         int opponentPoints = gameManager.playersPoints[Math.abs(turn - 1)] + gameManager.playersTerritoryPoints[Math.abs(turn - 1)];
         String result = "";
         String komi;
-        if (turn == 0) {
-            komi = "You had komi +6 points\n";
-            yourPoints += 6;
-        } else {
-            komi = "Your opponent had komi +6 points\n";
-            opponentPoints += 6;
+        if(gameManager.getBoard().getSize()>12){
+            if (turn == 0) {
+                komi = "You had komi +6 points\n";
+                yourPoints += 6;
+            } else {
+                komi = "Your opponent had komi +6 points\n";
+                opponentPoints += 6;
+            }
+        }else{
+            komi = "";
         }
+
         if (yourPoints > opponentPoints) {
             result += "You won\n";
         } else if (yourPoints < opponentPoints) {
@@ -110,7 +115,10 @@ public class Game implements Runnable {
 
     private void endGame() {
         gameManager.addTerritoryPoints();
-        sendTerritory();
+        if(!sendTerritory()){
+            handlePlayerRunningAway();
+            return;
+        }
         updatePlayersBoard();
         for (int i = 0; i < 2; i++) {
             try {
@@ -180,15 +188,13 @@ public class Game implements Runnable {
         }
     }
 
-    private boolean notifyPlayerAboutOpponentResignation(Player player) {
+    private void notifyPlayerAboutOpponentResignation(Player player) {
         DataPackage dataPackage = new DataPackage("Connection to opponent lost", DataPackage.Info.Info);
         try {
             player.send(dataPackage);
-            return true;
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return false;
     }
 
     @Override
@@ -220,14 +226,13 @@ public class Game implements Runnable {
                     break;
                 }
                 lastMoveWasPass = true;
-                nextTurn();
             } else {
                 Intersection placedStone = (Intersection) players[turn].getDataPackage().getData();
                 int moveResult = gameManager.processMove(placedStone, turn);
                 if (moveResult == 0) {
                     lastMoveWasPass = false;
                 } else {
-                    DataPackage badMoveData = null;
+                    DataPackage badMoveData;
                     switch (moveResult) {
                         case 2:
                             badMoveData = new DataPackage("Suicidal Move", DataPackage.Info.Info);
@@ -254,8 +259,8 @@ public class Game implements Runnable {
                     handlePlayerRunningAway();
                     return;
                 }
-                nextTurn();
             }
+            nextTurn();
         }
         System.out.println("A teraz mili państwo usuwamy kamienie");
         if (!proceedToStoneRemoval()) {

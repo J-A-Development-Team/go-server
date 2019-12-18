@@ -7,39 +7,39 @@ import java.io.IOException;
 
 public interface Player extends Runnable {
 
-    public void sendTurnInfo();
+    void sendTurnInfo();
 
-    public PlayerState getPlayerState();
+    PlayerState getPlayerState();
 
-    public void setPlayerState(PlayerState playerState);
+    void setPlayerState(PlayerState playerState);
 
-    public DataPackage getDataPackage();
+    DataPackage getDataPackage();
 
-    public boolean isAcceptedStones();
+    boolean isAcceptedStones();
 
     void setAcceptedStones(boolean b);
 
-    public boolean getInGame();
+    boolean getInGame();
 
-    public void setInGame(boolean b);
+    void setInGame(boolean b);
 
-    public void setLock(Object lock);
+    void setLock(Object lock);
 
-    public boolean getReceivedData();
+    boolean getReceivedData();
 
-    public void setReceivedData(boolean b);
+    void setReceivedData(boolean b);
 
-    public void send(DataPackage dataPackage) throws IOException;
+    void send(DataPackage dataPackage) throws IOException;
 
-    public void receive() throws IOException, ClassNotFoundException;
+    void receive() throws IOException, ClassNotFoundException;
 
     @Override
-    public void run();
+    void run();
 
     GameConfig getGameConfig();
 
 
-    public enum PlayerState {
+    enum PlayerState {
         Receive, Send, WaitForStart, NotYourTurn, EndGame, ConfigureGame
     }
 }
