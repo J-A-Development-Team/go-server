@@ -46,7 +46,7 @@ public class Game implements Runnable {
         } else if (yourPoints < opponentPoints) {
             result += "You lost\n";
         } else {
-            result += "Draw";
+            result += "Draw\n";
         }
         result += "Your Prisoners: " + gameManager.playersPoints[turn] + "\n" +
                 "Opponent Prisoners: " + gameManager.playersPoints[Math.abs(turn - 1)] + "\n" +
