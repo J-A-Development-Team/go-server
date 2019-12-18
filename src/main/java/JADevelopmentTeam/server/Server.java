@@ -20,7 +20,7 @@ public class Server implements Runnable {
                     e.printStackTrace();
                 }
             }
-            for(Game game : lobby.gamesLobby){
+            for (Game game : lobby.gamesLobby) {
                 new Thread(game).start();
             }
             lobby.gamesLobby.clear();

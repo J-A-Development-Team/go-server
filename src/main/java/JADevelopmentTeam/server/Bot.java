@@ -1,27 +1,72 @@
 package JADevelopmentTeam.server;
 
 import JADevelopmentTeam.common.DataPackage;
-import JADevelopmentTeam.common.Intersection;
+import JADevelopmentTeam.common.GameConfig;
 
 import java.io.IOException;
 
 
-public class Bot extends Player {
+public class Bot implements Player {
     boolean botTurn;
     boolean isPlayingBlack;
     boolean opponentPassed;
     int points;
     GameManager gameManager;
+    boolean inGame = false;
+    boolean receivedData = false;
+    boolean acceptedStones = false;
+    Object lock = null;
+    DataPackage dataPackage = null;
+    PlayerState playerState = PlayerState.ConfigureGame;
 
     public Bot() {
         setPlayerState(PlayerState.WaitForStart);
+    }
+
+    public PlayerState getPlayerState() {
+        return playerState;
+    }
+
+    public void setPlayerState(PlayerState playerState) {
+        this.playerState = playerState;
+    }
+
+    public boolean isAcceptedStones() {
+        return acceptedStones;
+    }
+
+    public void setAcceptedStones(boolean b) {
+        acceptedStones = b;
+    }
+
+    public boolean getInGame() {
+        return inGame;
+    }
+
+    public void setInGame(boolean b) {
+        inGame = b;
+    }
+
+    public void setLock(Object lock) {
+        this.lock = lock;
+    }
+
+    public boolean getReceivedData() {
+        return receivedData;
+    }
+
+    public void setReceivedData(boolean b) {
+        receivedData = b;
+    }
+
+    public DataPackage getDataPackage() {
+        return dataPackage;
     }
 
     public void setGameManager(GameManager gameManager) {
         this.gameManager = gameManager;
     }
 
-    @Override
     public void send(DataPackage dataPackageToSend) throws IOException {
         switch (dataPackageToSend.getInfo()) {
             case Info:
@@ -33,9 +78,9 @@ public class Bot extends Player {
             case Turn:
                 String info = (String) dataPackageToSend.getData();
                 botTurn = info.equals("Your turn");
-                if(botTurn){
+                if (botTurn) {
                     setPlayerState(PlayerState.Receive);
-                }else{
+                } else {
                     setPlayerState(PlayerState.NotYourTurn);
                 }
                 if (info.equals("Remove Dead Stones")) {
@@ -59,12 +104,14 @@ public class Bot extends Player {
         }
     }
 
-    private void makeMove() {
-        dataPackage =  BotBrain.getOptimalMove(gameManager,isPlayingBlack);
-        System.out.println("Robię ruch: "+dataPackage.getInfo());
+    public void sendTurnInfo() {
     }
 
-    @Override
+    private void makeMove() {
+        dataPackage = BotBrain.getOptimalMove(gameManager, isPlayingBlack);
+        System.out.println("Robię ruch: " + dataPackage.getInfo());
+    }
+
     public void receive() throws IOException, ClassNotFoundException {
         makeMove();
         receivedData = true;
@@ -74,14 +121,17 @@ public class Bot extends Player {
         }
     }
 
-    @Override
+    public GameConfig getGameConfig() {
+        return null;
+    }
+
     public void run() {
         while (true) {
             switch (getPlayerState()) {
                 case Receive:
-                    synchronized (this){
+                    synchronized (this) {
                         try {
-                            wait(1000);
+                            wait(100);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
@@ -93,7 +143,7 @@ public class Bot extends Player {
                     }
                     break;
                 case NotYourTurn:
-                    synchronized (this){
+                    synchronized (this) {
                         try {
                             wait(1000);
                         } catch (InterruptedException e) {
@@ -104,7 +154,7 @@ public class Bot extends Player {
                     break;
                 default:
                     try {
-                        synchronized (this){
+                        synchronized (this) {
                             wait(1000);
                         }
                     } catch (InterruptedException e) {
@@ -114,4 +164,6 @@ public class Bot extends Player {
             }
         }
     }
+
+
 }

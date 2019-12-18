@@ -5,8 +5,8 @@ public class Main {
         Server server = new Server();
         new Thread(server).start();
         Connector connector = Connector.getInstance();
-        while (true){
-            Player player = connector.initializePlayer();
+        while (true) {
+            Human player = connector.initializePlayer();
             new Thread(player).start();
             server.lobby.addPlayerToLobby(player);
         }

@@ -91,10 +91,10 @@ public class Game implements Runnable {
     }
 
     private boolean handlePlayerRunningAway() {
-        if (!players[0].inGame) {
+        if (!players[0].getInGame()) {
             notifyPlayerAboutOpponentResignation(players[1]);
             System.out.println("Player 0 disconnected");
-        } else if (!players[1].inGame) {
+        } else if (!players[1].getInGame()) {
             notifyPlayerAboutOpponentResignation(players[0]);
             System.out.println("Player 1 disconnected");
         } else {
@@ -123,11 +123,11 @@ public class Game implements Runnable {
             players[0].send(new DataPackage("white", DataPackage.Info.PlayerColor));
             if (players[0] instanceof Bot) {
                 new Thread(players[0]).start();
-                players[0].inGame = true;
+                players[0].setInGame(true);
                 ((Bot) players[0]).setGameManager(gameManager);
             } else if (players[1] instanceof Bot) {
                 new Thread(players[1]).start();
-                players[1].inGame = true;
+                players[1].setInGame(true);
                 ((Bot) players[1]).setGameManager(gameManager);
 
             }
@@ -270,13 +270,13 @@ public class Game implements Runnable {
                 return;
             }
             DataPackage receivedData = null;
-            if (players[0].receivedData) {
+            if (players[0].getReceivedData()) {
                 receivedData = players[0].getDataPackage();
-                players[0].receivedData = false;
+                players[0].setReceivedData(false);
                 playerThatSend = 0;
-            } else if (players[1].receivedData){
+            } else if (players[1].getReceivedData()) {
                 receivedData = players[1].getDataPackage();
-                players[1].receivedData = false;
+                players[1].setReceivedData(false);
                 playerThatSend = 1;
             }
             assert receivedData != null;

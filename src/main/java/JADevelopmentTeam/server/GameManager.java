@@ -7,21 +7,13 @@ import java.util.ArrayList;
 
 
 class GameManager {
-    ArrayList< ArrayList<StoneChain>>  playersStoneChains = new ArrayList<>();
-    ArrayList< ArrayList <Stone>> playersStones = new ArrayList<>();
-    int [] playersPoints = new int[2];
-    int [] playersTerritoryPoints = new int[2];
+    ArrayList<ArrayList<StoneChain>> playersStoneChains = new ArrayList<>();
+    ArrayList<ArrayList<Stone>> playersStones = new ArrayList<>();
+    int[] playersPoints = new int[2];
+    int[] playersTerritoryPoints = new int[2];
     TerritoryStates[][] territories = null;
     Stone lastRemovedStone = null;
     private Board board;
-
-    public TerritoryStates[][] getTerritories() {
-        return territories;
-    }
-
-    public void setTerritories(TerritoryStates[][] territories) {
-        this.territories = territories;
-    }
 
     GameManager(int boardSize) {
         board = new Board(boardSize);
@@ -29,6 +21,14 @@ class GameManager {
         playersStoneChains.add(new ArrayList<>());
         playersStones.add(new ArrayList<>());
         playersStones.add(new ArrayList<>());
+    }
+
+    public TerritoryStates[][] getTerritories() {
+        return territories;
+    }
+
+    public void setTerritories(TerritoryStates[][] territories) {
+        this.territories = territories;
     }
 
     Intersection[][] getBoardAsIntersections() {
@@ -126,8 +126,8 @@ class GameManager {
     }
 
     void resetStoneChains() {
-        playersStoneChains.set(0,new ArrayList<>()) ;
-        playersStoneChains.set(1,new ArrayList<>()) ;
+        playersStoneChains.set(0, new ArrayList<>());
+        playersStoneChains.set(1, new ArrayList<>());
         for (Stone stone : playersStones.get(0)) {
             addStoneToChains(stone, 0);
         }
@@ -140,11 +140,11 @@ class GameManager {
     void removeDeadStoneChains(int turn) {
         lastRemovedStone = null;
         int deleteCounter = 0;
-        int opponent = Math.abs(turn-1);
+        int opponent = Math.abs(turn - 1);
         for (int i = playersStoneChains.get(opponent).size() - 1; i >= 0; i--) {
             if (GameLogicCalculator.calculateLiberties(playersStoneChains.get(opponent).get(i), board) == 0) {
                 ArrayList<Stone> stones = playersStoneChains.get(opponent).get(i).getStones();
-                playersPoints[turn] +=stones.size();
+                playersPoints[turn] += stones.size();
                 for (int j = stones.size() - 1; j >= 0; j--) {
                     Stone stone = stones.get(j);
                     board.getIntersections()[stone.getXCoordinate()][stone.getYCoordinate()].setHasStone(false);
@@ -172,8 +172,8 @@ class GameManager {
     public GameManager copy() {
         GameManager clone = new GameManager(this.getBoard().getSize());
         clone.board = this.board.copy();
-        if (this.lastRemovedStone != null){
-            clone.lastRemovedStone = new Stone(this.lastRemovedStone.getXCoordinate(),this.lastRemovedStone.getYCoordinate());
+        if (this.lastRemovedStone != null) {
+            clone.lastRemovedStone = new Stone(this.lastRemovedStone.getXCoordinate(), this.lastRemovedStone.getYCoordinate());
         } else {
             clone.lastRemovedStone = null;
         }
@@ -183,60 +183,62 @@ class GameManager {
             copy.setLiberties(original.getLiberties());
             stones.add(copy);
         }
-        clone.playersStones.set(0,stones);
+        clone.playersStones.set(0, stones);
         stones = new ArrayList<>();
         for (Stone original : playersStones.get(1)) {
             Stone copy = new Stone(original.getXCoordinate(), original.getYCoordinate());
             copy.setLiberties(original.getLiberties());
             stones.add(copy);
         }
-        clone.playersStones.set(1,stones);
+        clone.playersStones.set(1, stones);
         clone.playersPoints[0] = this.playersPoints[0];
         clone.playersPoints[1] = this.playersPoints[1];
         clone.resetStoneChains();
         return clone;
     }
-    public void addTerritoryPoints(){
-        Integer [] pointToAdd = countTerritory();
+
+    public void addTerritoryPoints() {
+        Integer[] pointToAdd = countTerritory();
         playersTerritoryPoints[0] = pointToAdd[0];
         playersTerritoryPoints[1] = pointToAdd[1];
     }
+
     public Integer[] countTerritory() {
         Integer[] counter = new Integer[2];
-        counter[0]=0;
-        counter[1]=0;
+        counter[0] = 0;
+        counter[1] = 0;
         territories = TerritoryCalculator.calculateTerritory(board.getIntersections(), board.getSize());
         for (int i = 0; i < board.getSize(); i++) {
             for (int j = 0; j < board.getSize(); j++) {
-                switch (territories[j][i]){
+                switch (territories[j][i]) {
                     case White:
-            //            System.out.print(" 0 ");
+                        //            System.out.print(" 0 ");
                         break;
                     case WhiteTerritory:
                         counter[0]++;
-            //            System.out.print(" W ");
+                        //            System.out.print(" W ");
                         break;
                     case BlackTerritory:
                         counter[1]++;
-            //            System.out.print(" B ");
+                        //            System.out.print(" B ");
                         break;
                     case Black:
-            //            System.out.print(" 1 ");
+                        //            System.out.print(" 1 ");
                         break;
                     case Verified:
-            //            System.out.print(" V ");
+                        //            System.out.print(" V ");
                         break;
                     case None:
-            //            System.out.print(" N ");
+                        //            System.out.print(" N ");
                         break;
                     case Unknown:
-            //            System.out.print(" U ");
+                        //            System.out.print(" U ");
                         break;
                     case ProbablyBlack:
-            //            System.out.print(" A ");
+                        //            System.out.print(" A ");
                         break;
                     case ProbablyWhite:
-            //            System.out.println(" Q ");
+                        //            System.out.println(" Q ");
                         break;
                 }
             }

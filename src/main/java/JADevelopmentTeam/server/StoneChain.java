@@ -7,20 +7,20 @@ public class StoneChain {
     private int liberties;
     private boolean isDead;
 
-    public boolean isDead() {
-        return isDead;
-    }
-
-    public void setDead(boolean dead) {
-        isDead = dead;
-    }
-
     public StoneChain(ArrayList<Stone> stones) {
         this.stones = stones;
     }
 
     public StoneChain(Stone stone) {
         this.stones.add(stone);
+    }
+
+    public boolean isDead() {
+        return isDead;
+    }
+
+    public void setDead(boolean dead) {
+        isDead = dead;
     }
 
     void addStone(Stone stone) {
@@ -45,8 +45,8 @@ public class StoneChain {
 
     public StoneChain copy() {
         ArrayList<Stone> copy = new ArrayList<>();
-        for (Stone original : this.getStones()){
-            Stone temp = new Stone(original.getXCoordinate(),original.getYCoordinate());
+        for (Stone original : this.getStones()) {
+            Stone temp = new Stone(original.getXCoordinate(), original.getYCoordinate());
             temp.setLiberties(original.getLiberties());
             copy.add(temp);
         }

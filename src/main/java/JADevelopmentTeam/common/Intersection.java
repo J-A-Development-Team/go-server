@@ -12,15 +12,7 @@ public class Intersection implements Serializable {
     public Intersection(int xCoordinate, int yCoordinate) {
         this.xCoordinate = xCoordinate;
         this.yCoordinate = yCoordinate;
-        hasStone =true;
-    }
-
-    public boolean exist() {
-        return hasStone;
-    }
-
-    public void setHasStone(boolean hasStone) {
-        this.hasStone = hasStone;
+        hasStone = true;
     }
 
     public Intersection(int xCoordinate, int yCoordinate, boolean hasStone) {
@@ -29,8 +21,16 @@ public class Intersection implements Serializable {
         this.hasStone = hasStone;
     }
 
+    public boolean exist() {
+        return hasStone;
+    }
+
     public boolean isHasStone() {
         return hasStone;
+    }
+
+    public void setHasStone(boolean hasStone) {
+        this.hasStone = hasStone;
     }
 
     public boolean isStoneDead() {

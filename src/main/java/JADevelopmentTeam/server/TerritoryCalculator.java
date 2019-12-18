@@ -41,7 +41,7 @@ public abstract class TerritoryCalculator {
                                 if (territories[m][k] == TerritoryStates.ProbablyBlack || territories[m][k] == TerritoryStates.Verified) {
                                     territories[m][k] = TerritoryStates.BlackTerritory;
                                 }
-                            } else if (resultTerritory == TerritoryStates.ProbablyWhite){
+                            } else if (resultTerritory == TerritoryStates.ProbablyWhite) {
                                 if (territories[m][k] == TerritoryStates.ProbablyWhite || territories[m][k] == TerritoryStates.Verified) {
                                     territories[m][k] = TerritoryStates.WhiteTerritory;
                                 }
@@ -94,7 +94,7 @@ public abstract class TerritoryCalculator {
 //    -1 white
     // -2 none for 100%
     private static TerritoryStates calculate(TerritoryStates[][] territories, int x, int y, int size, Integer possible) {
-        possible = changePossible(x,y,size,possible,territories);
+        possible = changePossible(x, y, size, possible, territories);
         if (territories[x][y] != TerritoryStates.Unknown || territories[x][y] == TerritoryStates.Verified)
             return territories[x][y];
 

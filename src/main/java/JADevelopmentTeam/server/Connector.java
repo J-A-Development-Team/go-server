@@ -26,8 +26,8 @@ class Connector {
         return instance;
     }
 
-    Player[] initializePlayers() {
-        Player[] players = new Player[2];
+    Human[] initializePlayers() {
+        Human[] players = new Human[2];
         players[0] = connectPlayer();
         players[1] = connectPlayer();
         if (players[0] == null || players[1] == null) {
@@ -37,21 +37,21 @@ class Connector {
         return players;
     }
 
-    Player initializePlayer() {
-        Player player = connectPlayer();
-        if (player == null){
+    Human initializePlayer() {
+        Human player = connectPlayer();
+        if (player == null) {
             System.out.println("Accept failed: 4444");
             System.exit(-1);
         }
         return player;
     }
 
-    private Player connectPlayer() {
+    private Human connectPlayer() {
         Socket socket;
         System.out.println("Oczekuję na klienta");
         try {
             socket = serverSocket.accept();
-            Player player = new Player(socket);
+            Human player = new Human(socket);
             System.out.println("Connected First Player!");
             return player;
         } catch (IOException e) {
