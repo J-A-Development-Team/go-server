@@ -73,4 +73,8 @@ public class Move {
         this.isPass = false;
         this.isPass = isBlack;
     }
+
+    public void makeOneStep(){
+        orderOfMovement++;
+    }
 }
