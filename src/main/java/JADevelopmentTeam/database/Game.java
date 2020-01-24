@@ -8,9 +8,13 @@ public class Game {
     private int id;
     private int boardSize;
     private boolean withBot;
-
     public Game(int id, int boardSize, boolean withBot) {
         this.id = id;
+        this.boardSize = boardSize;
+        this.withBot = withBot;
+    }
+    public Game(int boardSize, boolean withBot) {
+        this.id = 0;
         this.boardSize = boardSize;
         this.withBot = withBot;
     }

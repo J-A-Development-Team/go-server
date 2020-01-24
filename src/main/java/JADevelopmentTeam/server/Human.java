@@ -127,6 +127,7 @@ public class Human implements Player {
             try {
                 configureGame();
             } catch (IOException | ClassNotFoundException e) {
+                e.printStackTrace();
                 System.out.println("Gracz się rozłączył przedwcześnie");
                 return;
             }

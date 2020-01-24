@@ -1,5 +1,7 @@
 package JADevelopmentTeam.common;
 
+
+
 import java.io.Serializable;
 
 public class DataPackage<T> implements Serializable {

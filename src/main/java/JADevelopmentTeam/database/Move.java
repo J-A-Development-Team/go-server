@@ -67,11 +67,11 @@ public class Move {
         isPass = pass;
     }
 
-    public void move(int x, int y,boolean isBlack) {
+    public void configureMove(int x, int y, boolean isBlack) {
         this.x = x;
         this.y = y;
         this.isPass = false;
-        this.isPass = isBlack;
+        this.isBlack = isBlack;
     }
 
     public void makeOneStep(){

@@ -1,5 +1,6 @@
 package JADevelopmentTeam.server;
 
+import JADevelopmentTeam.database.MySQLConnector;
 import JADevelopmentTeam.server.Bot.Bot;
 
 import java.util.ArrayList;
@@ -37,8 +38,10 @@ public class Lobby implements Runnable {
     }
 
     Game prepareGame(Player[] players, int boardSize) {
-        Game game = new Game(players, boardSize);
-        return game;
+        boolean isGameWithBot = players[0] instanceof Bot;
+        MySQLConnector.sendObject(new JADevelopmentTeam.database.Game(boardSize,isGameWithBot));
+        int lastId = MySQLConnector.getLastGameID();
+        return new Game(players, boardSize,lastId);
     }
 
     void processChillingPlayers() {

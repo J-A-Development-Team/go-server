@@ -3,6 +3,8 @@ package JADevelopmentTeam.server;
 import JADevelopmentTeam.common.DataPackage;
 import JADevelopmentTeam.common.Intersection;
 import JADevelopmentTeam.common.TerritoryStates;
+import JADevelopmentTeam.database.Move;
+import JADevelopmentTeam.database.MySQLConnector;
 import JADevelopmentTeam.server.Bot.Bot;
 import JADevelopmentTeam.server.GameLogic.GameManager;
 
@@ -14,13 +16,17 @@ public class Game implements Runnable {
     private Player[] players;
     private boolean lastMoveWasPass = false;
     private final Object lock = this;
-
-
-    Game(Player[] players, int boardSize) {
+    private int gameID;
+    private Move move;
+    Game(Player[] players, int boardSize, int id) {
         this.players = players;
         players[0].setLock(lock);
         players[1].setLock(lock);
         gameManager = new GameManager(boardSize);
+        gameID = MySQLConnector.getLastGameID();
+        this.gameID = id;
+        move = new Move();
+        move.setGameID(gameID);
     }
 
     private String wonInfo(int turn) {
@@ -196,7 +202,15 @@ public class Game implements Runnable {
             e.printStackTrace();
         }
     }
-
+//    private void sendMove(int x,int y,boolean isPass){
+//        if(isPass){
+//            move.setPass(true);
+//            move.setBlack(turn==1);
+//        }else{
+//            move.configureMove(x,y,turn==1);
+//        }
+//        MySQLConnector.sendObject(move);
+//    }
     @Override
     public void run() {
         System.out.println("Starting game");
@@ -218,17 +232,21 @@ public class Game implements Runnable {
             }
             DataPackage receivedData = players[turn].getDataPackage();
             if (receivedData.getInfo() == DataPackage.Info.Pass) {
+                move.setPass(true);
+                move.setBlack(turn==1);
                 if (!notifyOpponentAboutPass(players[Math.abs(turn - 1)])) {
                     handlePlayerRunningAway();
                     return;
                 }
                 if (lastMoveWasPass) {
+                    MySQLConnector.sendObject(move);
                     break;
                 }
                 lastMoveWasPass = true;
             } else {
                 Intersection placedStone = (Intersection) players[turn].getDataPackage().getData();
                 int moveResult = gameManager.processMove(placedStone, turn);
+                move.configureMove(placedStone.getXCoordinate(),placedStone.getYCoordinate(),turn==1);
                 if (moveResult == 0) {
                     lastMoveWasPass = false;
                 } else {
@@ -260,6 +278,7 @@ public class Game implements Runnable {
                     return;
                 }
             }
+            MySQLConnector.sendObject(move);
             nextTurn();
         }
         System.out.println("A teraz mili państwo usuwamy kamienie");
