@@ -1,22 +1,49 @@
 package JADevelopmentTeam.server;
 
-import java.io.IOException;
-import java.net.ServerSocket;
-import java.net.Socket;
+import JADevelopmentTeam.common.DataPackage;
+import com.google.gson.Gson;
+import org.java_websocket.WebSocket;
+import org.java_websocket.handshake.ClientHandshake;
+import org.java_websocket.server.WebSocketServer;
 
-class Connector {
+import java.net.InetSocketAddress;
+import java.net.ServerSocket;
+
+class Connector extends WebSocketServer {
     private static Connector instance = null;
+    private static WebSocket lastWebSocket = null;
     private ServerSocket serverSocket = null;
 
 
     private Connector() {
-        try {
-            serverSocket = new ServerSocket(4444);
-            System.out.println("port assigned");
-        } catch (IOException ex) {
-            System.out.println("Could not listen on port 4444");
-            System.exit(-1);
-        }
+        super(new InetSocketAddress(8887));
+        this.start();
+    }
+
+    @Override
+    public void onOpen(WebSocket webSocket, ClientHandshake clientHandshake) {
+        lastWebSocket = webSocket;
+    }
+
+    @Override
+    public void onClose(WebSocket webSocket, int i, String s, boolean b) {
+
+    }
+
+    @Override
+    public void onMessage(WebSocket webSocket, String s) {
+        DataPackage dataPackage = new Gson().fromJson(s, DataPackage.class);
+        Observable.notify(webSocket, dataPackage);
+    }
+
+    @Override
+    public void onError(WebSocket webSocket, Exception e) {
+
+    }
+
+    @Override
+    public void onStart() {
+
     }
 
     static Connector getInstance() {
@@ -26,16 +53,16 @@ class Connector {
         return instance;
     }
 
-    Human[] initializePlayers() {
-        Human[] players = new Human[2];
-        players[0] = connectPlayer();
-        players[1] = connectPlayer();
-        if (players[0] == null || players[1] == null) {
-            System.out.println("Accept failed: 4444");
-            System.exit(-1);
-        }
-        return players;
-    }
+//    Human[] initializePlayers() {
+//        Human[] players = new Human[2];
+//        players[0] = connectPlayer();
+//        players[1] = connectPlayer();
+//        if (players[0] == null || players[1] == null) {
+//            System.out.println("Accept failed: 4444");
+//            System.exit(-1);
+//        }
+//        return players;
+//    }
 
     Human initializePlayer() {
         Human player = connectPlayer();
@@ -47,16 +74,25 @@ class Connector {
     }
 
     private Human connectPlayer() {
-        Socket socket;
         System.out.println("Oczekuję na klienta");
-        try {
-            socket = serverSocket.accept();
-            Human player = new Human(socket);
-            System.out.println("Connected First Player!");
-            return player;
-        } catch (IOException e) {
-            return null;
+        if (lastWebSocket != null) {
+            String lastSocket = lastWebSocket.toString();
+            while (true) {
+                if (lastSocket.equals(lastWebSocket.toString())) {
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    break;
+                }
+            }
         }
+
+        Human player = new Human(lastWebSocket);
+        System.out.println("Connected First Player!");
+        return player;
     }
 
 }

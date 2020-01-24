@@ -5,7 +5,7 @@ import JADevelopmentTeam.common.GameConfig;
 
 import java.io.IOException;
 
-public interface Player extends Runnable {
+public interface Player extends Runnable, Observer {
 
     void sendTurnInfo();
 

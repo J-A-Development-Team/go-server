@@ -168,4 +168,13 @@ public class Bot implements Player {
     }
 
 
+    @Override
+    public void update(DataPackage dataPackage) {
+
+    }
+
+    @Override
+    public void delete() {
+
+    }
 }
