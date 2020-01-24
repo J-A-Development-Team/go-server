@@ -8,11 +8,13 @@ import org.java_websocket.server.WebSocketServer;
 
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
+import java.util.HashSet;
 
 class Connector extends WebSocketServer {
     private static Connector instance = null;
     private static WebSocket lastWebSocket = null;
     private ServerSocket serverSocket = null;
+    private HashSet<WebSocket> webSockets = new HashSet<>();
 
 
     private Connector() {
@@ -75,16 +77,18 @@ class Connector extends WebSocketServer {
 
     private Human connectPlayer() {
         System.out.println("Oczekuję na klienta");
-        if (lastWebSocket != null) {
-            String lastSocket = lastWebSocket.toString();
-            while (true) {
-                if (lastSocket.equals(lastWebSocket.toString())) {
+        webSockets.add(lastWebSocket);
+        while (true) {
+            if (lastWebSocket != null) {
+                if (webSockets.contains(lastWebSocket)) {
                     try {
-                        Thread.sleep(1000);
+                        Thread.sleep(100);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                } else {
+                }
+                else {
+                    webSockets.add(lastWebSocket);
                     break;
                 }
             }
