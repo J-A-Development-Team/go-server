@@ -51,7 +51,7 @@ class Connector extends WebSocketServer {
 
     @Override
     public void onClose(WebSocket webSocket, int i, String s, boolean b) {
-
+        Observable.delete(webSocket);
     }
 
     @Override
@@ -74,7 +74,7 @@ class Connector extends WebSocketServer {
 
     @Override
     public void onError(WebSocket webSocket, Exception e) {
-
+        Observable.delete(webSocket);
     }
 
     @Override

@@ -13,6 +13,9 @@ public class Observable {
     public static void addObserver(WebSocket webSocket,Observer observer){
         observers.put(webSocket,observer);
     }
+    public static void delete(WebSocket webSocket){
+        observers.get(webSocket).delete();
+    }
     public static void notifyAll(DataPackage dataPackage){
         observers.forEach((a,b) -> b.update(dataPackage));
     }

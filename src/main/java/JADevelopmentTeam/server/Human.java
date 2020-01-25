@@ -84,7 +84,11 @@ public class Human implements Player {
     }
 
     public void send(DataPackage dataPackage) {
-        webSocket.send(new Gson().toJson(dataPackage));
+        if (dataPackage.getInfo()!= DataPackage.Info.StoneTable) {
+            webSocket.send(new Gson().toJson(dataPackage));
+        } else {
+            webSocket.send(new Gson().toJson(new DataPackage(new Gson().toJson(dataPackage.getData()), DataPackage.Info.StoneTable)));
+        }
     }
 
     @Override
