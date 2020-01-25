@@ -1,5 +1,8 @@
 package JADevelopmentTeam.server;
 
+import JADevelopmentTeam.common.DataPackage;
+import JADevelopmentTeam.common.Intersection;
+
 public class Main {
     private static final Object lock = Main.class;
     public static void main(String[] args) {
@@ -17,6 +20,9 @@ public class Main {
             Human player = connector.initializePlayer();
             new Thread(player).start();
             server.lobby.addPlayerToLobby(player);
+            DataPackage dataPackage = new DataPackage(new Intersection(1,1), DataPackage.Info.Stone);
+
+            player.send(dataPackage);
         }
     }
 }

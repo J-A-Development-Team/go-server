@@ -74,6 +74,7 @@ class Connector extends WebSocketServer {
     private static Human connectPlayer() {
         webSockets.add(lastWebSocket);
         Human player = new Human(lastWebSocket);
+        Observable.addObserver(lastWebSocket,player);
         System.out.println("Connected First Player!");
         return player;
     }
