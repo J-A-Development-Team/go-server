@@ -57,22 +57,25 @@ class Connector extends WebSocketServer {
 
     @Override
     public void onMessage(WebSocket webSocket, String s) {
-        DataPackage dataPackage = new DataPackage(null,null);
+        DataPackage dataPackage = new DataPackage(null, null);
         try {
             System.out.println(s);
             dataPackage = new Gson().fromJson(s, DataPackage.class);
 
-        } catch (IllegalStateException ex){
+        } catch (IllegalStateException ex) {
             System.out.println(s);
         }
         if (dataPackage.getInfo() == DataPackage.Info.GameConfig) {
             GameConfig gameConfig = new Gson().fromJson(dataPackage.getData().toString(), GameConfig.class);
             dataPackage = new DataPackage(gameConfig, DataPackage.Info.GameConfig);
-        } else if (dataPackage.getInfo() == DataPackage.Info.Stone){
+        } else if (dataPackage.getInfo() == DataPackage.Info.Stone) {
             dataPackage = new DataPackage(new Gson().fromJson(dataPackage.getData().toString(), Intersection.class), DataPackage.Info.Stone);
         }
-        Observable.notify(webSocket, dataPackage);
-        System.out.println("dostałem"+s);
+        if (dataPackage != null)
+            if (dataPackage.getInfo() != null && dataPackage.getData() != null) {
+                Observable.notify(webSocket, dataPackage);
+                System.out.println("dostałem" + s);
+            }
     }
 
     @Override
