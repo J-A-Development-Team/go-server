@@ -1,12 +1,14 @@
 package JADevelopmentTeam.server;
 
 import JADevelopmentTeam.common.DataPackage;
+import JADevelopmentTeam.common.GameConfig;
 import JADevelopmentTeam.common.Intersection;
 import JADevelopmentTeam.common.TerritoryStates;
 import JADevelopmentTeam.database.Move;
 import JADevelopmentTeam.database.MySQLConnector;
 import JADevelopmentTeam.server.Bot.Bot;
 import JADevelopmentTeam.server.GameLogic.GameManager;
+import com.google.gson.Gson;
 
 import java.io.IOException;
 
@@ -244,7 +246,7 @@ public class Game implements Runnable {
                 }
                 lastMoveWasPass = true;
             } else {
-                Intersection placedStone = (Intersection) players[turn].getDataPackage().getData();
+                Intersection placedStone = new Gson().fromJson(players[turn].getDataPackage().getData().toString(), Intersection.class);
                 int moveResult = gameManager.processMove(placedStone, turn);
                 move.configureMove(placedStone.getXCoordinate(),placedStone.getYCoordinate(),turn==1);
                 if (moveResult == 0) {

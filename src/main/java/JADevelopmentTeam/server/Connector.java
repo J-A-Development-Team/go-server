@@ -1,6 +1,7 @@
 package JADevelopmentTeam.server;
 
 import JADevelopmentTeam.common.DataPackage;
+import JADevelopmentTeam.common.GameConfig;
 import com.google.gson.Gson;
 import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
@@ -19,9 +20,24 @@ class Connector extends WebSocketServer {
 
 
     private Connector(Object lock) {
-        super(new InetSocketAddress(8887));
+        super(new InetSocketAddress(8889));
         this.start();
-        this.lock=lock;
+        this.lock = lock;
+    }
+
+    static Connector getInstance(Object lock) {
+        if (instance == null) {
+            instance = new Connector(lock);
+        }
+        return instance;
+    }
+
+    private static Human connectPlayer() {
+        webSockets.add(lastWebSocket);
+        Human player = new Human(lastWebSocket);
+        Observable.addObserver(lastWebSocket, player);
+        System.out.println("Connected First Player!");
+        return player;
     }
 
     @Override
@@ -40,7 +56,18 @@ class Connector extends WebSocketServer {
 
     @Override
     public void onMessage(WebSocket webSocket, String s) {
-        DataPackage dataPackage = new Gson().fromJson(s, DataPackage.class);
+        DataPackage dataPackage = new DataPackage(null,null);
+        try {
+            System.out.println(s);
+            dataPackage = new Gson().fromJson(s, DataPackage.class);
+
+        } catch (IllegalStateException ex){
+            System.out.println(s);
+        }
+        if (dataPackage.getInfo() == DataPackage.Info.GameConfig) {
+            GameConfig gameConfig = new Gson().fromJson(dataPackage.getData().toString(), GameConfig.class);
+            dataPackage = new DataPackage(gameConfig, DataPackage.Info.GameConfig);
+        }
         Observable.notify(webSocket, dataPackage);
         System.out.println(webSocket);
     }
@@ -55,27 +82,12 @@ class Connector extends WebSocketServer {
 
     }
 
-    static Connector getInstance(Object lock) {
-        if (instance == null) {
-            instance = new Connector(lock);
-        }
-        return instance;
-    }
-
     Human initializePlayer() {
         Human player = connectPlayer();
         if (player == null) {
             System.out.println("Accept failed: 4444");
             System.exit(-1);
         }
-        return player;
-    }
-
-    private static Human connectPlayer() {
-        webSockets.add(lastWebSocket);
-        Human player = new Human(lastWebSocket);
-        Observable.addObserver(lastWebSocket,player);
-        System.out.println("Connected First Player!");
         return player;
     }
 

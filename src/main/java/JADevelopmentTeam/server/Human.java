@@ -6,7 +6,7 @@ import com.google.gson.Gson;
 import org.java_websocket.WebSocket;
 
 public class Human implements Player {
-    boolean inGame = false;
+    private boolean inGame = false;
     boolean receivedData = false;
     boolean acceptedStones = false;
     boolean gameConfigured = false;
