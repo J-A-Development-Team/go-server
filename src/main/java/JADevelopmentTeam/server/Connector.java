@@ -2,6 +2,7 @@ package JADevelopmentTeam.server;
 
 import JADevelopmentTeam.common.DataPackage;
 import JADevelopmentTeam.common.GameConfig;
+import JADevelopmentTeam.common.Intersection;
 import com.google.gson.Gson;
 import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
@@ -67,6 +68,8 @@ class Connector extends WebSocketServer {
         if (dataPackage.getInfo() == DataPackage.Info.GameConfig) {
             GameConfig gameConfig = new Gson().fromJson(dataPackage.getData().toString(), GameConfig.class);
             dataPackage = new DataPackage(gameConfig, DataPackage.Info.GameConfig);
+        } else if (dataPackage.getInfo() == DataPackage.Info.Stone){
+            dataPackage = new DataPackage(new Gson().fromJson(dataPackage.getData().toString(), Intersection.class), DataPackage.Info.Stone);
         }
         Observable.notify(webSocket, dataPackage);
         System.out.println("dostałem"+s);

@@ -246,7 +246,7 @@ public class Game implements Runnable {
                 }
                 lastMoveWasPass = true;
             } else {
-                Intersection placedStone = new Gson().fromJson(players[turn].getDataPackage().getData().toString(), Intersection.class);
+                Intersection placedStone = (Intersection) players[turn].getDataPackage().getData();
                 int moveResult = gameManager.processMove(placedStone, turn);
                 move.configureMove(placedStone.getXCoordinate(),placedStone.getYCoordinate(),turn==1);
                 if (moveResult == 0) {
