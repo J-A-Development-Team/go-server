@@ -71,7 +71,7 @@ public class Bot implements Player {
 
     public void send(DataPackage dataPackageToSend) throws IOException {
         switch (dataPackageToSend.getInfo()) {
-            case Info:
+            case InfoMessage:
                 String i = (String) dataPackageToSend.getData();
                 if (i.equals("Connection to opponent lost"))
                     inGame = false;
