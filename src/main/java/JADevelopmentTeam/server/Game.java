@@ -324,7 +324,8 @@ public class Game implements Runnable {
                         e.printStackTrace();
                     }
             } else {
-                if (gameManager.processDeadDeclaration((Intersection) receivedData.getData()) == 0) {
+                Intersection placedStone = new Gson().fromJson(players[turn].getDataPackage().getData().toString(), Intersection.class);
+                if (gameManager.processDeadDeclaration(placedStone)==0) {
                     players[0].setAcceptedStones(false);
                     players[1].setAcceptedStones(false);
                     firstEdit = false;
