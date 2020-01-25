@@ -1,11 +1,19 @@
 package JADevelopmentTeam.server;
 
 public class Main {
+    private static final Object lock = Main.class;
     public static void main(String[] args) {
         Server server = new Server();
         new Thread(server).start();
-        Connector connector = Connector.getInstance();
+        Connector connector = Connector.getInstance(lock);
         while (true) {
+            synchronized (lock) {
+                try {
+                    lock.wait();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
             Human player = connector.initializePlayer();
             new Thread(player).start();
             server.lobby.addPlayerToLobby(player);

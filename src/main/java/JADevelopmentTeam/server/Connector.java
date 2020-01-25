@@ -13,18 +13,24 @@ import java.util.HashSet;
 class Connector extends WebSocketServer {
     private static Connector instance = null;
     private static WebSocket lastWebSocket = null;
-    private ServerSocket serverSocket = null;
-    private HashSet<WebSocket> webSockets = new HashSet<>();
+    private static ServerSocket serverSocket = null;
+    private static HashSet<WebSocket> webSockets = new HashSet<>();
+    private final Object lock;
 
 
-    private Connector() {
+    private Connector(Object lock) {
         super(new InetSocketAddress(8887));
         this.start();
+        this.lock=lock;
     }
 
     @Override
     public void onOpen(WebSocket webSocket, ClientHandshake clientHandshake) {
+        System.out.println(webSocket);
         lastWebSocket = webSocket;
+        synchronized (lock) {
+            lock.notify();
+        }
     }
 
     @Override
@@ -36,6 +42,7 @@ class Connector extends WebSocketServer {
     public void onMessage(WebSocket webSocket, String s) {
         DataPackage dataPackage = new Gson().fromJson(s, DataPackage.class);
         Observable.notify(webSocket, dataPackage);
+        System.out.println(webSocket);
     }
 
     @Override
@@ -48,23 +55,12 @@ class Connector extends WebSocketServer {
 
     }
 
-    static Connector getInstance() {
+    static Connector getInstance(Object lock) {
         if (instance == null) {
-            instance = new Connector();
+            instance = new Connector(lock);
         }
         return instance;
     }
-
-//    Human[] initializePlayers() {
-//        Human[] players = new Human[2];
-//        players[0] = connectPlayer();
-//        players[1] = connectPlayer();
-//        if (players[0] == null || players[1] == null) {
-//            System.out.println("Accept failed: 4444");
-//            System.exit(-1);
-//        }
-//        return players;
-//    }
 
     Human initializePlayer() {
         Human player = connectPlayer();
@@ -75,23 +71,8 @@ class Connector extends WebSocketServer {
         return player;
     }
 
-    private Human connectPlayer() {
-        System.out.println("Oczekuję na klienta");
+    private static Human connectPlayer() {
         webSockets.add(lastWebSocket);
-        while (true) {
-            if (lastWebSocket != null) {
-                if (!webSockets.contains(lastWebSocket)) {
-                    webSockets.add(lastWebSocket);
-                    break;
-                }
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-
         Human player = new Human(lastWebSocket);
         System.out.println("Connected First Player!");
         return player;
