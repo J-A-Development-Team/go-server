@@ -80,16 +80,14 @@ class Connector extends WebSocketServer {
         webSockets.add(lastWebSocket);
         while (true) {
             if (lastWebSocket != null) {
-                if (webSockets.contains(lastWebSocket)) {
-                    try {
-                        Thread.sleep(100);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-                else {
+                if (!webSockets.contains(lastWebSocket)) {
                     webSockets.add(lastWebSocket);
                     break;
+                }
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
             }
         }

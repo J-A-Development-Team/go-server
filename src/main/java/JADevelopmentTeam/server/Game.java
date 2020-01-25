@@ -195,7 +195,7 @@ public class Game implements Runnable {
     }
 
     private void notifyPlayerAboutOpponentResignation(Player player) {
-        DataPackage dataPackage = new DataPackage("Connection to opponent lost", DataPackage.Info.Info);
+        DataPackage dataPackage = new DataPackage("Connection to opponent lost", DataPackage.Info.InfoMessage);
         try {
             player.send(dataPackage);
         } catch (IOException e) {
@@ -253,13 +253,13 @@ public class Game implements Runnable {
                     DataPackage badMoveData;
                     switch (moveResult) {
                         case 2:
-                            badMoveData = new DataPackage("Suicidal Move", DataPackage.Info.Info);
+                            badMoveData = new DataPackage("Suicidal Move", DataPackage.Info.InfoMessage);
                             break;
                         case 3:
-                            badMoveData = new DataPackage("Illegal KO Move", DataPackage.Info.Info);
+                            badMoveData = new DataPackage("Illegal KO Move", DataPackage.Info.InfoMessage);
                             break;
                         default:
-                            badMoveData = new DataPackage("Bad Move", DataPackage.Info.Info);
+                            badMoveData = new DataPackage("Bad Move", DataPackage.Info.InfoMessage);
                             break;
                     }
                     try {
