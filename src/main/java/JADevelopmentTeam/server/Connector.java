@@ -1,7 +1,10 @@
 package JADevelopmentTeam.server;
 
 import JADevelopmentTeam.common.DataPackage;
+import JADevelopmentTeam.common.GameConfig;
+import JADevelopmentTeam.common.Intersection;
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.server.WebSocketServer;
@@ -41,6 +44,15 @@ class Connector extends WebSocketServer {
     @Override
     public void onMessage(WebSocket webSocket, String s) {
         DataPackage dataPackage = new Gson().fromJson(s, DataPackage.class);
+        Object object;
+        switch (dataPackage.getInfo()){
+            case GameConfig:
+                object = new Gson().fromJson((String) dataPackage.getData(), GameConfig.class);
+                break;
+            default:
+                object = new Gson().fromJson((String) dataPackage.getData(), Intersection.class);
+        }
+        dataPackage = new DataPackage(object,dataPackage.getInfo());
         Observable.notify(webSocket, dataPackage);
         System.out.println(webSocket);
     }
