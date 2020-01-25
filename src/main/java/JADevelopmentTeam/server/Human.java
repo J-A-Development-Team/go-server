@@ -84,7 +84,9 @@ public class Human implements Player {
     }
 
     public void send(DataPackage dataPackage) {
-        webSocket.send(new Gson().toJson(dataPackage));
+        String dataToSend = new Gson().toJson(dataPackage);
+        webSocket.send(dataToSend);
+        System.out.println(dataToSend);
     }
 
     @Override
