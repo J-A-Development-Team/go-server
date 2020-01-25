@@ -69,7 +69,7 @@ class Connector extends WebSocketServer {
             dataPackage = new DataPackage(gameConfig, DataPackage.Info.GameConfig);
         }
         Observable.notify(webSocket, dataPackage);
-        System.out.println(webSocket);
+        System.out.println("dostałem"+s);
     }
 
     @Override
