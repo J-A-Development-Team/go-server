@@ -322,8 +322,12 @@ public class Game implements Runnable {
                 if (players[playerThatSend].getDataPackage().getData() instanceof Intersection) {
                     Intersection placedStone = (Intersection) players[playerThatSend].getDataPackage().getData();
                     if (gameManager.processDeadDeclaration(placedStone) == 0) {
-                        players[0].setAcceptedStones(false);
-                        players[1].setAcceptedStones(false);
+                        if(!(players[0] instanceof Bot)) {
+                            players[0].setAcceptedStones(false);
+                        }
+                        if(!(players[1] instanceof Bot)) {
+                            players[1].setAcceptedStones(false);
+                        }
                         if (!updatePlayersBoard()) {
                             handlePlayerRunningAway();
 
