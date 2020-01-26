@@ -2,6 +2,7 @@ package JADevelopmentTeam.server;
 
 import JADevelopmentTeam.common.DataPackage;
 import JADevelopmentTeam.common.Intersection;
+import JADevelopmentTeam.database.MySQLConnector;
 import org.apache.log4j.BasicConfigurator;
 
 public class Main {
@@ -10,6 +11,7 @@ public class Main {
         Server server = new Server();
         BasicConfigurator.configure();
         new Thread(server).start();
+        MySQLConnector.getSessionFactory();
         Connector connector = Connector.getInstance(lock);
         while (true) {
             synchronized (lock) {

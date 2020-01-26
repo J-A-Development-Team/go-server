@@ -89,7 +89,7 @@ public class Human implements Player {
         } else {
             webSocket.send(new Gson().toJson(new DataPackage(new Gson().toJson(dataPackage.getData()), DataPackage.Info.StoneTable)));
         }
-        System.out.println("Wysyłam");
+        System.out.println("Wysyłam "+ dataPackage.getInfo());
     }
 
     @Override
@@ -121,8 +121,8 @@ public class Human implements Player {
             return;
         }
         this.dataPackage = dataPackage;
+        receivedData = true;
         synchronized (lock) {
-            receivedData = true;
             lock.notify();
         }
     }

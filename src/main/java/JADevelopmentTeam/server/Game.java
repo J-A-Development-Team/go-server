@@ -11,6 +11,7 @@ import JADevelopmentTeam.server.GameLogic.GameManager;
 import com.google.gson.Gson;
 
 import java.io.IOException;
+import java.util.List;
 
 public class Game implements Runnable {
     private int turn = 0;
@@ -284,13 +285,17 @@ public class Game implements Runnable {
             nextTurn();
         }
         System.out.println("A teraz mili państwo usuwamy kamienie");
+
+
+
         if (!proceedToStoneRemoval()) {
             handlePlayerRunningAway();
             return;
         }
+        boolean first = false;
         int playerThatSend = -1;
-        boolean firstEdit = true;
-        while (true) {
+        do {
+            if (!first)
             synchronized (lock) {
                 try {
                     wait();
@@ -303,39 +308,31 @@ public class Game implements Runnable {
             }
             DataPackage receivedData = null;
             if (players[0].getReceivedData()) {
-                receivedData = players[0].getDataPackage();
                 players[0].setReceivedData(false);
                 playerThatSend = 0;
             } else if (players[1].getReceivedData()) {
-                receivedData = players[1].getDataPackage();
                 players[1].setReceivedData(false);
                 playerThatSend = 1;
             }
+            receivedData = players[playerThatSend].getDataPackage();
             assert receivedData != null;
             if (receivedData.getInfo() == DataPackage.Info.Pass) {
                 players[playerThatSend].setAcceptedStones(true);
-                if (players[Math.abs(playerThatSend - 1)].isAcceptedStones()) {
-                    break;
-                }
-                if (!firstEdit)
-                    try {
-                        players[Math.abs(playerThatSend - 1)].send(new DataPackage("Opponent accepted", DataPackage.Info.Pass));
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
             } else {
-                Intersection placedStone = (Intersection) players[turn].getDataPackage().getData();
-                if (gameManager.processDeadDeclaration(placedStone)==0) {
-                    players[0].setAcceptedStones(false);
-                    players[1].setAcceptedStones(false);
-                    firstEdit = false;
-                    if (!updatePlayersBoard()) {
-                        handlePlayerRunningAway();
-                        return;
+                if (players[playerThatSend].getDataPackage().getData() instanceof Intersection) {
+                    Intersection placedStone = (Intersection) players[playerThatSend].getDataPackage().getData();
+                    if (gameManager.processDeadDeclaration(placedStone) == 0) {
+                        players[0].setAcceptedStones(false);
+                        players[1].setAcceptedStones(false);
+                        if (!updatePlayersBoard()) {
+                            handlePlayerRunningAway();
+
+                        }
                     }
                 }
             }
-        }
+            first = false;
+        } while (!players[0].isAcceptedStones() || !players[1].isAcceptedStones());
         endGame();
     }
 }

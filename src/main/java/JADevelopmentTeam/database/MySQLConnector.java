@@ -2,10 +2,10 @@ package JADevelopmentTeam.database;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 
 import java.math.BigInteger;
+import java.util.logging.Level;
 
 public abstract class MySQLConnector {
     private static SessionFactory sessionFactory;
