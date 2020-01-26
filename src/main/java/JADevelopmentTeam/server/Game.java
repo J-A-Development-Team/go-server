@@ -4,6 +4,7 @@ import JADevelopmentTeam.common.DataPackage;
 import JADevelopmentTeam.common.GameConfig;
 import JADevelopmentTeam.common.Intersection;
 import JADevelopmentTeam.common.TerritoryStates;
+import JADevelopmentTeam.database.EndGame;
 import JADevelopmentTeam.database.Move;
 import JADevelopmentTeam.database.MySQLConnector;
 import JADevelopmentTeam.server.Bot.Bot;
@@ -136,6 +137,7 @@ public class Game implements Runnable {
                 e.printStackTrace();
             }
         }
+        MySQLConnector.sendObject(new EndGame(gameID,gameManager.playersTerritoryPoints[1],gameManager.playersPoints[1],gameManager.playersTerritoryPoints[0],gameManager.playersPoints[0]));
         System.out.println("Ending game");
     }
 

@@ -21,7 +21,7 @@ class Connector extends WebSocketServer {
 
 
     private Connector(Object lock) {
-        super(new InetSocketAddress(8889));
+        super(new InetSocketAddress(8888));
         this.start();
         this.lock = lock;
     }

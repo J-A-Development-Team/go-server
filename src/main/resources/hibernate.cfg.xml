@@ -13,6 +13,7 @@
 
         <mapping class="JADevelopmentTeam.database.Game"/>
         <mapping class="JADevelopmentTeam.database.Move"/>
+        <mapping class="JADevelopmentTeam.database.EndGame"/>
 
 
     </session-factory>
