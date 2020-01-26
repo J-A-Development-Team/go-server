@@ -84,12 +84,16 @@ public class Human implements Player {
     }
 
     public void send(DataPackage dataPackage) {
-        if (dataPackage.getInfo()!= DataPackage.Info.StoneTable) {
-            webSocket.send(new Gson().toJson(dataPackage));
-        } else {
-            webSocket.send(new Gson().toJson(new DataPackage(new Gson().toJson(dataPackage.getData()), DataPackage.Info.StoneTable)));
+        switch (dataPackage.getInfo()) {
+            case StoneTable:
+                webSocket.send(new Gson().toJson(new DataPackage(new Gson().toJson(dataPackage.getData()), DataPackage.Info.StoneTable)));
+                break;
+            case TerritoryTable:
+                webSocket.send(new Gson().toJson(new DataPackage(new Gson().toJson(dataPackage.getData()), DataPackage.Info.TerritoryTable)));
+                break;
+            default:
+                webSocket.send(new Gson().toJson(dataPackage));
         }
-        System.out.println("Wysyłam "+ dataPackage.getInfo());
     }
 
     @Override
