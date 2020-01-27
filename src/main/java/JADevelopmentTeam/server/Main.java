@@ -11,7 +11,7 @@ public class Main {
         Server server = new Server();
         BasicConfigurator.configure();
         new Thread(server).start();
-        MySQLConnector.getSessionFactory();
+        MySQLConnector.getInstance();
         Connector connector = Connector.getInstance(lock);
         while (true) {
             synchronized (lock) {

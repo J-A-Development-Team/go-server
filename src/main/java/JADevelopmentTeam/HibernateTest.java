@@ -12,17 +12,18 @@ public class HibernateTest {
     public static void main(String[] args) {
         Game game = new Game(4,9,false);
 
-        MySQLConnector.sendObject(game);
-        game.setId(MySQLConnector.getLastGameID());
+        MySQLConnector mySQLConnector = MySQLConnector.getInstance();
+        mySQLConnector.sendObject(game);
+        game.setId(mySQLConnector.getLastGameID());
         Move move = new Move();
         move.setGameID(game.getId());
         move.setOrderOfMovement(1);
         move.configureMove(1,1,true);
-        MySQLConnector.sendObject(move);
-        MySQLConnector.sendObject(move);
-        MySQLConnector.sendObject(move);
-        MySQLConnector.sendObject(move);
-        System.out.println(MySQLConnector.getLastGameID());
+        mySQLConnector.sendObject(move);
+        mySQLConnector.sendObject(move);
+        mySQLConnector.sendObject(move);
+        mySQLConnector.sendObject(move);
+        System.out.println(mySQLConnector.getLastGameID());
 
 
     }

@@ -27,7 +27,7 @@ public class Game implements Runnable {
         players[0].setLock(lock);
         players[1].setLock(lock);
         gameManager = new GameManager(boardSize);
-        gameID = MySQLConnector.getLastGameID();
+        gameID = MySQLConnector.getInstance().getLastGameID();
         this.gameID = id;
         move = new Move();
         move.setGameID(gameID);
@@ -137,7 +137,7 @@ public class Game implements Runnable {
                 e.printStackTrace();
             }
         }
-        MySQLConnector.sendObject(new EndGame(gameID,gameManager.playersTerritoryPoints[1],gameManager.playersPoints[1],gameManager.playersTerritoryPoints[0],gameManager.playersPoints[0]));
+        MySQLConnector.getInstance().sendObject(new EndGame(gameID,gameManager.playersTerritoryPoints[1],gameManager.playersPoints[1],gameManager.playersTerritoryPoints[0],gameManager.playersPoints[0]));
         System.out.println("Ending game");
     }
 
@@ -244,7 +244,7 @@ public class Game implements Runnable {
                     return;
                 }
                 if (lastMoveWasPass) {
-                    MySQLConnector.sendObject(move);
+                    MySQLConnector.getInstance().sendObject(move);
                     break;
                 }
                 lastMoveWasPass = true;
@@ -283,7 +283,7 @@ public class Game implements Runnable {
                     return;
                 }
             }
-            MySQLConnector.sendObject(move);
+            MySQLConnector.getInstance().sendObject(move);
             nextTurn();
         }
         System.out.println("A teraz mili państwo usuwamy kamienie");

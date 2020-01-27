@@ -39,8 +39,9 @@ public class Lobby implements Runnable {
 
     Game prepareGame(Player[] players, int boardSize) {
         boolean isGameWithBot = players[0] instanceof Bot;
-        MySQLConnector.sendObject(new JADevelopmentTeam.database.Game(boardSize,isGameWithBot));
-        int lastId = MySQLConnector.getLastGameID();
+        MySQLConnector mySQLConnector = MySQLConnector.getInstance();
+        mySQLConnector.sendObject(new JADevelopmentTeam.database.Game(boardSize,isGameWithBot));
+        int lastId = mySQLConnector.getLastGameID();
         return new Game(players, boardSize,lastId);
     }
 

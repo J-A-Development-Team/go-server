@@ -5,25 +5,29 @@ import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
 import java.math.BigInteger;
-import java.util.logging.Level;
 
-public abstract class MySQLConnector {
-    private static SessionFactory sessionFactory;
-    public static SessionFactory getSessionFactory(){
-        if (sessionFactory == null) {
+public class MySQLConnector {
+    private SessionFactory sessionFactory;
+    private static MySQLConnector mySQLConnector;
+
+    private MySQLConnector(){
+        sessionFactory = new Configuration()
+                .configure() // configures settings from hibernate.cfg.xml
+                .buildSessionFactory();
+    }
+
+    public static MySQLConnector getInstance(){
+        if (mySQLConnector == null) {
             synchronized (MySQLConnector.class) {
-                if (sessionFactory == null) {
-                    sessionFactory = new Configuration()
-                            .configure() // configures settings from hibernate.cfg.xml
-                            .buildSessionFactory();
+                if (mySQLConnector == null) {
+                    mySQLConnector = new MySQLConnector();
                 }
             }
         }
-        return sessionFactory;
+        return mySQLConnector;
     }
-    public static void sendObject(Object object){
+    public void sendObject(Object object){
         try {
-            SessionFactory sessionFactory = getSessionFactory();
             Session session = sessionFactory.openSession();
             session.beginTransaction();
             session.save(object);
@@ -38,9 +42,8 @@ public abstract class MySQLConnector {
             e.printStackTrace();
         }
     }
-    public static int getLastGameID(){
+    public int getLastGameID(){
         try {
-            SessionFactory sessionFactory = getSessionFactory();
             Session session = sessionFactory.openSession();
             return ((BigInteger) session.createSQLQuery("SELECT last_insert_id() from game limit 1;").uniqueResult()).intValue();
         }
